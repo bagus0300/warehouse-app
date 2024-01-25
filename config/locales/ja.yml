@@ -27,6 +27,9 @@
 #       "yes": yup
 #       enabled: "ON"
 
-en:
+ja:
   hello: "Hello world"
-  login_id: "Login ID"
+  users:
+    login_id: "ログインID"
+    password: "パスワード"
+    login: "ログイン"
