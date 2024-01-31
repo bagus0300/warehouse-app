@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../javascript/application.ts"],
+  "sourcesContent": ["// Entry point for the build script in your package.json\nimport \"@hotwired/turbo-rails\";\nimport \"./components/application\";\n"],
+  "mappings": "AACA,OAAO;AACP,OAAO;",
+  "names": []
+}
