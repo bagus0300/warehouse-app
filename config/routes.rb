@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
-  root 'component#index'
+  devise_for :users
   get '/*path', to: 'component#index'
+  namespace :api do
+    post '/login' => 'user#login'
+  end
+  root 'component#index'
 end
