@@ -10,7 +10,9 @@
   },
   "buttons": {
     "login": "ログイン",
-    "register": "新規登録"
+    "register": "新規登録",
+    "change": "変更",
+    "delete": "削除"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -51,12 +53,27 @@
       "key": "/billing_process",
       "url": "/billing_process"
     },
+
     {
       "label": "マスタ保守",
       "key": "/maintenence",
       "url": "/maintenence"
-    }
-  ],
+    }],
+    "IncomePageJp": {
+      "addition": "追加",
+      "lotNumber": "ロット番号",
+      "weight": "重量",
+      "itemNumber": "入庫数",
+      "cargoPrice": "荷役単価",
+      "storagePrice": "保管単価",
+      "packing": "荷姿",
+      "productName": "品名",
+      "productNumber": "品番",
+      "search": "検索",
+      "receiptDate": "入庫日",
+      "shipper": "荷主",
+      "warehouse": "倉庫"
+    },
   "messages": {
     "type_username": "Please input your username!",
     "type_password": "Please input your password!"
