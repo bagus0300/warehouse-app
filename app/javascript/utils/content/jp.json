@@ -3,15 +3,19 @@
     "title": "倉庫管理システム",
     "description": "倉庫管理システム"
   },
+<<<<<<< HEAD
   "pages": {
     "login": "ログイン",
     "signup": "新規登録"
   },
+=======
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   "LoginFields": {
     "username": "ログインID",
     "password": "パスワード",
     "rememberme": "remember me"
   },
+<<<<<<< HEAD
   "signupFields": {
     "username": "ユーザー名",
     "loginId": "ログインID",
@@ -20,6 +24,8 @@
     "to_login": "サインインペジロ",
     "signup": "登録"
   },
+=======
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   "buttons": {
     "login": "ログイン",
     "register": "新規登録"
@@ -70,9 +76,14 @@
     }
   ],
   "messages": {
+<<<<<<< HEAD
     "type_username": "ユーザー名を入力してください!",
     "type_loginId": "ログインIDを入力してください！",
     "type_password": "パスワードを入力してください！",
     "type_repassword": "パスワードを確認してください!"
+=======
+    "type_username": "Please input your username!",
+    "type_password": "Please input your password!"
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   }
 }

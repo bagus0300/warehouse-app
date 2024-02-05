@@ -1096,7 +1096,11 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
+<<<<<<< HEAD
           function useEffect90(create, deps) {
+=======
+          function useEffect88(create, deps) {
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1112,7 +1116,11 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
+<<<<<<< HEAD
           function useMemo97(create, deps) {
+=======
+          function useMemo96(create, deps) {
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1878,12 +1886,20 @@
           exports.useContext = useContext140;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
+<<<<<<< HEAD
           exports.useEffect = useEffect90;
+=======
+          exports.useEffect = useEffect88;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           exports.useId = useId4;
           exports.useImperativeHandle = useImperativeHandle27;
           exports.useInsertionEffect = useInsertionEffect3;
           exports.useLayoutEffect = useLayoutEffect10;
+<<<<<<< HEAD
           exports.useMemo = useMemo97;
+=======
+          exports.useMemo = useMemo96;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           exports.useReducer = useReducer3;
           exports.useRef = useRef120;
           exports.useState = useState85;
@@ -2636,9 +2652,15 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
+<<<<<<< HEAD
           var React399 = require_react();
           var Scheduler = require_scheduler();
           var ReactSharedInternals = React399.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+=======
+          var React397 = require_react();
+          var Scheduler = require_scheduler();
+          var ReactSharedInternals = React397.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4243,7 +4265,11 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
+<<<<<<< HEAD
                   React399.Children.forEach(props.children, function(child) {
+=======
+                  React397.Children.forEach(props.children, function(child) {
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
                     if (child == null) {
                       return;
                     }
@@ -12690,7 +12716,11 @@
             }
           }
           var fakeInternalInstance = {};
+<<<<<<< HEAD
           var emptyRefsObject = new React399.Component().refs;
+=======
+          var emptyRefsObject = new React397.Component().refs;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24493,7 +24523,11 @@
   });
 
   // app/javascript/App.jsx
+<<<<<<< HEAD
   var import_react117 = __toESM(require_react());
+=======
+  var import_react115 = __toESM(require_react());
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
 
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
@@ -79054,7 +79088,11 @@
   var typography_default = Typography2;
 
   // app/javascript/components/router/AppRouter.jsx
+<<<<<<< HEAD
   var import_react116 = __toESM(require_react());
+=======
+  var import_react114 = __toESM(require_react());
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
 
   // node_modules/react-router-dom/dist/index.js
   var React385 = __toESM(require_react());
@@ -80988,7 +81026,11 @@
   // app/javascript/pages/LoginPage.jsx
   var import_react106 = __toESM(require_react());
 
+<<<<<<< HEAD
   // app/javascript/components/auth/Login.jsx
+=======
+  // app/javascript/components/auth/LoginComponent.jsx
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   var import_react105 = __toESM(require_react());
 
   // app/javascript/hooks/userAuth.js
@@ -81027,6 +81069,7 @@
   var falsy = (d) => d === void 0 || d === null;
   var isEmpty = (d) => d?.toString().trim().length === 0;
   var getAuthUser = () => {
+<<<<<<< HEAD
     const email2 = localStorage.getItem("email");
     const token2 = localStorage.getItem("token");
     return falsy(email2) || falsy(token2) || isEmpty(email2) || isEmpty(token2) ? { email: null, token: null } : { email: email2, token: token2 };
@@ -81035,14 +81078,29 @@
   var getAuthUserToken = () => getAuthUser()?.token;
   var saveAuthUser = (email2, token2) => {
     localStorage.setItem("email", email2);
+=======
+    const email2 = localStorage.getItem("username");
+    const token2 = localStorage.getItem("token");
+    return falsy(email2) || falsy(token2) || isEmpty(email2) || isEmpty(token2) ? { email: null, token: null } : { email: email2, token: token2 };
+  };
+  var getAuthUsername = () => getAuthUser()?.username;
+  var getAuthUserToken2 = () => getAuthUser()?.token;
+  var saveAuthUser = (email2, token2) => {
+    localStorage.setItem("username", email2);
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     localStorage.setItem("token", token2);
   };
   var clearStorage = () => localStorage.clear();
 
   // app/javascript/contexts/auth.reducer.js
   var initialAuthState = {
+<<<<<<< HEAD
     authUserEmail: getAuthUserEmail(),
     token: getAuthUserToken(),
+=======
+    authUsername: getAuthUsername(),
+    token: getAuthUserToken2(),
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     loginErrors: null,
     signupErrors: null
   };
@@ -81090,15 +81148,19 @@
       title: "\u5009\u5EAB\u7BA1\u7406\u30B7\u30B9\u30C6\u30E0",
       description: "\u5009\u5EAB\u7BA1\u7406\u30B7\u30B9\u30C6\u30E0"
     },
+<<<<<<< HEAD
     pages: {
       login: "\u30ED\u30B0\u30A4\u30F3",
       signup: "\u65B0\u898F\u767B\u9332"
     },
+=======
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     LoginFields: {
       username: "\u30ED\u30B0\u30A4\u30F3ID",
       password: "\u30D1\u30B9\u30EF\u30FC\u30C9",
       rememberme: "remember me"
     },
+<<<<<<< HEAD
     signupFields: {
       username: "\u30E6\u30FC\u30B6\u30FC\u540D",
       loginId: "\u30ED\u30B0\u30A4\u30F3ID",
@@ -81107,6 +81169,8 @@
       to_login: "\u30B5\u30A4\u30F3\u30A4\u30F3\u30DA\u30B8\u30ED",
       signup: "\u767B\u9332"
     },
+=======
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     buttons: {
       login: "\u30ED\u30B0\u30A4\u30F3",
       register: "\u65B0\u898F\u767B\u9332"
@@ -81157,6 +81221,7 @@
       }
     ],
     messages: {
+<<<<<<< HEAD
       type_username: "\u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044!",
       type_loginId: "\u30ED\u30B0\u30A4\u30F3ID\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF01",
       type_password: "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF01",
@@ -81165,12 +81230,24 @@
   };
 
   // app/javascript/components/auth/Login.jsx
+=======
+      type_username: "Please input your username!",
+      type_password: "Please input your password!"
+    }
+  };
+
+  // app/javascript/components/auth/LoginComponent.jsx
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   var { Title: Title3 } = typography_default;
   var LoginForm = () => {
     const {
       state: { loginErrors },
+<<<<<<< HEAD
       loginAction: loginAction2,
       logoutAction: logoutAction2
+=======
+      loginAction: loginAction2
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     } = useAuth();
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
@@ -81180,7 +81257,11 @@
       console.log("password", password);
       loginAction2({ username, password });
     };
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react105.default.createElement("div", { style: { width: 450 }, className: "mx-auto" }, /* @__PURE__ */ import_react105.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react105.default.createElement(card_default, { style: { width: 450 }, className: "py-4" }, /* @__PURE__ */ import_react105.default.createElement(
+=======
+    return /* @__PURE__ */ import_react105.default.createElement("div", { style: { width: 350 }, className: "mx-auto" }, /* @__PURE__ */ import_react105.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react105.default.createElement(card_default, { style: { width: 400 }, className: "py-4" }, /* @__PURE__ */ import_react105.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
       Title3,
       {
         level: 4,
@@ -81230,10 +81311,17 @@
         },
         /* @__PURE__ */ import_react105.default.createElement(checkbox_default, null, "Remember me")
       ),
+<<<<<<< HEAD
       /* @__PURE__ */ import_react105.default.createElement(form_default.Item, { wrapperCol: { offset: 8, span: 16 } }, /* @__PURE__ */ import_react105.default.createElement(button_default2, { type: "primary", htmlType: "submit" }, jp_default.buttons.login), /* @__PURE__ */ import_react105.default.createElement("small", { style: { marginLeft: 20 } }, /* @__PURE__ */ import_react105.default.createElement(Link2, { to: "/signup" }, jp_default.buttons.register)))
     )), /* @__PURE__ */ import_react105.default.createElement("button", { onClick: logoutAction2 }, "logout")));
   };
   var Login_default = LoginForm;
+=======
+      /* @__PURE__ */ import_react105.default.createElement(form_default.Item, { wrapperCol: { offset: 8, span: 16 } }, /* @__PURE__ */ import_react105.default.createElement(button_default2, { type: "primary", htmlType: "submit" }, jp_default.buttons.login), /* @__PURE__ */ import_react105.default.createElement("small", { style: { marginLeft: 20 } }, /* @__PURE__ */ import_react105.default.createElement("a", { href: "/signup" }, jp_default.buttons.register)))
+    ))));
+  };
+  var LoginComponent_default = LoginForm;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
 
   // app/javascript/pages/LoginPage.jsx
   var LoginPage = () => {
@@ -81243,7 +81331,11 @@
         return;
       }
     }, [token2]);
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react106.default.createElement(import_react106.default.Fragment, null, /* @__PURE__ */ import_react106.default.createElement(Login_default, null));
+=======
+    return /* @__PURE__ */ import_react106.default.createElement(import_react106.default.Fragment, null, /* @__PURE__ */ import_react106.default.createElement(LoginComponent_default, null));
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   };
   var LoginPage_default = LoginPage;
 
@@ -81308,7 +81400,11 @@
     const [currentMenu, setCurrentMenu] = (0, import_react107.useState)({});
     const [selectedKeys, setSelectedKeys] = (0, import_react107.useState)([]);
     const { Header: Header5 } = layout_default2;
+<<<<<<< HEAD
     const { Title: Title6 } = typography_default;
+=======
+    const { Title: Title5 } = typography_default;
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     const navigate = useNavigate();
     const handleMenuClick = ({ key }) => {
       const { url: url2 } = navigations.find((item) => item.key === key) || {};
@@ -81328,7 +81424,11 @@
           backgroundColor: "#fff"
         }
       },
+<<<<<<< HEAD
       /* @__PURE__ */ import_react107.default.createElement("div", { className: "demo-logo ", style: { marginRight: "100px" } }, /* @__PURE__ */ import_react107.default.createElement(Title6, { level: 4, style: { marginTop: 15 } }, siteInfo.title)),
+=======
+      /* @__PURE__ */ import_react107.default.createElement("div", { className: "demo-logo ", style: { marginRight: "100px" } }, /* @__PURE__ */ import_react107.default.createElement(Title5, { level: 4, style: { marginTop: 15 } }, siteInfo.title)),
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
       /* @__PURE__ */ import_react107.default.createElement(
         menu_default2,
         {
@@ -81391,6 +81491,7 @@
   };
   var TopPage_default = Top;
 
+<<<<<<< HEAD
   // app/javascript/pages/SignupPage.jsx
   var import_react112 = __toESM(require_react());
 
@@ -81496,12 +81597,23 @@
 
   // app/javascript/components/Income/IncomeTable.jsx
   var import_react113 = __toESM(require_react());
+=======
+  // app/javascript/pages/IncomePage.tsx
+  var import_react112 = __toESM(require_react());
+
+  // app/javascript/components/Income/IncomeTable.jsx
+  var import_react111 = __toESM(require_react());
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   var columns = [
     {
       title: "\u54C1\u756A",
       dataIndex: "productnumber",
       key: "productnumber",
+<<<<<<< HEAD
       render: (text) => /* @__PURE__ */ import_react113.default.createElement("a", null, text)
+=======
+      render: (text) => /* @__PURE__ */ import_react111.default.createElement("a", null, text)
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     },
     {
       title: "\u54C1\u540D",
@@ -81532,12 +81644,20 @@
       title: "",
       key: "action",
       dataIndex: "action",
+<<<<<<< HEAD
       render: (_, { action }) => /* @__PURE__ */ import_react113.default.createElement(import_react113.default.Fragment, null, action.map((tag, i) => {
+=======
+      render: (_, { action }) => /* @__PURE__ */ import_react111.default.createElement(import_react111.default.Fragment, null, action.map((tag, i) => {
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
         let color = tag.length > 5 ? "geekblue" : "green";
         if (tag === "\u524A\u9664") {
           color = "red";
         }
+<<<<<<< HEAD
         return /* @__PURE__ */ import_react113.default.createElement(tag_default, { color, key: tag }, tag.toUpperCase());
+=======
+        return /* @__PURE__ */ import_react111.default.createElement(tag_default, { color, key: tag }, tag.toUpperCase());
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
       }))
     }
     // {
@@ -81602,7 +81722,11 @@
       key: "5"
     }
   ];
+<<<<<<< HEAD
   var IncomeTable = () => /* @__PURE__ */ import_react113.default.createElement(table_default, { columns, dataSource: data });
+=======
+  var IncomeTable = () => /* @__PURE__ */ import_react111.default.createElement(table_default, { columns, dataSource: data });
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   var IncomeTable_default = IncomeTable;
 
   // node_modules/rc-picker/es/locale/ja_JP.js
@@ -81664,13 +81788,21 @@
       console.log(date4, dateString);
     };
     const onSearch = (value, _e, info) => console.log(info?.source, value);
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(Navbar_default, null), /* @__PURE__ */ import_react114.default.createElement(
+=======
+    return /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(Navbar_default, null), /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
       Content3,
       {
         style: { width: 1024 },
         className: "mx-auto flex flex-col justify-content content-h"
       },
+<<<<<<< HEAD
       /* @__PURE__ */ import_react114.default.createElement(
+=======
+      /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
         form_default,
         {
           name: "basic",
@@ -81678,14 +81810,22 @@
           autoComplete: "off",
           style: { margin: "50px 0 0px 0" }
         },
+<<<<<<< HEAD
         /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal" }, /* @__PURE__ */ import_react114.default.createElement(
+=======
+        /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal" }, /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u5009\u5EAB",
             name: "username",
             style: { display: "inline-block", width: 200, marginBottom: 0 }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
             select_default,
             {
               defaultValue: "\u4E00\u822C\u5009\u5EAB",
@@ -81698,14 +81838,22 @@
               ]
             }
           )
+<<<<<<< HEAD
         ), /* @__PURE__ */ import_react114.default.createElement(
+=======
+        ), /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u8377\u4E3B",
             name: "username",
             style: { display: "inline-block", width: 300, marginBottom: 0 }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
             select_default,
             {
               defaultValue: "\u682A\u5F0F\u4F1A\u793EXXXXXX\uFF08\u25CB\u25CB\u5009\u5EAB\u88FD\u54C1\uFF09",
@@ -81718,7 +81866,11 @@
               ]
             }
           )
+<<<<<<< HEAD
         ), /* @__PURE__ */ import_react114.default.createElement(
+=======
+        ), /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u5165\u5EAB\u65E5",
@@ -81730,10 +81882,17 @@
               marginBottom: 0
             }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(date_picker_default, { onChange: onChangeDate, locale: ja_JP_default3 })
         )),
         /* @__PURE__ */ import_react114.default.createElement(divider_default, null),
         /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(date_picker_default, { onChange: onChangeDate, locale: ja_JP_default3 })
+        )),
+        /* @__PURE__ */ import_react112.default.createElement(divider_default, null),
+        /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u54C1\u756A",
@@ -81744,7 +81903,11 @@
               marginBottom: 0
             }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
             Search2,
             {
               placeholder: "\u54C1\u756A",
@@ -81754,7 +81917,11 @@
             }
           )
         ))),
+<<<<<<< HEAD
         /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
+=======
+        /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u54C1\u540D",
@@ -81765,8 +81932,13 @@
               marginBottom: 0
             }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u54C1\u540D" })
         ), /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u54C1\u540D" })
+        ), /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u8377\u59FF",
@@ -81778,8 +81950,13 @@
               marginBottom: 0
             }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u8377\u59FF" })
         ), /* @__PURE__ */ import_react114.default.createElement(
+=======
+          /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u8377\u59FF" })
+        ), /* @__PURE__ */ import_react112.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
           form_default.Item,
           {
             label: "\u8377\u59FF",
@@ -81791,17 +81968,30 @@
               marginBottom: 0
             }
           },
+<<<<<<< HEAD
           /* @__PURE__ */ import_react114.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u8377\u5F79\u5358\u4FA1" }), /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u4FDD\u7BA1\u5358\u4FA1" }))
         ))),
         /* @__PURE__ */ import_react114.default.createElement(divider_default, null)
       ),
       /* @__PURE__ */ import_react114.default.createElement(IncomeTable_default, null)
     ), /* @__PURE__ */ import_react114.default.createElement(Index_default, null));
+=======
+          /* @__PURE__ */ import_react112.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u8377\u5F79\u5358\u4FA1" }), /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u4FDD\u7BA1\u5358\u4FA1" }))
+        ))),
+        /* @__PURE__ */ import_react112.default.createElement(divider_default, null)
+      ),
+      /* @__PURE__ */ import_react112.default.createElement(IncomeTable_default, null)
+    ), /* @__PURE__ */ import_react112.default.createElement(Index_default, null));
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   };
   var IncomePage_default = IncomePage;
 
   // app/javascript/contexts/AuthContextProvider.js
+<<<<<<< HEAD
   var import_react115 = __toESM(require_react());
+=======
+  var import_react113 = __toESM(require_react());
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
 
   // app/javascript/utils/contants.js
   var baseUrl = "http://127.0.0.1:3000/api/";
@@ -81872,7 +82062,11 @@
 
   // app/javascript/contexts/AuthContextProvider.js
   var AuthContextProvider = ({ children }) => {
+<<<<<<< HEAD
     const [state, dispatch] = (0, import_react115.useReducer)(AuthReducer, initialAuthState);
+=======
+    const [state, dispatch] = (0, import_react113.useReducer)(AuthReducer, initialAuthState);
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
     const loginAction2 = async (payload) => {
       const res = await services_default.login(payload);
       if (!hasError(res?.status)) {
@@ -81895,7 +82089,11 @@
         auth_actions_default.logoutAction(dispatch);
       }
     };
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react115.default.createElement(
+=======
+    return /* @__PURE__ */ import_react113.default.createElement(
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
       AuthContext.Provider,
       {
         value: {
@@ -81912,12 +82110,20 @@
 
   // app/javascript/components/router/AppRouter.jsx
   var AppRouter = () => {
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react116.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react116.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react116.default.createElement(Routes, null, /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/signup", element: /* @__PURE__ */ import_react116.default.createElement(SignupPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react116.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react116.default.createElement(IncomePage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react116.default.createElement(LoginPage_default, null) }))));
+=======
+    return /* @__PURE__ */ import_react114.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react114.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react114.default.createElement(Routes, null, /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react114.default.createElement(LoginPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react114.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react114.default.createElement(IncomePage_default, null) }))));
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   };
 
   // app/javascript/App.jsx
   var App = () => {
+<<<<<<< HEAD
     return /* @__PURE__ */ import_react117.default.createElement(import_react117.default.Fragment, null, /* @__PURE__ */ import_react117.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react117.default.createElement(AppRouter, null)));
+=======
+    return /* @__PURE__ */ import_react115.default.createElement(import_react115.default.Fragment, null, /* @__PURE__ */ import_react115.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react115.default.createElement(AppRouter, null)));
+>>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   };
   var App_default = App;
 })();
