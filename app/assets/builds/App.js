@@ -1096,7 +1096,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect88(create, deps) {
+          function useEffect90(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1112,7 +1112,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
-          function useMemo96(create, deps) {
+          function useMemo97(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useMemo(create, deps);
           }
@@ -1878,12 +1878,12 @@
           exports.useContext = useContext140;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect88;
+          exports.useEffect = useEffect90;
           exports.useId = useId4;
           exports.useImperativeHandle = useImperativeHandle27;
           exports.useInsertionEffect = useInsertionEffect3;
           exports.useLayoutEffect = useLayoutEffect10;
-          exports.useMemo = useMemo96;
+          exports.useMemo = useMemo97;
           exports.useReducer = useReducer3;
           exports.useRef = useRef120;
           exports.useState = useState85;
@@ -2636,9 +2636,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React397 = require_react();
+          var React399 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React397.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React399.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4243,7 +4243,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React397.Children.forEach(props.children, function(child) {
+                  React399.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12690,7 +12690,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React397.Component().refs;
+          var emptyRefsObject = new React399.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24493,7 +24493,7 @@
   });
 
   // app/javascript/App.jsx
-  var import_react115 = __toESM(require_react());
+  var import_react117 = __toESM(require_react());
 
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
@@ -79054,7 +79054,7 @@
   var typography_default = Typography2;
 
   // app/javascript/components/router/AppRouter.jsx
-  var import_react114 = __toESM(require_react());
+  var import_react116 = __toESM(require_react());
 
   // node_modules/react-router-dom/dist/index.js
   var React385 = __toESM(require_react());
@@ -80988,7 +80988,7 @@
   // app/javascript/pages/LoginPage.jsx
   var import_react106 = __toESM(require_react());
 
-  // app/javascript/components/auth/LoginComponent.jsx
+  // app/javascript/components/auth/Login.jsx
   var import_react105 = __toESM(require_react());
 
   // app/javascript/hooks/userAuth.js
@@ -81032,7 +81032,7 @@
     return falsy(email2) || falsy(token2) || isEmpty(email2) || isEmpty(token2) ? { email: null, token: null } : { email: email2, token: token2 };
   };
   var getAuthUserEmail = () => getAuthUser()?.email;
-  var getAuthUserToken2 = () => getAuthUser()?.token;
+  var getAuthUserToken = () => getAuthUser()?.token;
   var saveAuthUser = (email2, token2) => {
     localStorage.setItem("email", email2);
     localStorage.setItem("token", token2);
@@ -81042,7 +81042,7 @@
   // app/javascript/contexts/auth.reducer.js
   var initialAuthState = {
     authUserEmail: getAuthUserEmail(),
-    token: getAuthUserToken2(),
+    token: getAuthUserToken(),
     loginErrors: null,
     signupErrors: null
   };
@@ -81090,10 +81090,22 @@
       title: "\u5009\u5EAB\u7BA1\u7406\u30B7\u30B9\u30C6\u30E0",
       description: "\u5009\u5EAB\u7BA1\u7406\u30B7\u30B9\u30C6\u30E0"
     },
+    pages: {
+      login: "\u30ED\u30B0\u30A4\u30F3",
+      signup: "\u65B0\u898F\u767B\u9332"
+    },
     LoginFields: {
       username: "\u30ED\u30B0\u30A4\u30F3ID",
       password: "\u30D1\u30B9\u30EF\u30FC\u30C9",
       rememberme: "remember me"
+    },
+    signupFields: {
+      username: "\u30E6\u30FC\u30B6\u30FC\u540D",
+      loginId: "\u30ED\u30B0\u30A4\u30F3ID",
+      password: "\u30D1\u30B9\u30EF\u30FC\u30C9",
+      confirm_password: "\u30D1\u30B9\u30EF\u30FC\u30C9\u306E\u78BA\u8A8D",
+      to_login: "\u30B5\u30A4\u30F3\u30A4\u30F3\u30DA\u30B8\u30ED",
+      signup: "\u767B\u9332"
     },
     buttons: {
       login: "\u30ED\u30B0\u30A4\u30F3",
@@ -81145,17 +81157,20 @@
       }
     ],
     messages: {
-      type_username: "Please input your username!",
-      type_password: "Please input your password!"
+      type_username: "\u30E6\u30FC\u30B6\u30FC\u540D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044!",
+      type_loginId: "\u30ED\u30B0\u30A4\u30F3ID\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF01",
+      type_password: "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\uFF01",
+      type_repassword: "\u30D1\u30B9\u30EF\u30FC\u30C9\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044!"
     }
   };
 
-  // app/javascript/components/auth/LoginComponent.jsx
+  // app/javascript/components/auth/Login.jsx
   var { Title: Title3 } = typography_default;
   var LoginForm = () => {
     const {
       state: { loginErrors },
-      loginAction: loginAction2
+      loginAction: loginAction2,
+      logoutAction: logoutAction2
     } = useAuth();
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
@@ -81165,7 +81180,7 @@
       console.log("password", password);
       loginAction2({ username, password });
     };
-    return /* @__PURE__ */ import_react105.default.createElement("div", { style: { width: 350 }, className: "mx-auto" }, /* @__PURE__ */ import_react105.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react105.default.createElement(card_default, { style: { width: 400 }, className: "py-4" }, /* @__PURE__ */ import_react105.default.createElement(
+    return /* @__PURE__ */ import_react105.default.createElement("div", { style: { width: 450 }, className: "mx-auto" }, /* @__PURE__ */ import_react105.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react105.default.createElement(card_default, { style: { width: 450 }, className: "py-4" }, /* @__PURE__ */ import_react105.default.createElement(
       Title3,
       {
         level: 4,
@@ -81215,10 +81230,10 @@
         },
         /* @__PURE__ */ import_react105.default.createElement(checkbox_default, null, "Remember me")
       ),
-      /* @__PURE__ */ import_react105.default.createElement(form_default.Item, { wrapperCol: { offset: 8, span: 16 } }, /* @__PURE__ */ import_react105.default.createElement(button_default2, { type: "primary", htmlType: "submit" }, jp_default.buttons.login), /* @__PURE__ */ import_react105.default.createElement("small", { style: { marginLeft: 20 } }, /* @__PURE__ */ import_react105.default.createElement("a", { href: "/signup" }, jp_default.buttons.register)))
-    ))));
+      /* @__PURE__ */ import_react105.default.createElement(form_default.Item, { wrapperCol: { offset: 8, span: 16 } }, /* @__PURE__ */ import_react105.default.createElement(button_default2, { type: "primary", htmlType: "submit" }, jp_default.buttons.login), /* @__PURE__ */ import_react105.default.createElement("small", { style: { marginLeft: 20 } }, /* @__PURE__ */ import_react105.default.createElement(Link2, { to: "/signup" }, jp_default.buttons.register)))
+    )), /* @__PURE__ */ import_react105.default.createElement("button", { onClick: logoutAction2 }, "logout")));
   };
-  var LoginComponent_default = LoginForm;
+  var Login_default = LoginForm;
 
   // app/javascript/pages/LoginPage.jsx
   var LoginPage = () => {
@@ -81228,7 +81243,7 @@
         return;
       }
     }, [token2]);
-    return /* @__PURE__ */ import_react106.default.createElement(import_react106.default.Fragment, null, /* @__PURE__ */ import_react106.default.createElement(LoginComponent_default, null));
+    return /* @__PURE__ */ import_react106.default.createElement(import_react106.default.Fragment, null, /* @__PURE__ */ import_react106.default.createElement(Login_default, null));
   };
   var LoginPage_default = LoginPage;
 
@@ -81293,7 +81308,7 @@
     const [currentMenu, setCurrentMenu] = (0, import_react107.useState)({});
     const [selectedKeys, setSelectedKeys] = (0, import_react107.useState)([]);
     const { Header: Header5 } = layout_default2;
-    const { Title: Title5 } = typography_default;
+    const { Title: Title6 } = typography_default;
     const navigate = useNavigate();
     const handleMenuClick = ({ key }) => {
       const { url: url2 } = navigations.find((item) => item.key === key) || {};
@@ -81313,7 +81328,7 @@
           backgroundColor: "#fff"
         }
       },
-      /* @__PURE__ */ import_react107.default.createElement("div", { className: "demo-logo ", style: { marginRight: "100px" } }, /* @__PURE__ */ import_react107.default.createElement(Title5, { level: 4, style: { marginTop: 15 } }, siteInfo.title)),
+      /* @__PURE__ */ import_react107.default.createElement("div", { className: "demo-logo ", style: { marginRight: "100px" } }, /* @__PURE__ */ import_react107.default.createElement(Title6, { level: 4, style: { marginTop: 15 } }, siteInfo.title)),
       /* @__PURE__ */ import_react107.default.createElement(
         menu_default2,
         {
@@ -81376,17 +81391,117 @@
   };
   var TopPage_default = Top;
 
-  // app/javascript/pages/IncomePage.tsx
+  // app/javascript/pages/SignupPage.jsx
   var import_react112 = __toESM(require_react());
 
-  // app/javascript/components/Income/IncomeTable.jsx
+  // app/javascript/components/auth/Signup.jsx
   var import_react111 = __toESM(require_react());
+  var { Title: Title5 } = typography_default;
+  var Signup = () => {
+    const {
+      state: { signupErrors },
+      signupAction: signupAction2
+    } = useAuth();
+    const onFinishFailed = (errorInfo) => {
+      console.log("Failed:", errorInfo);
+    };
+    const onFormSubmit = ({ user_name, password, login_id }) => {
+      signupAction2({ user_name, password, login_id });
+    };
+    (0, import_react111.useEffect)(() => {
+    });
+    return /* @__PURE__ */ import_react111.default.createElement("div", { style: { width: 450 }, className: "mx-auto" }, /* @__PURE__ */ import_react111.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react111.default.createElement(card_default, { style: { width: 450 }, className: "py-4" }, /* @__PURE__ */ import_react111.default.createElement(
+      Title5,
+      {
+        level: 4,
+        className: "text-center",
+        style: { marginTop: 10, marginBottom: 50 }
+      },
+      jp_default.pages.signup
+    ), signupErrors && /* @__PURE__ */ import_react111.default.createElement("p", null, signupErrors), /* @__PURE__ */ import_react111.default.createElement(
+      form_default,
+      {
+        name: "basic",
+        labelCol: { span: 10 },
+        wrapperCol: { span: 16 },
+        style: { maxWidth: 600 },
+        initialValues: { remember: true },
+        onFinish: onFormSubmit,
+        onFinishFailed,
+        autoComplete: "off"
+      },
+      /* @__PURE__ */ import_react111.default.createElement(
+        form_default.Item,
+        {
+          label: jp_default.signupFields.username,
+          name: "user_name",
+          rules: [
+            { required: true, message: jp_default.messages.type_username }
+          ]
+        },
+        /* @__PURE__ */ import_react111.default.createElement(input_default, null)
+      ),
+      /* @__PURE__ */ import_react111.default.createElement(
+        form_default.Item,
+        {
+          label: jp_default.signupFields.loginId,
+          name: "login_id",
+          rules: [
+            { required: true, message: jp_default.messages.type_loginId }
+          ]
+        },
+        /* @__PURE__ */ import_react111.default.createElement(input_default, null)
+      ),
+      /* @__PURE__ */ import_react111.default.createElement(
+        form_default.Item,
+        {
+          label: jp_default.signupFields.password,
+          name: "password",
+          rules: [
+            { required: true, message: jp_default.messages.type_password }
+          ]
+        },
+        /* @__PURE__ */ import_react111.default.createElement(input_default.Password, null)
+      ),
+      /* @__PURE__ */ import_react111.default.createElement(
+        form_default.Item,
+        {
+          label: jp_default.signupFields.confirm_password,
+          name: "repassword",
+          rules: [
+            { required: true, message: jp_default.messages.type_repassword }
+          ]
+        },
+        /* @__PURE__ */ import_react111.default.createElement(input_default.Password, null)
+      ),
+      /* @__PURE__ */ import_react111.default.createElement(form_default.Item, { wrapperCol: { offset: 10, span: 16 } }, /* @__PURE__ */ import_react111.default.createElement(button_default2, { type: "primary", htmlType: "submit" }, jp_default.signupFields.signup), /* @__PURE__ */ import_react111.default.createElement("small", { style: { marginLeft: 20 } }, /* @__PURE__ */ import_react111.default.createElement(Link2, { to: "/" }, jp_default.signupFields.to_login)))
+    ))));
+  };
+  var Signup_default = Signup;
+
+  // app/javascript/pages/SignupPage.jsx
+  var LoginPage2 = () => {
+    const token2 = (0, import_react112.useMemo)(() => getAuthUser().token, [getAuthUser().token]);
+    (0, import_react112.useEffect)(() => {
+      if (!falsy(token2)) {
+        return;
+      }
+    }, [token2]);
+    return /* @__PURE__ */ import_react112.default.createElement(import_react112.default.Fragment, null, /* @__PURE__ */ import_react112.default.createElement(Signup_default, null));
+  };
+  var SignupPage_default = LoginPage2;
+
+  // app/javascript/pages/IncomePage.tsx
+  var import_react114 = __toESM(require_react());
+
+  // app/javascript/components/Income/IncomeTable.jsx
+  var import_react113 = __toESM(require_react());
   var columns = [
     {
       title: "\u54C1\u756A",
       dataIndex: "productnumber",
       key: "productnumber",
-      render: (text) => /* @__PURE__ */ import_react111.default.createElement("a", null, text)
+      render: (text) => /* @__PURE__ */ import_react113.default.createElement("a", null, text)
     },
     {
       title: "\u54C1\u540D",
@@ -81417,12 +81532,12 @@
       title: "",
       key: "action",
       dataIndex: "action",
-      render: (_, { action }) => /* @__PURE__ */ import_react111.default.createElement(import_react111.default.Fragment, null, action.map((tag, i) => {
+      render: (_, { action }) => /* @__PURE__ */ import_react113.default.createElement(import_react113.default.Fragment, null, action.map((tag, i) => {
         let color = tag.length > 5 ? "geekblue" : "green";
         if (tag === "\u524A\u9664") {
           color = "red";
         }
-        return /* @__PURE__ */ import_react111.default.createElement(tag_default, { color, key: tag }, tag.toUpperCase());
+        return /* @__PURE__ */ import_react113.default.createElement(tag_default, { color, key: tag }, tag.toUpperCase());
       }))
     }
     // {
@@ -81487,7 +81602,7 @@
       key: "5"
     }
   ];
-  var IncomeTable = () => /* @__PURE__ */ import_react111.default.createElement(table_default, { columns, dataSource: data });
+  var IncomeTable = () => /* @__PURE__ */ import_react113.default.createElement(table_default, { columns, dataSource: data });
   var IncomeTable_default = IncomeTable;
 
   // node_modules/rc-picker/es/locale/ja_JP.js
@@ -81549,13 +81664,13 @@
       console.log(date4, dateString);
     };
     const onSearch = (value, _e, info) => console.log(info?.source, value);
-    return /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(Navbar_default, null), /* @__PURE__ */ import_react112.default.createElement(
+    return /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(Navbar_default, null), /* @__PURE__ */ import_react114.default.createElement(
       Content3,
       {
         style: { width: 1024 },
         className: "mx-auto flex flex-col justify-content content-h"
       },
-      /* @__PURE__ */ import_react112.default.createElement(
+      /* @__PURE__ */ import_react114.default.createElement(
         form_default,
         {
           name: "basic",
@@ -81563,14 +81678,14 @@
           autoComplete: "off",
           style: { margin: "50px 0 0px 0" }
         },
-        /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal" }, /* @__PURE__ */ import_react112.default.createElement(
+        /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal" }, /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u5009\u5EAB",
             name: "username",
             style: { display: "inline-block", width: 200, marginBottom: 0 }
           },
-          /* @__PURE__ */ import_react112.default.createElement(
+          /* @__PURE__ */ import_react114.default.createElement(
             select_default,
             {
               defaultValue: "\u4E00\u822C\u5009\u5EAB",
@@ -81583,14 +81698,14 @@
               ]
             }
           )
-        ), /* @__PURE__ */ import_react112.default.createElement(
+        ), /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u8377\u4E3B",
             name: "username",
             style: { display: "inline-block", width: 300, marginBottom: 0 }
           },
-          /* @__PURE__ */ import_react112.default.createElement(
+          /* @__PURE__ */ import_react114.default.createElement(
             select_default,
             {
               defaultValue: "\u682A\u5F0F\u4F1A\u793EXXXXXX\uFF08\u25CB\u25CB\u5009\u5EAB\u88FD\u54C1\uFF09",
@@ -81603,7 +81718,7 @@
               ]
             }
           )
-        ), /* @__PURE__ */ import_react112.default.createElement(
+        ), /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u5165\u5EAB\u65E5",
@@ -81615,10 +81730,10 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react112.default.createElement(date_picker_default, { onChange: onChangeDate, locale: ja_JP_default3 })
+          /* @__PURE__ */ import_react114.default.createElement(date_picker_default, { onChange: onChangeDate, locale: ja_JP_default3 })
         )),
-        /* @__PURE__ */ import_react112.default.createElement(divider_default, null),
-        /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react112.default.createElement(
+        /* @__PURE__ */ import_react114.default.createElement(divider_default, null),
+        /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u54C1\u756A",
@@ -81629,7 +81744,7 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react112.default.createElement(
+          /* @__PURE__ */ import_react114.default.createElement(
             Search2,
             {
               placeholder: "\u54C1\u756A",
@@ -81639,7 +81754,7 @@
             }
           )
         ))),
-        /* @__PURE__ */ import_react112.default.createElement("div", null, /* @__PURE__ */ import_react112.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react112.default.createElement(
+        /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u54C1\u540D",
@@ -81650,8 +81765,8 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u54C1\u540D" })
-        ), /* @__PURE__ */ import_react112.default.createElement(
+          /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u54C1\u540D" })
+        ), /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u8377\u59FF",
@@ -81663,8 +81778,8 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u8377\u59FF" })
-        ), /* @__PURE__ */ import_react112.default.createElement(
+          /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u8377\u59FF" })
+        ), /* @__PURE__ */ import_react114.default.createElement(
           form_default.Item,
           {
             label: "\u8377\u59FF",
@@ -81676,17 +81791,17 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react112.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u8377\u5F79\u5358\u4FA1" }), /* @__PURE__ */ import_react112.default.createElement(input_default, { placeholder: "\u4FDD\u7BA1\u5358\u4FA1" }))
+          /* @__PURE__ */ import_react114.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u8377\u5F79\u5358\u4FA1" }), /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: "\u4FDD\u7BA1\u5358\u4FA1" }))
         ))),
-        /* @__PURE__ */ import_react112.default.createElement(divider_default, null)
+        /* @__PURE__ */ import_react114.default.createElement(divider_default, null)
       ),
-      /* @__PURE__ */ import_react112.default.createElement(IncomeTable_default, null)
-    ), /* @__PURE__ */ import_react112.default.createElement(Index_default, null));
+      /* @__PURE__ */ import_react114.default.createElement(IncomeTable_default, null)
+    ), /* @__PURE__ */ import_react114.default.createElement(Index_default, null));
   };
   var IncomePage_default = IncomePage;
 
   // app/javascript/contexts/AuthContextProvider.js
-  var import_react113 = __toESM(require_react());
+  var import_react115 = __toESM(require_react());
 
   // app/javascript/utils/contants.js
   var baseUrl = "http://127.0.0.1:3000/api/";
@@ -81757,7 +81872,7 @@
 
   // app/javascript/contexts/AuthContextProvider.js
   var AuthContextProvider = ({ children }) => {
-    const [state, dispatch] = (0, import_react113.useReducer)(AuthReducer, initialAuthState);
+    const [state, dispatch] = (0, import_react115.useReducer)(AuthReducer, initialAuthState);
     const loginAction2 = async (payload) => {
       const res = await services_default.login(payload);
       if (!hasError(res?.status)) {
@@ -81780,7 +81895,7 @@
         auth_actions_default.logoutAction(dispatch);
       }
     };
-    return /* @__PURE__ */ import_react113.default.createElement(
+    return /* @__PURE__ */ import_react115.default.createElement(
       AuthContext.Provider,
       {
         value: {
@@ -81797,12 +81912,12 @@
 
   // app/javascript/components/router/AppRouter.jsx
   var AppRouter = () => {
-    return /* @__PURE__ */ import_react114.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react114.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react114.default.createElement(Routes, null, /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react114.default.createElement(LoginPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react114.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react114.default.createElement(IncomePage_default, null) }))));
+    return /* @__PURE__ */ import_react116.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react116.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react116.default.createElement(Routes, null, /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/signup", element: /* @__PURE__ */ import_react116.default.createElement(SignupPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react116.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react116.default.createElement(IncomePage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react116.default.createElement(LoginPage_default, null) }))));
   };
 
   // app/javascript/App.jsx
   var App = () => {
-    return /* @__PURE__ */ import_react115.default.createElement(import_react115.default.Fragment, null, /* @__PURE__ */ import_react115.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react115.default.createElement(AppRouter, null)));
+    return /* @__PURE__ */ import_react117.default.createElement(import_react117.default.Fragment, null, /* @__PURE__ */ import_react117.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react117.default.createElement(AppRouter, null)));
   };
   var App_default = App;
 })();

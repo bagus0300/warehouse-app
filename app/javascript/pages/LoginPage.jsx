@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 // import { useTranslation } from "react-i18next";
-import LoginComponent from "../components/auth/LoginComponent";
+import LoginComponent from "../components/auth/Login";
 import { falsy, getAuthUser } from "../utils/helper";
 
 const LoginPage = () => {
