@@ -39,7 +39,7 @@ const IncomePage = () => {
       lotNumber: "123123123",
       weight: "100",
       stock: "200",
-      action: ["変更", "削除"],
+      action: ["messages.buttons.change", "messages.buttons.delete"],
       key: "1"
     },
     {
@@ -51,7 +51,7 @@ const IncomePage = () => {
       lotNumber: "123123123",
       weight: "100",
       stock: "200",
-      action: ["変更", "削除"],
+      action: ["messages.buttons.change", "messages.buttons.delete"],
       key: "2"
     },
     {
@@ -63,7 +63,7 @@ const IncomePage = () => {
       lotNumber: "123123123",
       weight: "100",
       stock: "200",
-      action: ["変更", "削除"],
+      action: ["messages.buttons.change", "messages.buttons.delete"],
       key: "3"
     },
     {
@@ -75,7 +75,7 @@ const IncomePage = () => {
       lotNumber: "123123123",
       weight: "100",
       stock: "200",
-      action: ["変更", "削除"],
+      action: ["messages.buttons.change", "messages.buttons.delete"],
       key: "4"
     },
     {
@@ -87,7 +87,7 @@ const IncomePage = () => {
       lotNumber: "123123123",
       weight: "100",
       stock: "200",
-      action: ["変更", "削除"],
+      action: ["messages.buttons.change", "messages.buttons.delete"],
       key: "5"
     }
   ];
@@ -100,6 +100,10 @@ const IncomePage = () => {
   const [shipperVal, setShipperVal] = useState(shipperOptions[0]);
   const [receiptDate, setReceiptDate] = useState();
   const [searchResult, setSearchResult] = useState({});
+
+  // const handleSubmit = (e) = {
+
+  // };
 
   const selStoreChange = (value) => {
     setStoreVal(storeOptions[value]);
@@ -123,9 +127,19 @@ const IncomePage = () => {
     console.log('edit', idx);
   }
 
-  const deleteRow = (idx) => {
-    console.log('delete', idx);
+  
+  const deleteRow = (id) => {
+    const newData = data.slice();
+    console.log('delete', id);
+    const delData = newData.filter((data) => data.product_id == id)[0];
+    console.log(delData);
+    const index = newData.indexOf(delData);
+    console.log('========',index);
+    newData.splice(index, 1);
+    console.log('========',newData);
+    setData(newData);
   }
+
 
   const insertData = () => {
     const newData = data.slice();
@@ -147,38 +161,38 @@ const IncomePage = () => {
           autoComplete="off"
           style={{ margin: "50px 0 0px 0" }}
         >
-          <Space direction="horizontal">
+          <Space style={{ display:"flex", flexDirection: "column", alignItems:"flex-start", }}>
             <Form.Item
-              label="倉庫"
+              label={messages.IncomePageJp.warehouse}
               name="username"
               style={{ display: "inline-block", width: 200, marginBottom: 0 }}
             >
               <Select
                 defaultValue={storeVal.label}
                 onChange={selStoreChange}
-                style={{ width: 140 }}
+                style={{ width: 140, marginLeft: 14 }}
                 options={storeOptions}
               />
             </Form.Item>
             <Form.Item
-              label="荷主"
+              label={messages.IncomePageJp.shipper}
               name="username"
-              style={{ display: "inline-block", width: 300, marginBottom: 0 }}
+              style={{ display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }}
             >
               <Select
                 defaultValue={shipperVal.label}
-                style={{ width: 280 }}
+                style={{ width: 300, marginLeft: 14  }}
                 onChange={selShipperChange}
                 options={shipperOptions}
               />
             </Form.Item>
             <Form.Item
-              label="入庫日"
+              label={messages.IncomePageJp.receiptDate}
               name="username"
               style={{
                 display: "inline-block",
                 width: 250,
-                marginLeft: 30,
+                marginLeft: 0,
                 marginBottom: 0,
               }}
             >
@@ -189,17 +203,18 @@ const IncomePage = () => {
           <div>
             <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
               <Form.Item
-                label="品番"
+                label={messages.IncomePageJp.productNumber}
                 name="username"
                 style={{
                   display: "inline-block",
-                  width: 250,
+                  width: 350,
                   marginBottom: 0,
                 }}
               >
                 <Search
-                  placeholder="品番"
+                  placeholder={messages.IncomePageJp.productNumber}
                   allowClear
+                  style={{marginLeft: 15,}}
                   enterButton="検索"
                   value={searchResult.product_id}
                   onSearch={onSearch}
@@ -210,7 +225,7 @@ const IncomePage = () => {
           <div>
             <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
               <Form.Item
-                label="品名"
+                label={messages.IncomePageJp.productName}
                 name="username"
                 style={{
                   display: "inline-block",
@@ -219,11 +234,14 @@ const IncomePage = () => {
                 }}
               >
                 <Space.Compact>
-                  <Input placeholder="品名" value={searchResult.product_name}/>
+                  <Input 
+                    placeholder={messages.IncomePageJp.productName}
+                    style={{marginLeft: 15,}}
+                    value={searchResult.product_name}/>
                 </Space.Compact>
               </Form.Item>
               <Form.Item
-                label="荷姿"
+                label={messages.IncomePageJp.packing}
                 name="username"
                 style={{
                   display: "inline-block",
@@ -233,22 +251,26 @@ const IncomePage = () => {
                 }}
               >
                 <Space.Compact>
-                  <Input placeholder="荷姿" value={searchResult.product_type}/>
+                  <Input placeholder={messages.IncomePageJp.packing} value={searchResult.product_type}/>
                 </Space.Compact>
               </Form.Item>
               <Form.Item
-                label="荷姿"
+                label={messages.IncomePageJp.packing}
                 name="username"
                 style={{
                   display: "inline-block",
-                  width: 250,
+                  width: 450,
                   marginLeft: 30,
                   marginBottom: 0,
                 }}
               >
                 <Space.Compact>
-                  <Input placeholder="荷役単価" value={searchResult.cargoPrice}/>
-                  <Input placeholder="保管単価" value={searchResult.storagePrice}/>
+                  <Input 
+                    style={{width: 100,}} 
+                    placeholder={messages.IncomePageJp.cargoPrice} 
+                    value={searchResult.cargoPrice}/>
+                  <Input style={{width: 80}}/>
+                  <Input style={{width: 100}} placeholder={messages.IncomePageJp.storagePrice} value={searchResult.storagePrice}/>
                 </Space.Compact>
               </Form.Item>
             </Space>
@@ -259,7 +281,7 @@ const IncomePage = () => {
                 style={{
                   display: "inline-block",
                   width: 400,
-                  marginLeft: 40,
+                  marginLeft: 55,
                   marginBottom: 0,
                 }}
               >
@@ -276,7 +298,14 @@ const IncomePage = () => {
           data={data}
           editRow={editRow}
           deleteRow={deleteRow}
+          pagination={false}
         />
+        <div style={{height:15}}></div>
+        <div style={{justifyContent: "flex-end", display: "flex"}}>
+          <Button style={{width: 150,}}>{messages.buttons.csvExchange}</Button>
+          <div style={{width: 40}}></div>
+          <Button style={{width: 150,}}>{messages.buttons.confirmDeparture}</Button>
+      </div>
       </Content>
       <FooterSection />
     </div>

@@ -12,7 +12,9 @@
     "login": "ログイン",
     "register": "新規登録",
     "change": "変更",
-    "delete": "削除"
+    "delete": "削除",
+    "csvExchange": "CSVダウンロード",
+    "confirmDeparture" : "出庫確定"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -73,6 +75,11 @@
       "receiptDate": "入庫日",
       "shipper": "荷主",
       "warehouse": "倉庫"
+    },
+    "OutputPage": {
+      "departureDate": "出庫日",
+      "libraryNumber":"現在庫数",
+      "shipmentNumber": "出庫数"
     },
   "messages": {
     "type_username": "Please input your username!",

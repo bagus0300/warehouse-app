@@ -1084,7 +1084,7 @@
             }
             return dispatcher.useContext(Context3);
           }
-          function useState85(initialState) {
+          function useState86(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1096,7 +1096,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect87(create, deps) {
+          function useEffect88(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1878,7 +1878,7 @@
           exports.useContext = useContext138;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect87;
+          exports.useEffect = useEffect88;
           exports.useId = useId4;
           exports.useImperativeHandle = useImperativeHandle27;
           exports.useInsertionEffect = useInsertionEffect3;
@@ -1886,7 +1886,7 @@
           exports.useMemo = useMemo96;
           exports.useReducer = useReducer3;
           exports.useRef = useRef120;
-          exports.useState = useState85;
+          exports.useState = useState86;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
@@ -2636,9 +2636,9 @@
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart === "function") {
             __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(new Error());
           }
-          var React394 = require_react();
+          var React395 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React394.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React395.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -4243,7 +4243,7 @@
             {
               if (props.value == null) {
                 if (typeof props.children === "object" && props.children !== null) {
-                  React394.Children.forEach(props.children, function(child) {
+                  React395.Children.forEach(props.children, function(child) {
                     if (child == null) {
                       return;
                     }
@@ -12690,7 +12690,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React394.Component().refs;
+          var emptyRefsObject = new React395.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24493,7 +24493,7 @@
   });
 
   // app/javascript/App.jsx
-  var import_react115 = __toESM(require_react());
+  var import_react117 = __toESM(require_react());
 
   // node_modules/@babel/runtime/helpers/esm/extends.js
   function _extends() {
@@ -78707,7 +78707,7 @@
   var typography_default = Typography2;
 
   // app/javascript/components/router/AppRouter.jsx
-  var import_react114 = __toESM(require_react());
+  var import_react116 = __toESM(require_react());
 
   // node_modules/react-router-dom/dist/index.js
   var React382 = __toESM(require_react());
@@ -80752,7 +80752,9 @@
       login: "\u30ED\u30B0\u30A4\u30F3",
       register: "\u65B0\u898F\u767B\u9332",
       change: "\u5909\u66F4",
-      delete: "\u524A\u9664"
+      delete: "\u524A\u9664",
+      csvExchange: "CSV\u30C0\u30A6\u30F3\u30ED\u30FC\u30C9",
+      confirmDeparture: "\u51FA\u5EAB\u78BA\u5B9A"
     },
     CardTopics: [
       "\uFF11\uFF0E\u5165\u5EAB\u51E6\u7406",
@@ -80813,6 +80815,11 @@
       receiptDate: "\u5165\u5EAB\u65E5",
       shipper: "\u8377\u4E3B",
       warehouse: "\u5009\u5EAB"
+    },
+    OutputPage: {
+      departureDate: "\u51FA\u5EAB\u65E5",
+      libraryNumber: "\u73FE\u5728\u5EAB\u6570",
+      shipmentNumber: "\u51FA\u5EAB\u6570"
     },
     messages: {
       type_username: "Please input your username!",
@@ -81087,10 +81094,10 @@
       {
         title: "Action",
         key: "action",
-        render: (_, record) => /* @__PURE__ */ import_react110.default.createElement(space_default, { size: "small" }, /* @__PURE__ */ import_react110.default.createElement(button_default2, { onClick: () => editRow(record.productnumber) }, jp_default.buttons.change), /* @__PURE__ */ import_react110.default.createElement(button_default2, { onClick: () => deleteRow(record.productnumber) }, jp_default.buttons.delete))
+        render: (_, record) => /* @__PURE__ */ import_react110.default.createElement(space_default, { size: "small" }, /* @__PURE__ */ import_react110.default.createElement(button_default2, { onClick: () => editRow(record.product_id) }, jp_default.buttons.change), /* @__PURE__ */ import_react110.default.createElement(button_default2, { onClick: () => deleteRow(record.product_id) }, jp_default.buttons.delete))
       }
     ];
-    return /* @__PURE__ */ import_react110.default.createElement(table_default, { columns, dataSource: data });
+    return /* @__PURE__ */ import_react110.default.createElement(table_default, { columns, dataSource: data, pagination: false });
   };
   var IncomeTable_default = IncomeTable;
 
@@ -81169,7 +81176,7 @@
         lotNumber: "123123123",
         weight: "100",
         stock: "200",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
+        action: ["messages.buttons.change", "messages.buttons.delete"],
         key: "1"
       },
       {
@@ -81181,7 +81188,7 @@
         lotNumber: "123123123",
         weight: "100",
         stock: "200",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
+        action: ["messages.buttons.change", "messages.buttons.delete"],
         key: "2"
       },
       {
@@ -81193,7 +81200,7 @@
         lotNumber: "123123123",
         weight: "100",
         stock: "200",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
+        action: ["messages.buttons.change", "messages.buttons.delete"],
         key: "3"
       },
       {
@@ -81205,7 +81212,7 @@
         lotNumber: "123123123",
         weight: "100",
         stock: "200",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
+        action: ["messages.buttons.change", "messages.buttons.delete"],
         key: "4"
       },
       {
@@ -81217,23 +81224,11 @@
         lotNumber: "123123123",
         weight: "100",
         stock: "200",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
+        action: ["messages.buttons.change", "messages.buttons.delete"],
         key: "5"
       }
     ];
     const [data, setData] = (0, import_react112.useState)([]);
-    const data2 = [
-      {
-        productnumber: "1",
-        productnamme: "xxx",
-        packaging: "xxx",
-        lotnumber: "xxx",
-        weight: "xxx",
-        quantity: "xxx",
-        action: ["\u5909\u66F4", "\u524A\u9664"],
-        key: "1"
-      }
-    ];
     const [storeVal, setStoreVal] = (0, import_react112.useState)(storeOptions[0]);
     const [shipperVal, setShipperVal] = (0, import_react112.useState)(shipperOptions[0]);
     const [receiptDate, setReceiptDate] = (0, import_react112.useState)();
@@ -81255,8 +81250,16 @@
     const editRow = (idx) => {
       console.log("edit", idx);
     };
-    const deleteRow = (idx) => {
-      console.log("delete", idx);
+    const deleteRow = (id) => {
+      const newData = data.slice();
+      console.log("delete", id);
+      const delData = newData.filter((data2) => data2.product_id == id)[0];
+      console.log(delData);
+      const index2 = newData.indexOf(delData);
+      console.log("========", index2);
+      newData.splice(index2, 1);
+      console.log("========", newData);
+      setData(newData);
     };
     const insertData = () => {
       const newData = data.slice();
@@ -81278,10 +81281,10 @@
           autoComplete: "off",
           style: { margin: "50px 0 0px 0" }
         },
-        /* @__PURE__ */ import_react111.default.createElement(space_default, { direction: "horizontal" }, /* @__PURE__ */ import_react111.default.createElement(
+        /* @__PURE__ */ import_react111.default.createElement(space_default, { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" } }, /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u5009\u5EAB",
+            label: jp_default.IncomePageJp.warehouse,
             name: "username",
             style: { display: "inline-block", width: 200, marginBottom: 0 }
           },
@@ -81290,22 +81293,22 @@
             {
               defaultValue: storeVal.label,
               onChange: selStoreChange,
-              style: { width: 140 },
+              style: { width: 140, marginLeft: 14 },
               options: storeOptions
             }
           )
         ), /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u8377\u4E3B",
+            label: jp_default.IncomePageJp.shipper,
             name: "username",
-            style: { display: "inline-block", width: 300, marginBottom: 0 }
+            style: { display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }
           },
           /* @__PURE__ */ import_react111.default.createElement(
             select_default,
             {
               defaultValue: shipperVal.label,
-              style: { width: 280 },
+              style: { width: 300, marginLeft: 14 },
               onChange: selShipperChange,
               options: shipperOptions
             }
@@ -81313,12 +81316,12 @@
         ), /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u5165\u5EAB\u65E5",
+            label: jp_default.IncomePageJp.receiptDate,
             name: "username",
             style: {
               display: "inline-block",
               width: 250,
-              marginLeft: 30,
+              marginLeft: 0,
               marginBottom: 0
             }
           },
@@ -81328,19 +81331,20 @@
         /* @__PURE__ */ import_react111.default.createElement("div", null, /* @__PURE__ */ import_react111.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u54C1\u756A",
+            label: jp_default.IncomePageJp.productNumber,
             name: "username",
             style: {
               display: "inline-block",
-              width: 250,
+              width: 350,
               marginBottom: 0
             }
           },
           /* @__PURE__ */ import_react111.default.createElement(
             Search2,
             {
-              placeholder: "\u54C1\u756A",
+              placeholder: jp_default.IncomePageJp.productNumber,
               allowClear: true,
+              style: { marginLeft: 15 },
               enterButton: "\u691C\u7D22",
               value: searchResult.product_id,
               onSearch
@@ -81350,7 +81354,7 @@
         /* @__PURE__ */ import_react111.default.createElement("div", null, /* @__PURE__ */ import_react111.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u54C1\u540D",
+            label: jp_default.IncomePageJp.productName,
             name: "username",
             style: {
               display: "inline-block",
@@ -81358,11 +81362,18 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(input_default, { placeholder: "\u54C1\u540D", value: searchResult.product_name }))
+          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(
+            input_default,
+            {
+              placeholder: jp_default.IncomePageJp.productName,
+              style: { marginLeft: 15 },
+              value: searchResult.product_name
+            }
+          ))
         ), /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u8377\u59FF",
+            label: jp_default.IncomePageJp.packing,
             name: "username",
             style: {
               display: "inline-block",
@@ -81371,27 +81382,34 @@
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(input_default, { placeholder: "\u8377\u59FF", value: searchResult.product_type }))
+          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(input_default, { placeholder: jp_default.IncomePageJp.packing, value: searchResult.product_type }))
         ), /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
-            label: "\u8377\u59FF",
+            label: jp_default.IncomePageJp.packing,
             name: "username",
             style: {
               display: "inline-block",
-              width: 250,
+              width: 450,
               marginLeft: 30,
               marginBottom: 0
             }
           },
-          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(input_default, { placeholder: "\u8377\u5F79\u5358\u4FA1", value: searchResult.cargoPrice }), /* @__PURE__ */ import_react111.default.createElement(input_default, { placeholder: "\u4FDD\u7BA1\u5358\u4FA1", value: searchResult.storagePrice }))
+          /* @__PURE__ */ import_react111.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react111.default.createElement(
+            input_default,
+            {
+              style: { width: 100 },
+              placeholder: jp_default.IncomePageJp.cargoPrice,
+              value: searchResult.cargoPrice
+            }
+          ), /* @__PURE__ */ import_react111.default.createElement(input_default, { style: { width: 80 } }), /* @__PURE__ */ import_react111.default.createElement(input_default, { style: { width: 100 }, placeholder: jp_default.IncomePageJp.storagePrice, value: searchResult.storagePrice }))
         )), /* @__PURE__ */ import_react111.default.createElement(space_default, null, /* @__PURE__ */ import_react111.default.createElement(
           form_default.Item,
           {
             style: {
               display: "inline-block",
               width: 400,
-              marginLeft: 40,
+              marginLeft: 55,
               marginBottom: 0
             }
           },
@@ -81406,9 +81424,12 @@
         {
           data,
           editRow,
-          deleteRow
+          deleteRow,
+          pagination: false
         }
-      )
+      ),
+      /* @__PURE__ */ import_react111.default.createElement("div", { style: { height: 15 } }),
+      /* @__PURE__ */ import_react111.default.createElement("div", { style: { justifyContent: "flex-end", display: "flex" } }, /* @__PURE__ */ import_react111.default.createElement(button_default2, { style: { width: 150 } }, jp_default.buttons.csvExchange), /* @__PURE__ */ import_react111.default.createElement("div", { style: { width: 40 } }), /* @__PURE__ */ import_react111.default.createElement(button_default2, { style: { width: 150 } }, jp_default.buttons.confirmDeparture))
     ), /* @__PURE__ */ import_react111.default.createElement(Index_default, null));
   };
   var IncomePage_default = IncomePage;
@@ -81523,14 +81544,326 @@
   };
   var AuthContextProvider_default = AuthContextProvider;
 
+  // app/javascript/pages/OutputPage.jsx
+  var import_react114 = __toESM(require_react());
+  var import_react115 = __toESM(require_react());
+  var { Search: Search3 } = input_default;
+  var { Content: Content4 } = layout_default2;
+  var OutputPage = () => {
+    const storeOptions = [
+      { value: 0, label: "\u4E00\u822C\u5009\u5EAB" },
+      { value: 1, label: "\u7DE8\u96C6" },
+      { value: 2, label: "\u524A\u9664" },
+      { value: 3, label: "\u4EE3\u66FF\u30C6\u30AD\u30B9\u30C8" }
+    ];
+    const shipperOptions = [
+      { value: 0, label: "\u682A\u5F0F\u4F1A\u793EXXXXXX\uFF08\u25CB\u25CB\u5009\u5EAB\u88FD\u54C1\uFF09" },
+      { value: 1, label: "\u7DE8\u96C6" },
+      { value: 2, label: "\u524A\u9664" },
+      { value: 2, label: "\u4EE3\u66FF\u30C6\u30AD\u30B9\u30C8" }
+    ];
+    const products = [
+      {
+        product_id: "1",
+        product_name: "product name 1",
+        product_type: "project type 1",
+        cargoPrice: "100",
+        storagePrice: "200",
+        lotNumber: "123123123",
+        weight: "100",
+        stock: "200",
+        action: ["messages.buttons.change", "messages.buttons.delete"],
+        key: "1"
+      },
+      {
+        product_id: "2",
+        product_name: "product name 2",
+        product_type: "project type 2",
+        cargoPrice: "100",
+        storagePrice: "200",
+        lotNumber: "123123123",
+        weight: "100",
+        stock: "200",
+        action: ["messages.buttons.change", "messages.buttons.delete"],
+        key: "2"
+      },
+      {
+        product_id: "3",
+        product_name: "product name 3",
+        product_type: "project type 3",
+        cargoPrice: "100",
+        storagePrice: "200",
+        lotNumber: "123123123",
+        weight: "100",
+        stock: "200",
+        action: ["messages.buttons.change", "messages.buttons.delete"],
+        key: "3"
+      },
+      {
+        product_id: "4",
+        product_name: "product name 4",
+        product_type: "project type 4",
+        cargoPrice: "100",
+        storagePrice: "200",
+        lotNumber: "123123123",
+        weight: "100",
+        stock: "200",
+        action: ["messages.buttons.change", "messages.buttons.delete"],
+        key: "4"
+      },
+      {
+        product_id: "5",
+        product_name: "product name 5",
+        product_type: "project type 5",
+        cargoPrice: "100",
+        storagePrice: "200",
+        lotNumber: "123123123",
+        weight: "100",
+        stock: "200",
+        action: ["messages.buttons.change", "messages.buttons.delete"],
+        key: "5"
+      }
+    ];
+    const [data, setData] = (0, import_react115.useState)([]);
+    const [storeVal, setStoreVal] = (0, import_react115.useState)(storeOptions[0]);
+    const [shipperVal, setShipperVal] = (0, import_react115.useState)(shipperOptions[0]);
+    const [receiptDate, setReceiptDate] = (0, import_react115.useState)();
+    const [searchResult, setSearchResult] = (0, import_react115.useState)({});
+    const handleSubmit = (e3) => {
+    };
+    const selStoreChange = (value) => {
+      setStoreVal(storeOptions[value]);
+    };
+    const selShipperChange = (value) => {
+      setShipperVal(shipperOptions[value]);
+    };
+    const onChangeDate = (date4, dateString) => {
+      setReceiptDate(dateString);
+    };
+    const onSearch = (value, _e, info) => {
+      const result = products.filter((product) => product.product_id == value)[0];
+      console.log(result);
+      setSearchResult(result);
+    };
+    const editRow = (id) => {
+      console.log("edit", id);
+    };
+    const deleteRow = (id) => {
+      const newData = data.slice();
+      console.log("delete", id);
+      const delData = newData.filter((data2) => data2.product_id == id)[0];
+      console.log(delData);
+      const index2 = newData.indexOf(delData);
+      console.log("========", index2);
+      newData.splice(index2, 1);
+      console.log("========", newData);
+      setData(newData);
+    };
+    const insertData = () => {
+      const newData = data.slice();
+      newData.push(searchResult);
+      setData(newData);
+      console.log(data);
+    };
+    return /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(Navbar_default, null), /* @__PURE__ */ import_react114.default.createElement(
+      Content4,
+      {
+        style: { width: 1024 },
+        className: "mx-auto flex flex-col justify-content content-h"
+      },
+      /* @__PURE__ */ import_react114.default.createElement(
+        "div",
+        {
+          name: "basic",
+          initialValues: { remember: true },
+          autoComplete: "off",
+          style: { margin: "50px 0 0px 0" }
+        },
+        /* @__PURE__ */ import_react114.default.createElement(space_default, { style: { display: "flex", flexDirection: "column", alignItems: "flex-start" } }, /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.warehouse,
+            name: "username",
+            style: { display: "inline-block", width: 200, marginBottom: 0 }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(
+            select_default,
+            {
+              defaultValue: storeVal.label,
+              onChange: selStoreChange,
+              style: { width: 140, marginLeft: 14 },
+              options: storeOptions
+            }
+          )
+        ), /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.shipper,
+            name: "username",
+            style: { display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(
+            select_default,
+            {
+              defaultValue: shipperVal.label,
+              style: { width: 300, marginLeft: 14 },
+              onChange: selShipperChange,
+              options: shipperOptions
+            }
+          )
+        ), /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.receiptDate,
+            name: "username",
+            style: {
+              display: "inline-block",
+              width: 250,
+              marginLeft: 0,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(date_picker_default, { value: receiptDate, onChange: onChangeDate, locale: ja_JP_default3 })
+        )),
+        /* @__PURE__ */ import_react114.default.createElement(divider_default, null),
+        /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.productNumber,
+            name: "username",
+            style: {
+              display: "inline-block",
+              width: 350,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(
+            select_default,
+            {
+              placeholder: jp_default.IncomePageJp.productNumber,
+              allowClear: true,
+              style: { marginLeft: 15, width: 200 },
+              enterButton: "\u691C\u7D22",
+              value: searchResult.product_id
+            }
+          )
+        ))),
+        /* @__PURE__ */ import_react114.default.createElement("div", null, /* @__PURE__ */ import_react114.default.createElement(space_default, { direction: "horizontal", style: { margin: "0 0 20px 0" } }, /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.productName,
+            name: "username",
+            style: {
+              display: "inline-block",
+              width: 350,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react114.default.createElement(
+            input_default,
+            {
+              placeholder: jp_default.IncomePageJp.productName,
+              style: { marginLeft: 15, width: 250 },
+              value: searchResult.product_name
+            }
+          ))
+        ), /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.packing,
+            name: "username",
+            style: {
+              display: "inline-block",
+              width: 250,
+              marginLeft: 30,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react114.default.createElement(input_default, { placeholder: jp_default.IncomePageJp.packing, value: searchResult.product_type }))
+        ), /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            label: jp_default.IncomePageJp.packing,
+            name: "username",
+            style: {
+              display: "inline-block",
+              width: 450,
+              marginLeft: 30,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(space_default.Compact, null, /* @__PURE__ */ import_react114.default.createElement(
+            input_default,
+            {
+              style: { width: 100 },
+              placeholder: jp_default.IncomePageJp.cargoPrice,
+              value: searchResult.cargoPrice
+            }
+          ), /* @__PURE__ */ import_react114.default.createElement(input_default, { style: { width: 80 } }), /* @__PURE__ */ import_react114.default.createElement(input_default, { style: { width: 100 }, placeholder: jp_default.IncomePageJp.storagePrice, value: searchResult.storagePrice }))
+        )), /* @__PURE__ */ import_react114.default.createElement(space_default, null, /* @__PURE__ */ import_react114.default.createElement(
+          form_default.Item,
+          {
+            style: {
+              display: "flexs",
+              width: 700,
+              marginLeft: 55,
+              marginBottom: 0
+            }
+          },
+          /* @__PURE__ */ import_react114.default.createElement(date_picker_default, { value: receiptDate, onChange: onChangeDate, locale: ja_JP_default3 }),
+          /* @__PURE__ */ import_react114.default.createElement(
+            select_default,
+            {
+              style: { width: 200 },
+              placeholder: jp_default.IncomePageJp.lotNumber
+            }
+          ),
+          /* @__PURE__ */ import_react114.default.createElement(
+            input_default,
+            {
+              style: {
+                width: 100,
+                marginLeft: 20,
+                marginBottom: 0
+              },
+              placeholder: jp_default.OutputPage.libraryNumber,
+              value: searchResult.weight
+            }
+          ),
+          /* @__PURE__ */ import_react114.default.createElement(
+            input_default,
+            {
+              style: { width: 100, marginBottom: 0 },
+              placeholder: jp_default.OutputPage.shipmentNumber,
+              value: searchResult.stock
+            }
+          )
+        ), /* @__PURE__ */ import_react114.default.createElement(button_default2, { onClick: insertData, style: { fontWeight: "bold", width: "100px", fontSize: "15px" } }, jp_default.IncomePageJp.addition))),
+        /* @__PURE__ */ import_react114.default.createElement(divider_default, null)
+      ),
+      /* @__PURE__ */ import_react114.default.createElement(
+        IncomeTable_default,
+        {
+          data,
+          editRow,
+          deleteRow,
+          pagination: false
+        }
+      ),
+      /* @__PURE__ */ import_react114.default.createElement("div", { style: { height: 15 } }),
+      /* @__PURE__ */ import_react114.default.createElement("div", { style: { justifyContent: "flex-end", display: "flex" } }, /* @__PURE__ */ import_react114.default.createElement(button_default2, { style: { width: 150 } }, jp_default.buttons.csvExchange), /* @__PURE__ */ import_react114.default.createElement("div", { style: { width: 40 } }), /* @__PURE__ */ import_react114.default.createElement(button_default2, { style: { width: 150 } }, jp_default.buttons.confirmDeparture))
+    ), /* @__PURE__ */ import_react114.default.createElement(Index_default, null));
+  };
+  var OutputPage_default = OutputPage;
+
   // app/javascript/components/router/AppRouter.jsx
   var AppRouter = () => {
-    return /* @__PURE__ */ import_react114.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react114.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react114.default.createElement(Routes, null, /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react114.default.createElement(LoginPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react114.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react114.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react114.default.createElement(IncomePage_default, null) }))));
+    return /* @__PURE__ */ import_react116.default.createElement(AuthContextProvider_default, null, /* @__PURE__ */ import_react116.default.createElement(BrowserRouter, null, /* @__PURE__ */ import_react116.default.createElement(Routes, null, /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/", element: /* @__PURE__ */ import_react116.default.createElement(LoginPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/home", element: /* @__PURE__ */ import_react116.default.createElement(TopPage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/in_process", element: /* @__PURE__ */ import_react116.default.createElement(IncomePage_default, null) }), /* @__PURE__ */ import_react116.default.createElement(Route, { path: "/out_process", element: /* @__PURE__ */ import_react116.default.createElement(OutputPage_default, null) }))));
   };
 
   // app/javascript/App.jsx
   var App = () => {
-    return /* @__PURE__ */ import_react115.default.createElement(import_react115.default.Fragment, null, /* @__PURE__ */ import_react115.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react115.default.createElement(AppRouter, null)));
+    return /* @__PURE__ */ import_react117.default.createElement(import_react117.default.Fragment, null, /* @__PURE__ */ import_react117.default.createElement(config_provider_default, null, /* @__PURE__ */ import_react117.default.createElement(AppRouter, null)));
   };
   var App_default = App;
 })();

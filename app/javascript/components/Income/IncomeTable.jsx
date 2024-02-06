@@ -1,5 +1,5 @@
 import React from "react";
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, Pagination } from "antd";
 import messages from "../../utils/content/jp.json";
 
 const IncomeTable = ({data, editRow, deleteRow}) => {
@@ -40,14 +40,15 @@ const IncomeTable = ({data, editRow, deleteRow}) => {
       key: 'action',
       render: (_, record) => (
         <Space size="small">
-          <Button onClick={() => editRow(record.productnumber)}>{ messages.buttons.change }</Button>
-          <Button onClick={() => deleteRow(record.productnumber)}>{ messages.buttons.delete }</Button>
+          <Button onClick={() => editRow(record.product_id)}>{ messages.buttons.change }</Button>
+          <Button onClick={() => deleteRow(record.product_id)}>{ messages.buttons.delete }</Button>
         </Space>
       ),
     }
   ];
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table columns={columns} dataSource={data} pagination={false} />
+    // <Pagination pageSizeOptions={5} defaultPageSize={5}/>
   )
 };
 
