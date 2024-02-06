@@ -8,11 +8,7 @@ import {
 
 import {
   makeHttpReq,
-<<<<<<< HEAD
   getAuthUserToken,
-=======
-  // getAuthUserToken,
->>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   makeURLOptions,
   makeURLOptionsWtoken,
 } from "../utils/helper";
