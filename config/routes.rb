@@ -7,5 +7,4 @@ Rails.application.routes.draw do
     post "/logout", to: "session#destroy"
   end
   get '/*path', to: 'component#index'
-  root 'component#index'
 end
