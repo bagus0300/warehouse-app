@@ -1,4 +1,3 @@
-import { Dates } from "../utils/constants/Dates";
 import { LanguageType } from "../interfaces/interfaces";
 import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,7 +12,6 @@ export const useLanguage = (): {
 
   const handleChangeLanguage = useCallback(
     async (locale: LanguageType) => {
-      Dates.setLocale(locale);
       localStorage.setItem("lng", locale);
       // await i18n.changeLanguage(locale);
     },

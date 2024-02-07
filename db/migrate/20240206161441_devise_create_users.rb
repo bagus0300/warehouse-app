@@ -4,9 +4,12 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
   def change
     create_table :users do |t|
       ## Database authenticatable
-      t.string :email,              null: false, default: ""
-      t.string :encrypted_password, null: false, default: ""
-
+      t.string  :user_name,           null: false, default: ""
+      t.string  :login_id,            null: false, default: "", comment: "ログインID"
+      t.integer :authority,           default: 1, null: false # 1: 入出庫の入力・編集のみ、2: 1＋請求書発行（締日処理）、9: 2 + マスタ管理機能
+      t.string :email,                null: false, default: ""
+      t.string :encrypted_password,   null: false, default: ""
+      
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
@@ -37,6 +40,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
     end
 
     add_index :users, :email,                unique: true
+    add_index :users, :login_id,             unique: true
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true

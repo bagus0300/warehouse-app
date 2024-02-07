@@ -10,19 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.1].define(version: 2024_02_05_102729) do
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "user_name"
-    t.string "login_id"
-    t.string "password"
-    t.string "password_digest"
-    t.integer "authority"
+ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
+  create_table "shipper_masters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "shipper_name"
+    t.string "post_code"
+    t.string "address1"
+    t.string "address2"
+    t.string "telephone_number"
+    t.string "closing_date"
+    t.string "calc_category"
+    t.float "used_tsubo_price"
+    t.float "discount_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-=======
-ActiveRecord::Schema[7.1].define(version: 2024_02_02_195505) do
+  end
+
+  create_table "user_logs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "login_id"
+    t.string "login_ip"
+    t.string "user_agent"
+    t.string "login_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "user_name", default: "", null: false
+    t.string "login_id", default: "", null: false, comment: "ログインID"
+    t.integer "authority", default: 1, null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -30,10 +45,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_195505) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
+    t.string "jti"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti"
+    t.index ["login_id"], name: "index_users_on_login_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
->>>>>>> 36c0d0eac0a3e2cf7872d018c7481cde53310ced
   end
 
 end

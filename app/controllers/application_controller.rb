@@ -1,28 +1,11 @@
 class ApplicationController < ActionController::Base
-  # def authenticate
-  #   authorization_header = request.headers[:authorization]
-  #   if !authorization_header
-  #     render status: :unauthorized
-  #   else
-  #     token = authorization_header.split(" ")[1]
-  #     secret_key = Rails.application.secrets.secret_key_base[0]
-  #     decoded_token = JWT.decode(token, secret_key)
-
-  #     @user = User.find(decoded_token[0]["user_id"])
-  #   end
-  # end
-
-  # def create_token(user_id)
-  #   payload = {user_id: user_id}
-  #   secret_key = Rails.application.secrets.secret_key_base[0]
-  #   token = JWT.encode(payload, secret_key)
-
-  #   return token
-  # end
   protect_from_forgery with: :null_session
+
   class AuthenticationError < StandardError; end
+  
   rescue_from ActiveRecord::RecordInvalid, with: :render_422
   rescue_from AuthenticationError, with: :not_authenticated
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def authenticate
     raise AuthenticationError unless current_user
@@ -41,4 +24,13 @@ class ApplicationController < ActionController::Base
   def not_authenticated
     render json: { error: { messages: ['please login'] } }, status: :unauthorized
   end
+
+  protected
+
+  def configure_permitted_parameters
+        devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:user_name, :login_id, :email, :password)}
+
+        devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:user_name, :login_id, :email, :authority, :password, :current_password)}
+  end
+  
 end

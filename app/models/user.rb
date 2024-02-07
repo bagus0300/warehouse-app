@@ -1,6 +1,10 @@
 class User < ApplicationRecord
-  has_secure_password
-  validates :user_name, presence: true
-  # validates :user_name, presence: {message: "Last  name is empty"}
-  validates :login_id, uniqueness: {message: "This email is already registered."}
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # devise :database_authenticatable, :registerable,
+  #        :recoverable, :rememberable, :validatable,
+  #        :jwt_authenticatable, jwt_revocation_strategy: self
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+  devise  :database_authenticatable, :registerable, :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 end
