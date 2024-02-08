@@ -8,12 +8,11 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
-  root 'component#index'
+  
   namespace :api do
-    # resource :user, only: %i[create]
-    post "/register", to: "users#create"
-    post "/login", to: "session#create"
-    post "/logout", to: "session#destroy"
+    resource :shipper, only: [:create, :update, :destroy]
   end
+
+  root 'component#index'
   get '/*path', to: 'component#index'
 end

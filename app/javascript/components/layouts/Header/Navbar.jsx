@@ -10,12 +10,13 @@ import { Typography, Breadcrumb } from "antd";
 import { Layout, Menu, theme } from "antd";
 import { navigations, siteInfo } from "../../../utils/content";
 
-const NavbarSection: React.FC = () => {
+const NavbarSection = () => {
   const [currentMenu, setCurrentMenu] = useState({});
   const [selectedKeys, setSelectedKeys] = useState([]);
   const { Header } = Layout;
   const { Title } = Typography;
   const navigate = useNavigate();
+  let flattenNavigations = [];
   // const urlSlice = useLocation().pathname;
   // const { label, url } =
   //   navigations.find((item) => item.key === useLocation().pathname) || {};
@@ -23,7 +24,7 @@ const NavbarSection: React.FC = () => {
   // const breadcrumbTitle = label;
 
   const handleMenuClick = ({ key }) => {
-    const { url } = navigations.find((item) => item.key === key) || {};
+    const { url } = flattenNavigations.find((item) => item.key === key) || {};
 
     if (url) {
       navigate(url);
@@ -31,9 +32,13 @@ const NavbarSection: React.FC = () => {
   };
   const location = useLocation();
   useEffect(() => {
+    flattenNavigations = navigations.reduce(
+      (a, b) => a.concat(b.children ? b.children : b),
+      []
+    );
     // setSelectedKeys([location.pathname]);
     // setCurrentMenu(navigations.find((item) => item.key === location.pathname));
-  }, [location]);
+  }, []);
 
   return (
     <Layout>
@@ -58,14 +63,14 @@ const NavbarSection: React.FC = () => {
           onClick={handleMenuClick}
         />
       </Header>
-      {/* <Breadcrumb
+      <Breadcrumb
         items={[
           {
-            title: breadcrumbTitle,
+            title: "breadcrumbTitle",
           },
         ]}
         style={{ padding: "10px 50px " }}
-      /> */}
+      />
     </Layout>
   );
 };
