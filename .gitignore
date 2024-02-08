@@ -75,6 +75,7 @@ next-env.d.ts
 package-lock.json
 
 /app/assets/builds/*
+
 /config/credentials/development.key
 
 /config/credentials/production.key

@@ -1,0 +1,2 @@
+class UnitPrice < ApplicationRecord
+end

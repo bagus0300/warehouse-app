@@ -10,6 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema[7.1].define(version: 2024_02_07_093208) do
+  create_table "product_names", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.float "product_nameID"
+    t.float "product_number"
+    t.string "product_name"
+    t.string "product_packing"
+    t.float "unitPriceID"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
   create_table "shipper_masters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "shipper_name"
@@ -21,6 +32,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
     t.string "calc_category"
     t.float "used_tsubo_price"
     t.float "discount_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "unit_prices", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "packing"
+    t.float "handling_fee_unit"
+    t.float "storage_fee_unit"
+    t.string "billing_class"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

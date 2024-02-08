@@ -35,6 +35,7 @@
     "watch": "esbuild app/javascript/*.* --watch --bundle --outdir=app/assets/builds --loader:.js=jsx"
   },
   "devDependencies": {
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }
 }
