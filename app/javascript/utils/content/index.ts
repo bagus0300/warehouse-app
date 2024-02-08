@@ -20,9 +20,10 @@ export const cardTopics: string[] = [
   "５．請求処理",
   "３．倉庫管理",
   "６．マスタ保守",
+  " 7 . 荷主一覧"
 ];
 
-export const navigations: NavigationItemType[] = [
+export const navigations = [
   {
     label: "TOP",
     key: "/",
@@ -40,8 +41,8 @@ export const navigations: NavigationItemType[] = [
   },
   {
     label: "在庫管理",
-    key: "/inventory_control",
-    url: "/inventory_control",
+    "key": "/inventory_control",
+    "url": "/inventory_control"
   },
   {
     label: "入金処理",
@@ -55,7 +56,14 @@ export const navigations: NavigationItemType[] = [
   },
   {
     label: "マスタ保守",
-    key: "/maintenence",
-    url: "/maintenence",
+    key: "/maintenance",
+    url : "/maintenance"
   },
+  {
+    label: "荷主一覧",
+    key: "/shipperlist",
+    url: "/shipperlist"
+  }
 ];
+
+

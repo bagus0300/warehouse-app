@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  packing: MyString
+  handling_fee_unit: 1.5
+  storage_fee_unit: 1.5
+  billing_class: MyString
+
+two:
+  packing: MyString
+  handling_fee_unit: 1.5
+  storage_fee_unit: 1.5
+  billing_class: MyString

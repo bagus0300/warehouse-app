@@ -3,10 +3,22 @@
     "title": "倉庫管理システム",
     "description": "倉庫管理システム"
   },
+  "pages": {
+    "login": "ログイン",
+    "signup": "新規登録"
+  },
   "LoginFields": {
     "username": "ログインID",
     "password": "パスワード",
     "rememberme": "remember me"
+  },
+  "signupFields": {
+    "username": "ユーザー名",
+    "loginId": "ログインID",
+    "password": "パスワード",
+    "confirm_password": "パスワードの確認",
+    "to_login": "サインインペジロ",
+    "signup": "登録"
   },
   "buttons": {
     "login": "ログイン",
@@ -14,6 +26,7 @@
     "change": "変更",
     "delete": "削除",
     "signUp": "新規登録",
+    "cancel":"キャンセル",
     "csvExchange": "CSVダウンロード",
     "confirmDeparture" : "出庫確定",
     "next":"次へ",
@@ -27,7 +40,8 @@
     "２．出庫処理",
     "５．請求処理",
     "３．倉庫管理",
-    "６．マスタ保守"
+    "６．マスタ保守",
+    " 7 . 荷主一覧"
   ],
   "Navigations": [
     {
@@ -60,12 +74,17 @@
       "key": "/billing_process",
       "url": "/billing_process"
     },
-
     {
       "label": "マスタ保守",
-      "key": "/maintenence",
-      "url": "/maintenence"
-    }],
+      "key": "/maintenance",
+      "url": "/maintenance"
+    },
+    {
+      "label": "荷主一覧",
+      "key": "/shipperlist",
+      "url": "/shipperlist"
+    }
+  ],
     "IncomePageJp": {
       "addition": "追加",
       "lotNumber": "ロット番号",
@@ -109,8 +128,46 @@
       "list":"一覧",
       "detail":"明細"
     },
+    "Maintenance": {
+      "addNew" : "新規登録",
+      "productNumber": "品番",
+      "productName": "品名",
+      "productPacking" : "規格・荷姿",
+      "handlingFee" : "荷役料",
+      "storageFee" : "保管料 ",
+      "change":"変更",
+      "productList" : "品名一覧",
+      "productMaster" : "品名マスタ",
+      "unitPriceMaster":"単価区分マスタ",
+      "unitPrice":"単価",
+      "packing":"荷姿",
+      "register":"登録",
+      "unitPriceID":"単価ID",
+      "handlingFeeUnitPrice":"荷役料単価",
+      "storageFeeUnitPrice":"保管料単価",
+      "billingClass":"請求区分",
+      "productNameID":"品名id",
+      "shipperID":"荷主ID",
+      "shipperName":"荷主名",
+      "address":"住所",
+      "postCode":"郵便番号",
+      "address1":"住所１",
+      "address2":"住所２",
+      "usedTsubos":"使用坪数",
+      "priceTsubo":"坪単価",
+      "discountRate":"値引率",
+      "calCategory":"計算区分",
+      "telephoneNumber":"電話番号",
+      "telephone":"電話",
+      "endDate":"締日",
+      "shipperlist":"荷主一覧",
+      "shipperMaster":"荷主マスタ",
+      "fullTimeRequest":"全期請求"
+  },
   "messages": {
-    "type_username": "Please input your username!",
-    "type_password": "Please input your password!"
+    "type_username": "ユーザー名を入力してください!",
+    "type_loginId": "ログインIDを入力してください！",
+    "type_password": "パスワードを入力してください！",
+    "type_repassword": "パスワードを確認してください!"
   }
 }
