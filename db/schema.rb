@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_093208) do
     t.datetime "updated_at", null: false
   end
 
+ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
   create_table "shipper_masters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "shipper_name"
     t.string "post_code"

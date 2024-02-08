@@ -1,8 +1,8 @@
-const baseUrl = "http://127.0.0.0:3000/api/";
+const baseUrl = "http://127.0.0.1:3000/";
 
 export const loginURL = baseUrl + "login";
 
-export const signupURL = baseUrl + "register";
+export const signupURL = baseUrl + "signup";
 
 export const secretsURL = baseUrl + "secrets";
 
