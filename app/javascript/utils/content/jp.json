@@ -13,6 +13,7 @@
     "register": "新規登録",
     "change": "変更",
     "delete": "削除",
+    "cancel":"キャンセル",
     "csvExchange": "CSVダウンロード",
     "confirmDeparture" : "出庫確定"
   },
@@ -22,7 +23,8 @@
     "２．出庫処理",
     "５．請求処理",
     "３．倉庫管理",
-    "６．マスタ保守"
+    "６．マスタ保守",
+    " 7 . 荷主一覧"
   ],
   "Navigations": [
     {
@@ -55,12 +57,17 @@
       "key": "/billing_process",
       "url": "/billing_process"
     },
-
     {
       "label": "マスタ保守",
-      "key": "/maintenence",
-      "url": "/maintenence"
-    }],
+      "key": "/maintenance",
+      "url": "/maintenance"
+    },
+    {
+      "label": "荷主一覧",
+      "key": "/shipperlist",
+      "url": "/shipperlist"
+    }
+  ],
     "IncomePageJp": {
       "addition": "追加",
       "lotNumber": "ロット番号",
@@ -80,6 +87,51 @@
       "departureDate": "出庫日",
       "libraryNumber":"現在庫数",
       "shipmentNumber": "出庫数"
+    },
+    "Maintenance": {
+      "addNew" : "新規登録",
+      "productNumber": "品番",
+      "productName": "品名",
+      "productPacking" : "規格・荷姿",
+      "handlingFee" : "荷役料",
+      "storageFee" : "保管料 ",
+      "change":"変更",
+      "productList" : "品名一覧",
+      "productMaster" : "品名マスタ",
+      "unitPriceMaster":"単価区分マスタ",
+      "unitPrice":"単価",
+      "packing":"荷姿",
+      "register":"登録",
+      "unitPriceID":"単価ID",
+      "handlingFeeUnitPrice":"荷役料単価",
+      "storageFeeUnitPrice":"保管料単価",
+      "billingClass":"請求区分",
+      "productNameID":"品名id",
+      "shipperID":"荷主ID",
+      "shipperName":"荷主名",
+      "address":"住所",
+      "postCode":"郵便番号",
+      "address1":"住所１",
+      "address2":"住所２",
+      "usedTsubos":"使用坪数",
+      "priceTsubo":"坪単価",
+      "discountRate":"値引率",
+      "calCategory":"計算区分",
+      "telephoneNumber":"電話番号",
+      "telephone":"電話",
+      "endDate":"締日",
+      "shipperlist":"荷主一覧",
+      "shipperMaster":"荷主マスタ",
+      "fullTimeRequest":"全期請求"
+    
+
+  
+     
+
+
+
+
+
     },
   "messages": {
     "type_username": "Please input your username!",

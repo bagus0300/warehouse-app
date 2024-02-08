@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  product_nameID: 1.5
+  product_number: 1.5
+  product_name: MyString
+  product_packing: MyString
+  unitPriceID: 1.5
+
+two:
+  product_nameID: 1.5
+  product_number: 1.5
+  product_name: MyString
+  product_packing: MyString
+  unitPriceID: 1.5

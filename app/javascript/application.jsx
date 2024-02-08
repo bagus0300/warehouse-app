@@ -5,6 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+
 // import Layout from "./layouts/Layout";
 // import Home from "./pages";
 import App from "./App";
