@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_07_093208) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
+  create_table "authority_client_pages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.integer "user_authority_id"
+    t.integer "client_page_id"
+    t.boolean "is_edit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "client_pages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "path"
+    t.string "code_name"
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "product_names", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.float "product_nameID"
     t.float "product_number"
@@ -21,7 +38,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_093208) do
     t.datetime "updated_at", null: false
   end
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
+  create_table "products", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "number"
+    t.string "packing"
+    t.string "unit_price_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "shipper_masters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "shipper_name"
     t.string "post_code"
@@ -41,6 +66,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_07_011953) do
     t.float "handling_fee_unit"
     t.float "storage_fee_unit"
     t.string "billing_class"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_authorities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "auth_num"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

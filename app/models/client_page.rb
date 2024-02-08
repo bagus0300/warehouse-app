@@ -1,0 +1,2 @@
+class ClientPage < ApplicationRecord
+end
