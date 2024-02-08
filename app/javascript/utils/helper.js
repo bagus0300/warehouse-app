@@ -1,7 +1,11 @@
-export const makeHttpReq = async (url, options = {}) => {
+export const makeHttpReq = async (url, options = {}, auth = false) => {
   try {
     const res = await fetch(url, { ...options });
     const data = await res.json();
+    if (auth && !hasError(res?.status)) {
+      saveAuthUser(data?.data?.user_name, res.headers.get("Authorization"));
+    }
+
     return { status: res.status, data };
   } catch (e) {
     console.log(`Something went wrong  ${e}`);
@@ -27,7 +31,8 @@ export const makeURLOptionsWtoken = (token, body = {}, method = "GET") => ({
   ...makeURLOptions(body, method),
   headers: {
     ...makeURLOptions(body, method).headers,
-    authorization: `Bearer ${token}`,
+    // authorization: `Bearer ${token}`,
+    authorization: `${token}`,
   },
 });
 
@@ -38,19 +43,19 @@ export const isEmpty = (d) => d?.toString().trim().length === 0;
 export const hasKey = (obj, key) => typeof obj === "object" && !falsy(obj[key]);
 
 export const getAuthUser = () => {
-  const email = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
 
-  return falsy(email) || falsy(token) || isEmpty(email) || isEmpty(token)
-    ? { email: null, token: null }
-    : { email, token };
+  return falsy(username) || falsy(token) || isEmpty(username) || isEmpty(token)
+    ? { username: null, token: null }
+    : { username, token };
 };
 
 export const getAuthUsername = () => getAuthUser()?.username;
 export const getAuthUserToken = () => getAuthUser()?.token;
 
-export const saveAuthUser = (email, token) => {
-  localStorage.setItem("username", email);
+export const saveAuthUser = (username, token) => {
+  localStorage.setItem("username", username);
   localStorage.setItem("token", token);
 };
 

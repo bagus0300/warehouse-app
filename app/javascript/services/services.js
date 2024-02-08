@@ -17,14 +17,17 @@ const verifyAuth = async (token = getAuthUserToken()) =>
   makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token));
 
 const login = async (payload) => {
-  makeHttpReq(loginURL, makeURLOptions(payload, "POST"));
+  makeHttpReq(loginURL, makeURLOptions(payload, "POST"), true);
 };
 
 const signup = async (payload) =>
-  makeHttpReq(signupURL, makeURLOptions(payload, "POST"));
+  makeHttpReq(signupURL, makeURLOptions(payload, "POST"), true);
 
 const logout = async () =>
-  makeHttpReq(logoutURL, makeURLOptionsWtoken(getAuthUserToken(), {}, "POST"));
+  makeHttpReq(
+    logoutURL,
+    makeURLOptionsWtoken(getAuthUserToken(), {}, "DELETE")
+  );
 
 const services = {
   signup,

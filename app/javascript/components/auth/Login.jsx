@@ -25,10 +25,8 @@ const LoginForm = () => {
     console.log("Failed:", errorInfo);
   };
 
-  const onFormSubmit = ({ username, password }) => {
-    console.log("username", username);
-    console.log("password", password);
-    loginAction({ username, password });
+  const onFormSubmit = ({ login_id, password }) => {
+    loginAction({ user: { login_id, password } });
   };
 
   return (
@@ -55,7 +53,7 @@ const LoginForm = () => {
           >
             <Form.Item
               label={messages.LoginFields.username}
-              name="username"
+              name="login_id"
               rules={[
                 { required: true, message: messages.messages.type_username },
               ]}

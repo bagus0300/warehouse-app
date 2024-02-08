@@ -80998,10 +80998,13 @@
   var import_react103 = __toESM(require_react());
 
   // app/javascript/utils/helper.js
-  var makeHttpReq = async (url2, options = {}) => {
+  var makeHttpReq = async (url2, options = {}, auth = false) => {
     try {
       const res = await fetch(url2, { ...options });
       const data2 = await res.json();
+      if (auth && !hasError(res?.status)) {
+        saveAuthUser(data2?.data?.user_name, res.headers.get("Authorization"));
+      }
       return { status: res.status, data: data2 };
     } catch (e3) {
       console.log(`Something went wrong  ${e3}`);
@@ -81021,20 +81024,21 @@
     ...makeURLOptions(body, method4),
     headers: {
       ...makeURLOptions(body, method4).headers,
-      authorization: `Bearer ${token2}`
+      // authorization: `Bearer ${token}`,
+      authorization: `${token2}`
     }
   });
   var falsy = (d) => d === void 0 || d === null;
   var isEmpty = (d) => d?.toString().trim().length === 0;
   var getAuthUser = () => {
-    const email2 = localStorage.getItem("username");
+    const username = localStorage.getItem("username");
     const token2 = localStorage.getItem("token");
-    return falsy(email2) || falsy(token2) || isEmpty(email2) || isEmpty(token2) ? { email: null, token: null } : { email: email2, token: token2 };
+    return falsy(username) || falsy(token2) || isEmpty(username) || isEmpty(token2) ? { username: null, token: null } : { username, token: token2 };
   };
   var getAuthUsername = () => getAuthUser()?.username;
   var getAuthUserToken = () => getAuthUser()?.token;
-  var saveAuthUser = (email2, token2) => {
-    localStorage.setItem("username", email2);
+  var saveAuthUser = (username, token2) => {
+    localStorage.setItem("username", username);
     localStorage.setItem("token", token2);
   };
   var clearStorage = () => localStorage.clear();
@@ -81175,10 +81179,8 @@
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
-    const onFormSubmit = ({ username, password }) => {
-      console.log("username", username);
-      console.log("password", password);
-      loginAction2({ username, password });
+    const onFormSubmit = ({ login_id, password }) => {
+      loginAction2({ user: { login_id, password } });
     };
     return /* @__PURE__ */ import_react105.default.createElement("div", { style: { width: 450 }, className: "mx-auto" }, /* @__PURE__ */ import_react105.default.createElement("div", { className: "py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm" }, /* @__PURE__ */ import_react105.default.createElement(card_default, { style: { width: 450 }, className: "py-4" }, /* @__PURE__ */ import_react105.default.createElement(
       Title3,
@@ -81204,7 +81206,7 @@
         form_default.Item,
         {
           label: jp_default.LoginFields.username,
-          name: "username",
+          name: "login_id",
           rules: [
             { required: true, message: jp_default.messages.type_username }
           ]
@@ -81804,9 +81806,9 @@
   var import_react115 = __toESM(require_react());
 
   // app/javascript/utils/contants.js
-  var baseUrl = "http://127.0.0.1:3000/api/";
+  var baseUrl = "http://127.0.0.1:3000/";
   var loginURL = baseUrl + "login";
-  var signupURL = baseUrl + "register";
+  var signupURL = baseUrl + "signup";
   var secretsURL = baseUrl + "secrets";
   var verifyAuthURL = baseUrl + "verify";
   var logoutURL = baseUrl + "logout";
@@ -81814,10 +81816,13 @@
   // app/javascript/services/services.js
   var verifyAuth = async (token2 = getAuthUserToken()) => makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token2));
   var login = async (payload) => {
-    makeHttpReq(loginURL, makeURLOptions(payload, "POST"));
+    makeHttpReq(loginURL, makeURLOptions(payload, "POST"), true);
   };
-  var signup = async (payload) => makeHttpReq(signupURL, makeURLOptions(payload, "POST"));
-  var logout = async () => makeHttpReq(logoutURL, makeURLOptionsWtoken(getAuthUserToken(), {}, "POST"));
+  var signup = async (payload) => makeHttpReq(signupURL, makeURLOptions(payload, "POST"), true);
+  var logout = async () => makeHttpReq(
+    logoutURL,
+    makeURLOptionsWtoken(getAuthUserToken(), {}, "DELETE")
+  );
   var services = {
     signup,
     login,
@@ -81842,7 +81847,7 @@
     dispatch({
       type: "Signup",
       payload: {
-        email: res?.data?.payload?.email,
+        username: res?.data?.payload?.user_name,
         token: res?.data?.payload?.token
       }
     });
@@ -81851,11 +81856,10 @@
     dispatch({
       type: "Login",
       payload: {
-        username: res?.data?.payload?.username,
+        username: res?.data?.payload?.user_name,
         token: res?.data?.payload?.token
       }
     });
-    saveAuthUser(res?.data?.payload?.email, res?.data?.payload?.token);
   };
   var logoutAction = (dispatch) => {
     clearStorage();
@@ -82026,4 +82030,3 @@ react-router-dom/dist/index.js:
    * @license MIT
    *)
 */
-//# sourceMappingURL=/assets/App.js.map
