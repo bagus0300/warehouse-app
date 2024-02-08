@@ -9,10 +9,17 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
   
-  namespace :api do
-    resource :shipper, only: [:create, :update, :destroy]
-  end
+  get "/api/shipper", to: 'shippers#index'
+  post "/api/shipper" , to: 'shippers#create'
+  put "/api/shipper" , to: 'shippers#update'
+  delete "/api/shipper" , to: 'shippers#destroy'
 
-  root 'component#index'
+  get "/api/unit_price", to: 'unit_prices#index'
+  post "/api/unit_price" , to: 'unit_prices#create'
+  put "/api/unit_price" , to: 'unit_prices#update'
+  delete "/api/unit_price" , to: 'unit_prices#destroy'
+
   get '/*path', to: 'component#index'
+ 
+  root 'component#index'
 end
