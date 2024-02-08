@@ -13,8 +13,13 @@
     "register": "新規登録",
     "change": "変更",
     "delete": "削除",
+    "signUp": "新規登録",
     "csvExchange": "CSVダウンロード",
-    "confirmDeparture" : "出庫確定"
+    "confirmDeparture" : "出庫確定",
+    "next":"次へ",
+    "newPost":"新規発行",
+    "list":"一覧",
+    "detail":"明細"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -80,6 +85,29 @@
       "departureDate": "出庫日",
       "libraryNumber":"現在庫数",
       "shipmentNumber": "出庫数"
+    },
+    "DepositPage": {
+      "payDay":"入金日",
+      "payDayFrom": "入金日From",
+      "payDayTo": "入金日To",
+      "shipperName":"荷主名",
+      "processingDate":"処理日",
+      "processingDateFrom":"処理日From",
+      "processingDateTo":"処理日To"
+    },
+    "Modal": {
+      "depositRegist":"入金登録",
+      "shipperId":"荷主id",
+      "depositDate":"入金年月日",
+      "depositAmount":"入金額"
+    },
+    "BillingPage" : {
+      "yearMonth":"年月",
+      "closingDate":"締日",
+      "number":"件数",
+      "targetPeriod":"対象期間",
+      "list":"一覧",
+      "detail":"明細"
     },
   "messages": {
     "type_username": "Please input your username!",

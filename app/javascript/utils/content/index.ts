@@ -35,7 +35,7 @@ export const navigations: NavigationItemType[] = [
   },
   {
     label: "出庫処理",
-    key: "/configout_process",
+    key: "/out_process",
     url: "/out_process",
   },
   {

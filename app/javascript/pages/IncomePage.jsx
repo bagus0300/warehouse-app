@@ -152,7 +152,7 @@ const IncomePage = () => {
     <div>
       <NavbarSection />
       <Content
-        style={{ width: 1024 }}
+        style={{ width: 1280 }}
         className="mx-auto flex flex-col justify-content content-h"
       >
         <div
@@ -304,7 +304,7 @@ const IncomePage = () => {
         <div style={{justifyContent: "flex-end", display: "flex"}}>
           <Button style={{width: 150,}}>{messages.buttons.csvExchange}</Button>
           <div style={{width: 40}}></div>
-          <Button style={{width: 150,}}>{messages.buttons.confirmDeparture}</Button>
+          <Button style={{width: 150,}} >{messages.buttons.confirmDeparture}</Button>
       </div>
       </Content>
       <FooterSection />
