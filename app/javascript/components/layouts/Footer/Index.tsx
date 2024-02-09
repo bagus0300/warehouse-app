@@ -13,7 +13,18 @@ const FooterSection = () => {
   // const {
   //   token: { colorBgContainer, borderRadiusLG },
   // } = theme.useToken();
-  return <Footer style={{ textAlign: "center" }}>Soko Kanri system</Footer>;
+  return (
+    <Footer
+      style={{
+        textAlign: "center",
+        position: "absolute",
+        bottom: "0",
+        width: "100%",
+      }}
+    >
+      Soko Kanri system
+    </Footer>
+  );
 };
 
 export default FooterSection;

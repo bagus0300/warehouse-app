@@ -73,16 +73,6 @@
       "label": "請求処理",
       "key": "/billing_process",
       "url": "/billing_process"
-    },
-    {
-      "label": "マスタ保守",
-      "key": "/maintenance",
-      "url": "/maintenance"
-    },
-    {
-      "label": "荷主一覧",
-      "key": "/shipperlist",
-      "url": "/shipperlist"
     }
   ],
     "IncomePageJp": {

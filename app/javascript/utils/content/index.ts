@@ -20,14 +20,14 @@ export const cardTopics: string[] = [
   "５．請求処理",
   "３．倉庫管理",
   "６．マスタ保守",
-  " 7 . 荷主一覧"
+  " 7 . 荷主一覧",
 ];
 
 export const navigations = [
   {
     label: "TOP",
-    key: "/",
-    url: "/",
+    key: "/home",
+    url: "/home",
   },
   {
     label: "入庫処理",
@@ -41,8 +41,8 @@ export const navigations = [
   },
   {
     label: "在庫管理",
-    "key": "/inventory_control",
-    "url": "/inventory_control"
+    key: "/inventory_control",
+    url: "/inventory_control",
   },
   {
     label: "入金処理",
@@ -56,14 +56,24 @@ export const navigations = [
   },
   {
     label: "マスタ保守",
-    key: "/maintenance",
-    url : "/maintenance"
+    key: "",
+    url: "",
+    children: [
+      {
+        label: "品名一覧",
+        key: "/product",
+        url: "/product",
+      },
+      {
+        label: "荷主一覧",
+        key: "/shipper",
+        url: "/shipper",
+      },
+      {
+        label: "単価区分マスタ",
+        key: "/unit_price",
+        url: "/unit_price",
+      },
+    ],
   },
-  {
-    label: "荷主一覧",
-    key: "/shipperlist",
-    url: "/shipperlist"
-  }
 ];
-
-

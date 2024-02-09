@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
 import { useAuth } from "../../hooks/userAuth";
@@ -26,7 +26,7 @@ const LoginForm = () => {
   };
 
   const onFormSubmit = ({ login_id, password }) => {
-    loginAction({ user: { login_id, password } });
+    loginAction({ user: { login_id, password } }).then((res) => {});
   };
 
   return (

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  number: MyString
+  packing: MyString
+  unit_price_id: MyString
+
+two:
+  name: MyString
+  number: MyString
+  packing: MyString
+  unit_price_id: MyString

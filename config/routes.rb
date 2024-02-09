@@ -8,12 +8,27 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
-  root 'component#index'
-  namespace :api do
-    # resource :user, only: %i[create]
-    post "/register", to: "users#create"
-    post "/login", to: "session#create"
-    post "/logout", to: "session#destroy"
-  end
+  
+  get "/api/shipper", to: 'shippers#index'
+  post "/api/shipper" , to: 'shippers#create'
+  put "/api/shipper" , to: 'shippers#update'
+  delete "/api/shipper" , to: 'shippers#destroy'
+
+  get "/api/unit_price", to: 'unit_prices#index'
+  post "/api/unit_price" , to: 'unit_prices#create'
+  put "/api/unit_price" , to: 'unit_prices#update'
+  delete "/api/unit_price" , to: 'unit_prices#destroy'
+
+  
+  get "/api/processing_data", to: 'processing_datas#index'
+  post "/api/processing_data", to: 'processing_datas#create'
+  put "/api/processing_data", to: 'processing_datas#update'
+  delete "/api/processing_data", to: 'processing_datas#destroy'
+  get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
+
+  get '/api/product' , to: 'products#index'
+  
   get '/*path', to: 'component#index'
+ 
+  root 'component#index'
 end

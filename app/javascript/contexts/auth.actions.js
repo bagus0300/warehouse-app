@@ -26,6 +26,7 @@ const loginAction = (res) => (dispatch) => {
     payload: {
       username: res?.data?.payload?.user_name,
       token: res?.data?.payload?.token,
+      
     },
   });
   // saveAuthUser(res?.data?.payload?.email, res?.data?.payload?.token);

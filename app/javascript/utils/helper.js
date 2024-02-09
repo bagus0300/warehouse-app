@@ -1,3 +1,4 @@
+import axios from "axios";
 export const makeHttpReq = async (url, options = {}, auth = false) => {
   try {
     const res = await fetch(url, { ...options });

@@ -77,3 +77,7 @@ gem "devise"
 gem 'devise-jwt'
 
 gem 'jsonapi-serializer'
+
+gem "warden"
+
+gem "spreadsheet_architect"

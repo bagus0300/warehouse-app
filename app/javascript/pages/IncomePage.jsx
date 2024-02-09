@@ -165,7 +165,7 @@ const IncomePage = () => {
             <Form.Item
               label={messages.IncomePageJp.warehouse}
               name="username"
-              style={{ display: "inline-block", width: 200, marginBottom: 0 }}
+              style={{ display: "inline-block", width: 200, marginBottom: 10 }}
             >
               <Select
                 defaultValue={storeVal.label}
@@ -177,7 +177,7 @@ const IncomePage = () => {
             <Form.Item
               label={messages.IncomePageJp.shipper}
               name="username"
-              style={{ display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }}
+              style={{ display: "", width: 500, marginBottom: 10, flexFlow: "nowrap" }}
             >
               <Select
                 defaultValue={shipperVal.label}
