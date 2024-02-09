@@ -13,9 +13,9 @@ const AuthContextProvider = ({ children }) => {
 
   const loginAction = async (payload) => {
     const res = await services.login(payload);
+    debugger;
     if (!hasError(res?.status)) {
       authActions.loginAction(res)(dispatch);
-      // history.replace("/secrets");
     } else {
       authActions.handleLoginErrorAction(res)(dispatch);
     }

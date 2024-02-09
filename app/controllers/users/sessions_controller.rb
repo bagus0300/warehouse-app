@@ -47,6 +47,11 @@ class Users::SessionsController < Devise::SessionsController
   # end
   #######################
   def respond_with(resource, _opts = {})
+
+  
+    UserLog.create(
+      user_id:   
+    )
     render json: {
       status: {code: 200, message: 'Logged in sucessfully.'},
       data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
