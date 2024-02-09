@@ -1,13 +1,13 @@
 class UnitPricesController < ApplicationController
   
-  # def index
-  #   unit_price = UnitPrice.all
+  def index
+    unit_price = UnitPrice.all
     
-  #   render :json {
-  #     data: unit_price,
-  #     status: :accepted
-  #   }
-  # end
+    render :json => {
+      data: unit_price,
+      status: :accepted
+    }
+  end
   def create
     unit_price = UnitPrice.find_or_create_by(
       packing:              params[:packing],

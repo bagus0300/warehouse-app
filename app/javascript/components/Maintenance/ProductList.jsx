@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, Tabs } from 'antd';
 
 import NavbarSection from '../layouts/Header/Navbar';
 import FooterSection from '../layouts/Footer/Index';
 
 import message from "../../utils/content/jp.json"
-import { render } from 'react-dom';
+import axios from 'axios';
 const { Search } = Input;
 
 
 const { Content } = Layout;
 
 const originData = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 20; i++) {
   originData.push({
     key: i.toString(),
     name: `${i}`,
@@ -58,8 +58,47 @@ const EditableCell = ({
 const ProductList = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState(originData);
+  const [allData, setAllData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const getAllProduct = () => {
+    axios.get('http://127.0.0.1:3000/api/product').then((res) => {
+      let index = 0
+      const priceData = res.data.data.map((item) => {
+        return {
+          ...item,
+          key: index++,
+        };
+      });
+      setAllData(priceData);
+      console.log(priceData, 'resData')
+      console.log(allData, 'allData')
+    });
+  }
+
+  useEffect(() => {
+    getAllProduct();
+  }, [])
+
+  const createProduct = () => {
+
+    if (packing && handleUnit && stoUnit && billClass) {
+      axios.post('http://127.0.0.1:3000/api/unit_price', {
+        packing: packing,
+        handling_fee_unit: handleUnit,
+        storage_fee_unit: stoUnit,
+        billing_class: billClass
+      })
+        .then((res) => {
+          notification.success({ message: "Success" })
+          getAllProduct();
+        })
+    } else {
+      notification.warning({ message: "Complete All Input!" })
+    }
+  }
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -109,37 +148,37 @@ const ProductList = () => {
   const listColumns = [
     {
       title: `${message.Maintenance.productNumber}`,
-      dataIndex: 'name',
+      dataIndex: 'number',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.productName}`,
-      dataIndex: 'age',
+      dataIndex: 'name',
       width: '25%',
       editable: true,
     },
     {
       title: `${message.Maintenance.productPacking}`,
-      dataIndex: 'address',
+      dataIndex: 'packing',
       width: '25%',
       editable: true,
     },
     {
       title: `${message.Maintenance.handlingFee}`,
-      dataIndex: 'address',
+      dataIndex: 'handling_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.storageFee}`,
-      dataIndex: 'address',
+      dataIndex: 'storage_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.billingClass}`,
-      dataIndex: 'address',
+      dataIndex: 'billing_class',
       width: '10%',
       editable: true,
     },
@@ -211,15 +250,36 @@ const ProductList = () => {
               ]}>
 
               <div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.productNameID}</label> <Input style={{ width: '30%' }} name='品名id' /></div>
-                <div><label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label><Input style={{ width: '40%', marginTop: '20px' }} name='品番' /></div>
-                <div><label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label><Input style={{ width: '50%', marginTop: '20px' }} name='品名' /></div>
-                <div><label >{message.Maintenance.productPacking}</label><Input style={{ width: '50%', marginTop: '20px' }} name='規格・荷姿' /></div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.unitPriceID}</label> <Select style={{ width: '30%' }} name='単価ID' /></div>
-                <div><label style={{ marginRight: '42px' }}>{message.Maintenance.packing}</label><Input style={{ width: '30%' }} name='荷姿' /></div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.handlingFee}</label> <Input style={{ width: '30%' }} name='荷役料' /></div>
-                <div><label style={{ marginRight: '27px' }}>{message.Maintenance.storageFee}</label><Input style={{ width: '30%' }} name='保管料' /></div>
-                <div><label style={{ marginRight: '15px' }}>{message.Maintenance.billingClass}</label><Input style={{ width: '30%' }} name='請求区分' /></div>
+                <div>
+                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label>
+                  <Input style={{ width: '40%', marginTop: '20px' }} name='品番' />
+                </div>
+                <div>
+                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label>
+                  <Input style={{ width: '50%', marginTop: '20px' }} name='品名' />
+                </div>
+                <div>
+                  <label >{message.Maintenance.productPacking}</label>
+                  <Input style={{ width: '50%', marginTop: '20px' }} name='規格・荷姿' />
+                </div>
+                <div>
+                  <label style={{ marginRight: '25px' }}>{message.Maintenance.unitPriceID}</label>
+                  <Select style={{ width: '30%' }} name='単価ID' />
+                </div>
+                <div>
+                  <label style={{ marginRight: '42px' }}>{message.Maintenance.packing}</label>
+                  <Input style={{ width: '30%' }} name='荷姿' />
+                </div>
+                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.handlingFee}</label>
+                  <Input style={{ width: '30%' }} name='荷役料' />
+                </div>
+                <div><label style={{ marginRight: '27px' }}>{message.Maintenance.storageFee}</label>
+                  <Input style={{ width: '30%' }} name='保管料' />
+                </div>
+                <div>
+                  <label style={{ marginRight: '15px' }}>{message.Maintenance.billingClass}</label>
+                  <Input style={{ width: '30%' }} name='請求区分' />
+                </div>
               </div>
             </Modal>
           </div>
@@ -237,7 +297,7 @@ const ProductList = () => {
                   },
                 }}
                 bordered
-                dataSource={data}
+                dataSource={allData}
                 columns={mergedListColumns}
                 rowClassName="editable-row"
                 pagination={{

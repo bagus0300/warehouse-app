@@ -1,25 +1,16 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, Tabs } from 'antd';
-
+import React, { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, Tabs, notification } from 'antd';
+import axios from 'axios';
+import { unitPriceURL } from '../../utils/contants';
 import NavbarSection from '../layouts/Header/Navbar';
 import FooterSection from '../layouts/Footer/Index';
 
 import message from "../../utils/content/jp.json"
-import { render } from 'react-dom';
-const { Search } = Input;
 
 
 const { Content } = Layout;
 
-const originData = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `${i}`,
-    age: 32,
-    address: `no. ${i}`,
-  });
-}
+
 const EditableCell = ({
   editing,
   dataIndex,
@@ -57,26 +48,77 @@ const EditableCell = ({
 
 const UnitPrice = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const [allData, setAllData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const [id, setID] = useState('');
+  const [packing, setPacking] = useState('');
+  const [handleUnit, setHandleUnit] = useState('');
+  const [stoUnit, setStoUnit] = useState('');
+  const [billClass, setBillClass] = useState('');
+
+  const handleId = (e) => {
+    setID(e.target.value);
+  }
+
+  const handlePacking = (e) => {
+    setPacking(e.target.value);
+  }
+  const handleHandle = (e) => {
+    setHandleUnit(e.target.value);
+  }
+  const handleSto = (e) => {
+    setStoUnit(e.target.value)
+  }
+  const handleBC = (value) => {
+    setBillClass(value)
+  }
+  const getAllPrice = () => {
+    axios.get('http://127.0.0.1:3000/api/unit_price').then((res) => {
+      let index = 0
+      const priceData = res.data.data.map((item) => {
+        return {
+          ...item,
+          key: index++,
+        };
+      });
+      setAllData(priceData);
+      // console.log(priceData, 'resData')
+      // console.log(allData, 'allData')
+    });
+  }
+
+  useEffect(() => {
+    getAllPrice();
+  }, [])
+
+  const create = () => {
+
+    if (packing && handleUnit && stoUnit && billClass) {
+      axios.post('http://127.0.0.1:3000/api/unit_price', {
+        packing: packing,
+        handling_fee_unit: handleUnit,
+        storage_fee_unit: stoUnit,
+        billing_class: billClass
+      })
+        .then((res) => {
+          notification.success({ message: "Success" })
+          getAllPrice();
+        })
+    } else {
+      notification.warning({ message: "Complete All Input!" })
+    }
+  }
+
 
   const isEditing = (record) => record.key === editingKey;
   const edit = (record) => {
     form.setFieldsValue({
-      name: '',
-      age: '',
-      address: '',
+      id: '',
+      packing: '',
+      handling_fee_unit: '',
+      storage_fee_unit: '',
+      billing_class: `${message.Maintenance.fullTimeRequest}`,
       ...record,
     });
     setEditingKey(record.key);
@@ -87,7 +129,7 @@ const UnitPrice = () => {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      const newData = [...data];
+      const newData = [...allData];
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
@@ -110,31 +152,32 @@ const UnitPrice = () => {
   const priceColumns = [
     {
       title: `${message.Maintenance.unitPriceID}`,
-      dataIndex: 'name',
+      dataIndex: 'id',
       width: '10%',
       editable: true,
+      height: '20px'
     },
     {
       title: `${message.Maintenance.packing}`,
-      dataIndex: 'age',
+      dataIndex: 'packing',
       width: '20%',
       editable: true,
     },
     {
       title: `${message.Maintenance.handlingFeeUnitPrice}`,
-      dataIndex: 'address',
+      dataIndex: 'handling_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.storageFeeUnitPrice}`,
-      dataIndex: 'address',
+      dataIndex: 'storage_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.billingClass}`,
-      dataIndex: 'address',
+      dataIndex: 'billing_class',
       width: '10%',
       editable: true,
     },
@@ -176,7 +219,7 @@ const UnitPrice = () => {
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
+        inputType: col.dataIndex === 'id' ? 'number' : 'text',
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -189,15 +232,41 @@ const UnitPrice = () => {
       <Content style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h">
         <div className='flex flex-col items-center'>
-          <div>
-            <span>{message.Maintenance.unitPriceID}</span>
-            <span style={{ marginLeft: '110px' }}>{message.Maintenance.packing}</span>
+          <div style={{ marginTop: "10px", marginBottom: '10px' }}>
+
+            <span style={{ marginLeft: '130px' }}>{message.Maintenance.packing}</span>
           </div>
           <div className='flex flex-row items-center'>
-            <Input style={{ width: "14%" }} />
-            <Input style={{ width: "29%" }} />
-            <Input style={{ width: "14%" }} />
-            <Input style={{ width: "14%" }} />
+            {/* <Input
+              type='text'
+              name="id"
+              style={{ width: "14%" }}
+              value={id}
+              onChange={handleId}
+
+            /> */}
+            <Input
+              type='text'
+              name='packing'
+              value={packing}
+              onChange={handlePacking}
+              style={{ marginLeft: '14%', width: "29%" }}
+            />
+            <Input
+              type='text'
+              name='handling_fee_unit'
+              value={handleUnit}
+              onChange={handleHandle}
+              style={{ width: "14%" }}
+            />
+            <Input
+              type='text'
+              name='unitPrice.storage_fee_unit'
+              value={stoUnit}
+              onChange={handleSto}
+              style={{ width: "14%" }}
+            />
+
             <Select
               style={{ width: "10%" }}
               defaultValue={message.Maintenance.fullTimeRequest}
@@ -207,24 +276,20 @@ const UnitPrice = () => {
                   label: `${message.Maintenance.fullTimeRequest}`,
                 },
                 {
-                  value: 'one',
-                  label: 'one',
-                },
-                {
-                  value: 'three',
-                  label: 'three',
-                },
-                {
-                  value: 'four',
-                  label: 'four',
-                },
+                  value: `${message.Maintenance.firstBilling}`,
+                  label: `${message.Maintenance.firstBilling}`,
+                }
               ]}
+              onChange={handleBC}
+              value={billClass}
             />
-            <Button style={{ marginLeft: "70px", width: "10%" }}>
+            <Button
+              onClick={create}
+              style={{ marginLeft: "70px", width: "10%" }}>
               {message.Maintenance.register}
             </Button>
           </div>
-          <div className='mt-2'>
+          <div className='mt-2' style={{ marginTop: '10px' }}>
             <Form form={form} component={false}>
               <Table
                 components={{
@@ -233,12 +298,14 @@ const UnitPrice = () => {
                   },
                 }}
                 bordered
-                dataSource={data}
+                dataSource={allData}
                 columns={mergedPriceColumns}
                 rowClassName="editable-row"
                 pagination={{
-                  onChange: cancel,
+                  // onChange: cancel,
+
                 }}
+
               />
             </Form>
           </div>

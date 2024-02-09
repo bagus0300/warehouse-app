@@ -124,7 +124,8 @@
       "endDate":"締日",
       "shipperlist":"荷主一覧",
       "shipperMaster":"荷主マスタ",
-      "fullTimeRequest":"全期請求"
+      "fullTimeRequest":"全期請求",
+      "firstBilling":"１期請求"
     
 
   
