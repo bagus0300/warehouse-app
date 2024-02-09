@@ -1,9 +1,6 @@
 import React from "react";
 import { ConfigProvider } from "antd";
-import "../../app/input.css";
-import "../../app/output.css";
-import "../assets/stylesheets/app.css"
-//import "../assets/stylesheets/application.css"
+import "../assets/stylesheets/application.css"
 // import jaJP from "antd/lib/locale/ja_JP";
 // import enUS from "antd/lib/locale/en_US";
 

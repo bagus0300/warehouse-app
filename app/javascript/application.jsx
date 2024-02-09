@@ -10,6 +10,8 @@ import { store } from "./store/store";
 // import Home from "./pages";
 import App from "./App";
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const rootEl = document.getElementById("root");
   ReactDOM.render(

@@ -6,6 +6,7 @@ import SignupPage from "../../pages/SignupPage";
 import IncomePage from "../../pages/IncomePage";
 import ProductList from "../Maintenance/ProductList";
 import ShipperList from "../Maintenance/ShipperList";
+import UnitPrice from "../Maintenance/UnitPrice";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 import OutputPage from "../../pages/OutputPage";
 // import InventoryPage from "../../pages/InventoryPage";
@@ -18,9 +19,10 @@ export const AppRouter = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={<TopPage />} />
           <Route path="/in_process" element={<IncomePage />} />
-          <Route path="/maintenance" element={<ProductList />} />
+          <Route path="/product" element={<ProductList />} />
           <Route path="/shipper" element={<ShipperList />} />
           <Route path="/out_process" element={<OutputPage />} />
+          <Route path="/unit_price" element={<UnitPrice />} />
           {/* <Route path="/inventory_process" element={<InventoryPage />} /> */}
           <Route path="/" element={<LoginPage />} />
         </Routes>

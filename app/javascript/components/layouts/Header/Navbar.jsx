@@ -13,6 +13,7 @@ import { navigations, siteInfo } from "../../../utils/content";
 const NavbarSection = () => {
   const [currentMenu, setCurrentMenu] = useState({});
   const [selectedKeys, setSelectedKeys] = useState([]);
+  const [title, setTitle] = useState('');
   const { Header } = Layout;
   const { Title } = Typography;
   const navigate = useNavigate();
@@ -25,11 +26,15 @@ const NavbarSection = () => {
 
   const handleMenuClick = ({ key }) => {
     const { url } = flattenNavigations.find((item) => item.key === key) || {};
+    const { label } = flattenNavigations.find((item) => item.key === key) || {};
+    console.log(label)
+    setTitle(label);
 
     if (url) {
       navigate(url);
     }
   };
+
   const location = useLocation();
   useEffect(() => {
     flattenNavigations = navigations.reduce(
@@ -38,7 +43,8 @@ const NavbarSection = () => {
     );
     // setSelectedKeys([location.pathname]);
     // setCurrentMenu(navigations.find((item) => item.key === location.pathname));
-  }, []);
+  });
+
 
   return (
     <Layout>
@@ -66,7 +72,7 @@ const NavbarSection = () => {
       <Breadcrumb
         items={[
           {
-            title: "breadcrumbTitle",
+            title: `${title}`,
           },
         ]}
         style={{ padding: "10px 50px " }}

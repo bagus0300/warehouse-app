@@ -26,8 +26,8 @@ export const cardTopics: string[] = [
 export const navigations = [
   {
     label: "TOP",
-    key: "/",
-    url: "/",
+    key: "/home",
+    url: "/home",
   },
   {
     label: "入庫処理",
@@ -65,7 +65,7 @@ export const navigations = [
         url: "/product",
       },
       {
-        label: "荷主マスタ",
+        label: "荷主一覧",
         key: "/shipper",
         url: "/shipper",
       },

@@ -1,18 +1,23 @@
+<<<<<<< HEAD
 import React, { useEffect } from "react";
+=======
+import React, { useEffect, useMemo } from "react";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
+>>>>>>> beast
 import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
 import { useAuth } from "../../hooks/userAuth";
 import { Link } from "react-router-dom";
-
 import messages from "../../utils/content/jp.json";
 
-// const navigate = useNavigate();
 
 // useEffect(() => {
 //   if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
 //     navigate("/");
 //   }
 // }, []);
+
 
 const LoginForm = () => {
   const {
@@ -21,13 +26,17 @@ const LoginForm = () => {
     logoutAction,
   } = useAuth();
 
+  const navigate = useNavigate();
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
   const onFormSubmit = ({ login_id, password }) => {
-    loginAction({ user: { login_id, password } });
+    loginAction({ user: { login_id, password } })
+    navigate('/home');
   };
+
 
   return (
     <div style={{ width: 450 }} className="mx-auto">
