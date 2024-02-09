@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_09_083317) do
   create_table "authority_client_pages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "user_authority_id"
     t.integer "client_page_id"
@@ -28,14 +28,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "product_names", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.float "product_nameID"
-    t.float "product_number"
-    t.string "product_name"
-    t.string "product_packing"
-    t.float "unitPriceID"
+  create_table "processing_data", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.integer "processing_classification", default: 0, null: false, comment: "0->入庫, 1->出庫"
+    t.datetime "processing_date", default: "2024-02-09 12:08:44", null: false, comment: "入出庫日"
+    t.bigint "warehouse_id", null: false
+    t.bigint "shipper_id", null: false
+    t.integer "processing_no", null: false
+    t.integer "lot_num", null: false
+    t.decimal "weight", precision: 6, scale: 2, default: "0.0", null: false
+    t.string "processing_num", default: "", null: false
+    t.decimal "unit_price", precision: 6, scale: 2, default: "0.0", null: false
+    t.bigint "reg_user_id", null: false
+    t.bigint "update_user_id"
+    t.integer "is_canceled", default: 0, null: false, comment: "1->キャンセル"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["reg_user_id"], name: "index_processing_data_on_reg_user_id"
+    t.index ["shipper_id"], name: "index_processing_data_on_shipper_id"
+    t.index ["update_user_id"], name: "index_processing_data_on_update_user_id"
+    t.index ["warehouse_id"], name: "index_processing_data_on_warehouse_id"
   end
 
   create_table "products", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -47,8 +58,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "shipper_masters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "shipper_name"
+  create_table "shippers", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
     t.string "post_code"
     t.string "address1"
     t.string "address2"
@@ -59,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
     t.float "discount_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "number"
   end
 
   create_table "unit_prices", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -104,4 +116,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_163433) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "warehouses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "processing_data", "shippers"
+  add_foreign_key "processing_data", "users", column: "reg_user_id"
+  add_foreign_key "processing_data", "users", column: "update_user_id"
+  add_foreign_key "processing_data", "warehouses"
 end

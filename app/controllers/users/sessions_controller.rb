@@ -2,6 +2,7 @@
 
 class Users::SessionsController < Devise::SessionsController
   protect_from_forgery with: :null_session
+  after_action :log_failed_login, :only => :new
   # before_action :configure_sign_in_params, only: [:create]
  
   # GET /resource/sign_in
@@ -27,7 +28,6 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   respond_to :json
-  private
   ######override#########
   # def new
   #   super
@@ -46,12 +46,16 @@ class Users::SessionsController < Devise::SessionsController
   #   end
   # end
   #######################
-  def respond_with(resource, _opts = {})
 
-  
-    UserLog.create(
-      user_id:   
-    )
+  # def create
+  #   super
+  #   ::Rails.logger.info "\n***\nSuccessful login with email_id : #{request.filtered_parameters["user"]}\n***\n"
+  # end
+  private
+  def respond_with(resource, _opts = {})
+    # UserLog.create(
+    #   user_id:   
+    # )
     render json: {
       status: {code: 200, message: 'Logged in sucessfully.'},
       data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
@@ -71,4 +75,11 @@ class Users::SessionsController < Devise::SessionsController
       }, status: :unauthorized
     end
   end
+  # def log_failed_login
+  #   ::Rails.logger.info "\n***\nFailed login with email_id : #{request.filtered_parameters["login_id"]}\n***\n" if failed_login?
+  # end 
+
+  # def failed_login?
+  #   (options = env["warden.options"]) && options[:action] == "unauthenticated"
+  # end 
 end

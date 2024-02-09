@@ -1,12 +1,13 @@
-class CreateShipperMasters < ActiveRecord::Migration[7.1]
+class CreateShippers < ActiveRecord::Migration[7.1]
   def change
-    create_table :shipper_masters do |t|
-      t.string :shipper_name
+    create_table :shippers do |t|
+      t.string :name
+      t.string :identy_num
       t.string :post_code
       t.string :address1
       t.string :address2
       t.string :telephone_number
-      t.string :closing_date
+      t.datetime :closing_date
       t.string :calc_category
       t.float :used_tsubo_price
       t.float :discount_rate

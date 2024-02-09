@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   put "/api/unit_price" , to: 'unit_prices#update'
   delete "/api/unit_price" , to: 'unit_prices#destroy'
 
+  
+  get "/api/processing_data", to: 'processing_datas#index'
+  post "/api/processing_data", to: 'processing_datas#create'
+  put "/api/processing_data", to: 'processing_datas#update'
+  delete "/api/processing_data", to: 'processing_datas#destroy'
+  
   get '/*path', to: 'component#index'
  
   root 'component#index'

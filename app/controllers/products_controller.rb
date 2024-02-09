@@ -18,7 +18,7 @@ class ProductsController < ApplicationController
 
     if product.save
       render :json => {
-        shipperMaster:    product,
+        shipper:          product,
         status:           :accepted
       }
     end
