@@ -26,9 +26,9 @@ const originData = [];
 for (let i = 0; i < 100; i++) {
   originData.push({
     key: i.toString(),
-    name: `Edward ${i}`,
+    name: `${i}`,
     age: 32,
-    address: `London Park no. ${i}`,
+    address: `no${i}`,
   });
 }
 const EditableCell = ({
@@ -203,7 +203,7 @@ const ShipperList = () => {
         className="mx-auto flex flex-col content-h"
       >
         <div>
-          <div className="mt-10" style={{ marginRight: "80px" }}>
+          <div className="mt-4" style={{ marginRight: "80px" }}>
             <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
             <Modal
               title={message.Maintenance.shipperMaster}
