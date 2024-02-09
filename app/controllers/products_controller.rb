@@ -1,10 +1,10 @@
-class ProductsController < ApplicationController
-  def index
-    product = Product.all
 
-    render :json => {
-      data:       product,
-      status:     :accepted
+   def index
+    products = Product.includes(:unit_price).all
+
+    render json: {
+      data: products.map { |product| ProductSerializer.new(product).as_json },
+      status: :accepted
     }
 
   end

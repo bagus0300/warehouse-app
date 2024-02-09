@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   post "/api/processing_data", to: 'processing_datas#create'
   put "/api/processing_data", to: 'processing_datas#update'
   delete "/api/processing_data", to: 'processing_datas#destroy'
+  get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
+
+  get '/api/product' , to: 'products#index'
   
   get '/*path', to: 'component#index'
  

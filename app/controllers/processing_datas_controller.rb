@@ -26,7 +26,12 @@ class ProcessingDatasController < ApplicationController
     end
 
   end
+  def export_csv
+      processingData = ProcessingData.all
+      render processingData.to_csv, filename: 'test'
+  end
   def request_params
     params.permit(:warehouse_id, :processing_classfication, :processing_date, :shipper_code, :processing_no, :lot_num, :weight, :processing_num, :unit_price, :is_canceled, :reg_user_id)
   end
+  
 end
