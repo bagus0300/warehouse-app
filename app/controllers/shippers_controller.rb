@@ -1,16 +1,16 @@
 class ShippersController < ApplicationController
   def index
-    shipperMaster = ShipperMaster.all
+    shipper = Shipper.all
 
     render :json => {
-      data:       shipperMaster,
+      data:       shipper,
       status:     :accepted
     }
 
   end
   def create
-    shipperMaster = ShipperMaster.find_or_create_by(
-      shipper_name:       params[:shipper_name],
+    shipper = Shipper.find_or_create_by(
+      name:       params[:name],
       post_code:          params[:post_code],
       address1:           params[:address1],
       address2:           params[:address2],
@@ -21,16 +21,16 @@ class ShippersController < ApplicationController
       discount_rate:      params[:discount_rate]
     )
 
-    if shipperMaster.save
+    if shipper.save
       render :json => {
-        shipperMaster:    shipperMaster,
+        shipper:    shipper,
         status:           :accepted
       }
     end
   end
   def update
-    if ShipperMaster.where(id: params[:id]).update_all(
-        shipper_name:               params[:shipper_name],
+    if Shipper.where(id: params[:id]).update_all(
+        name:               params[:name],
         post_code:                  params[:post_code],
         address1:                   params[:address1],
         address2:                   params[:address2],
@@ -46,7 +46,7 @@ class ShippersController < ApplicationController
     end
   end
   def destroy
-    shippermaster = ShipperMaster.find params[:id]
+    shippermaster = Shipper.find params[:id]
     if shippermaster.destroy
       render :json => {
         status: :accepted

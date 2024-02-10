@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  shipper_name: MyString
+  name: MyString
   post_code: MyString
   address1: MyString
   address2: MyString
@@ -12,7 +12,7 @@ one:
   discount_rate: 1.5
 
 two:
-  shipper_name: MyString
+  name: MyString
   post_code: MyString
   address1: MyString
   address2: MyString
