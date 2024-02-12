@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   delete "/api/processing_data", to: 'processing_datas#destroy'
   get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
 
-  get '/api/product' , to: 'products#index'
+  post "/api/stock_inout"  , to: 'stock_inouts#create'
   
   get '/*path', to: 'component#index'
  
