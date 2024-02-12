@@ -20,12 +20,7 @@ import {
   PencilSquareIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
-import {
-  InfoCircleOutlined,
-  ScheduleOutlined,
-  SendOutlined,
 
-} from "@ant-design/icons";
 
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
