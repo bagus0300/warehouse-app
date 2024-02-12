@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  belongs_to :unit_price
+  belongs_to :warehouse_fee
 
-  validates :unit_price, presence: true
+  validates :warehouse_fee, presence: true
 end

@@ -1,15 +1,32 @@
 import axios from "axios";
-export const makeHttpReq = async (url, options = {}, auth = false) => {
+class HTTPError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+export const makeHttpReq = async (options = {}) => {
+  const apiClient = axios.create({ baseURL: "/" });
   try {
-    const res = await fetch(url, { ...options });
-    const data = await res.json();
-    if (auth && !hasError(res?.status)) {
-      saveAuthUser(data?.data?.user_name, res.headers.get("Authorization"));
+    const res = await apiClient.request(options);
+    return res;
+  } catch (error) {
+    if (!error.response) {
+      throw new Error("Network Error");
     }
 
-    return { status: res.status, data };
-  } catch (e) {
-    console.log(`Something went wrong  ${e}`);
+    switch (error.response.status) {
+      case 400:
+        // throw new HTTPError("Bad Request", error.response.status);
+        throw new Error("Bad Request");
+      case 401:
+        throw new Error("Unauthorized");
+      case 404:
+        throw new Error("Not Found");
+      default:
+        throw new Error("Internal Server Error");
+    }
   }
 };
 
@@ -19,13 +36,21 @@ export const arrayIsEmpty = (arr) => arr?.length === 0;
 
 export const arrayIsNotEmpty = (arr) => !arrayIsEmpty(arr);
 
-export const makeURLOptions = (body, method = "GET") => ({
+export const makeHttpOptions = (
+  payload,
+  method = "GET",
+  url,
+  timeout = 1000
+) => ({
   method,
+  url: url,
   headers: {
     "content-type": "application/json",
   },
-  ...(method !== "GET" &&
-    arrayIsNotEmpty(Object.keys(body)) && { body: JSON.stringify(body) }),
+  data: payload,
+  timeout: timeout,
+  // ...(method !== "GET" &&
+  //   arrayIsNotEmpty(Object.keys(body)) && { body: JSON.stringify(body) }),
 });
 
 export const makeURLOptionsWtoken = (token, body = {}, method = "GET") => ({

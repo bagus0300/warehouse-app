@@ -19,7 +19,13 @@ Rails.application.routes.draw do
   put "/api/warehouse" , to: 'warehouses#update'
   delete "/api/warehouse" , to: 'warehouses#destroy'
 
+  get "/api/warehouse_fee", to: 'warehouse_fees#index'
+  post "/api/warehouse_fee" , to: 'warehouse_fees#create'
+  put "/api/warehouse_fee" , to: 'warehouse_fees#update'
+  delete "/api/warehouse_fee" , to: 'warehouse_fees#destroy'
+
   get "/api/product", to: 'products#index'
+  get "/api/product_detail", to:'products#show_with_warehouse_fee'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'

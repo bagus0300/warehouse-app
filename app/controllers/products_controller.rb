@@ -1,6 +1,7 @@
+class ProductsController < ApplicationController
 
    def index
-    products = Product.includes(:unit_price).all
+    products = Product.includes(:warehouse_fee).all
 
     render json: {
       data: products.map { |product| ProductSerializer.new(product).as_json },
@@ -34,6 +35,13 @@
       status: :accepted
     }
     end
+  end
+  def show_with_warehouse_fee
+    product = Product.includes(:warehouse_fee).find params[:id]
+    render :json => {
+      data: ProductSerializer.new(product).as_json ,
+      status: :accepted
+    }
   end
   def destroy
     product = Product.find params[:id]

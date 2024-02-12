@@ -12,7 +12,7 @@ class WarehouseFeesController < ApplicationController
         code:                 params[:code],
         packing:              params[:packing],
         handling_fee_rate:    params[:handling_fee_rate],
-        storage_fee_rate:     params[:storage_fee_rate]
+        storage_fee_rate:     params[:storage_fee_rate],
         fee_category:         params[:fee_category]
     )
     
@@ -28,7 +28,7 @@ class WarehouseFeesController < ApplicationController
         code:                 params[:code],
         packing:              params[:packing],
         handling_fee_rate:    params[:handling_fee_rate],
-        storage_fee_rate:     params[:storage_fee_rate]
+        storage_fee_rate:     params[:storage_fee_rate],
         fee_category:         params[:fee_category]
       )
 
