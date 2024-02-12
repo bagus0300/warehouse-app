@@ -236,7 +236,7 @@ const ShipperList = () => {
     {
       title: `${message.Maintenance.endDate}`,
       dataIndex: "closing_date",
-      width: "10%",
+      width: "11%",
       key: 'closing_date',
       render: (endDate, record) => {
         <DatePicker value={endDate} onChange={(date) => handleDateChange(date, record.key)} />
