@@ -11,9 +11,9 @@
   def create
     product = Product.find_or_create_by(
       name:                     params[:name],
-      number:                   params[:number],
-      packing:                  params[:packing],
-      unit_price_id:            params[:unit_price_id],
+      code:                     params[:code],
+      warehouse_fee_id:         params[:warehouse_fee_id],
+      specification:            params[:specification],
     )
 
     if product.save
@@ -25,10 +25,10 @@
   end
   def update
     if Product.where(id: params[:id]).update_all(
-        name:                     params[:name],
-        number:                   params[:number],
-        packing:                  params[:packing],
-        unit_price_id:            params[:unit_price_id],
+      name:                     params[:name],
+      code:                     params[:code],
+      warehouse_fee_id:         params[:warehouse_fee_id],
+      specification:            params[:specification],
       )
     render :json => {
       status: :accepted

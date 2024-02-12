@@ -1,14 +1,14 @@
 class ProductSerializer
   include JSONAPI::Serializer
   
-  attributes :id, :name, :packing, :unit_price
+  attributes :id, :name, :warehouse_fee
 
-  def unit_price
+  def warehouse_fee
     {
-      id:                   object.unit_price.id,
-      handling_fee_unit:    object.unit_price.handling_fee_unit,
-      storage_fee_unit:     object.unit_price.storage_fee_unit,
-      billing_class:        object.unit_price.billing_class
+      id:                   object.warehouse_fee.id,
+      handling_fee_rate:    object.warehouse_fee.handling_fee_rate,
+      storage_fee_rate:     object.warehouse_fee.storage_fee_rate,
+      fee_category:         object.warehouse_fee.fee_category
     }
   end
 end

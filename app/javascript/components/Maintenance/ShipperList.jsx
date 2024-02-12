@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment"
+// import moment from "moment";
 import {
   Form,
   Input,
@@ -12,7 +12,7 @@ import {
   Typography,
   Button,
   Modal,
-  notification
+  notification,
 } from "antd";
 
 import NavbarSection from "../layouts/Header/Navbar";
@@ -65,51 +65,51 @@ const ShipperList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allData, setAllData] = useState([]);
 
-  const [shipperName, setShipperName] = useState('');
-  const [postCode, setPostCode] = useState('');
-  const [address1, setAddress1] = useState('');
-  const [address2, setAddress2] = useState('');
-  const [tel, setTel] = useState('');
-  const [calCategory, setCalCategory] = useState('');
-  const [usedTsubos, setUsedTsubos] = useState('');
-  const [discountRate, setDiscountRate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [shipperName, setShipperName] = useState("");
+  const [postCode, setPostCode] = useState("");
+  const [mainAddress, setMainAddress] = useState("");
+  const [subAddress, setSubAddress] = useState("");
+  const [tel, setTel] = useState("");
+  // const [calCategory, setCalCategory] = useState("");
+  // const [usedTsubos, setUsedTsubos] = useState("");
+  // const [discountRate, setDiscountRate] = useState("");
+  const [closingDate, setClosingDate] = useState("");
 
   const handleShipperName = (e) => {
-    setShipperName(e.target.value)
-  }
+    setShipperName(e.target.value);
+  };
 
   const handlePostCode = (e) => {
-    setPostCode(e.target.value)
-  }
+    setPostCode(e.target.value);
+  };
 
-  const handleAddress1 = (e) => {
-    setAddress1(e.target.value)
-  }
+  const handleMainAddress = (e) => {
+    setMainAddress(e.target.value);
+  };
 
-  const handleAddress2 = (e) => {
-    setAddress2(e.target.value)
-  }
+  const handleSubAddress = (e) => {
+    setSubAddress(e.target.value);
+  };
   const handleTel = (e) => {
-    setTel(e.target.value)
-  }
-  const handleCalCategory = (e) => {
-    setCalCategory(e.target.value)
-  }
-  const handleUsedTsubo = (e) => {
-    setUsedTsubos(e.target.value)
-  }
-  const handleDiscountRate = (e) => {
-    setDiscountRate(e.target.value)
-  }
+    setTel(e.target.value);
+  };
+  // const handleCalCategory = (e) => {
+  //   setCalCategory(e.target.value);
+  // };
+  // const handleUsedTsubo = (e) => {
+  //   setUsedTsubos(e.target.value);
+  // };
+  // const handleDiscountRate = (e) => {
+  //   setDiscountRate(e.target.value);
+  // };
 
-  const handleEndDate = (value) => {
-    setEndDate(value)
-  }
+  const handleClosingDate = (value) => {
+    setClosingDate(value);
+  };
 
   const getAllShipper = () => {
-    axios.get('http://127.0.0.1:3000/api/shipper').then((res) => {
-      let index = 0
+    axios.get("http://127.0.0.1:3000/api/shipper").then((res) => {
+      let index = 0;
       const shipperData = res.data.data.map((item) => {
         return {
           ...item,
@@ -117,47 +117,54 @@ const ShipperList = () => {
         };
       });
       setAllData(shipperData);
-      console.log(shipperData, 'resData')
-
+      console.log(shipperData, "resData");
     });
-  }
+  };
 
   const createShipper = () => {
-    if (shipperName && address1 && address2 &&
-      postCode && tel && calCategory &&
-      usedTsubos && discountRate && endDate) {
-      axios.post('http://127.0.0.1:3000/api/shipper', {
-        name: shipperName,
-        post_code: postCode,
-        address1: address1,
-        address2: address2,
-        telephone_number: tel,
-        calc_category: calCategory,
-        used_tsubo_price: usedTsubos,
-        discourt_rate: discountRate,
-        closng_date: endDate,
-      })
-        .then((res) => {
-          notification.success({ message: "Success", duration: 1, })
-          setIsModalOpen(false);
-          setShipperName('');
-          setAddress1('');
-          setAddress2('');
-          setCalCategory('');
-          setDiscountRate('');
-          setEndDate('');
-          setTel('');
-          getAllShipper();
+    if (
+      shipperName &&
+      mainAddress &&
+      subAddress &&
+      postCode &&
+      tel &&
+      // calCategory &&
+      // usedTsubos &&
+      // discountRate &&
+      closingDate
+    ) {
+      axios
+        .post("http://127.0.0.1:3000/api/shipper", {
+          name: shipperName,
+          post_code: postCode,
+          mainAddress: mainAddress,
+          subAddress: subAddress,
+          tel: tel,
+          // calc_category: calCategory,
+          // used_tsubo_price: usedTsubos,
+          // discourt_rate: discountRate,
+          closng_date: closingDate,
         })
+        .then((res) => {
+          notification.success({ message: "Success", duration: 1 });
+          setIsModalOpen(false);
+          setShipperName("");
+          setMainAddress("");
+          setSubAddress("");
+          // setCalCategory("");
+          // setDiscountRate("");
+          setClosingDate("");
+          setTel("");
+          getAllShipper();
+        });
     } else {
-      notification.warning({ message: "Complete All Input!", duration: 1 })
+      notification.warning({ message: "Complete All Input!", duration: 1 });
     }
-  }
+  };
 
   useEffect(() => {
     getAllShipper();
-  }, [])
-
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -206,40 +213,43 @@ const ShipperList = () => {
   };
   const shipperListColumns = [
     {
-      title: `${message.Maintenance.shipperID}`,
+      title: `${message.tableCommon.no}`,
       dataIndex: "id",
-      key: 'id',
-      width: "10%",
+      key: "id",
+      width: "5%",
       editable: true,
     },
     {
-      title: `${message.Maintenance.shipperName}`,
+      title: `${message.shipper.name}`,
       dataIndex: "name",
-      key: 'name',
-      width: "20%",
+      key: "name",
+      width: "30%",
       editable: true,
     },
     {
-      title: `${message.Maintenance.address}`,
-      dataIndex: "address1",
-      key: 'address1',
-      width: "25%",
+      title: `${message.shipper.main_address}`,
+      dataIndex: "main_address",
+      key: "mainAddress",
+      width: "30%",
       editable: true,
     },
     {
-      title: `${message.Maintenance.telephone}`,
-      dataIndex: "telephone_number",
-      key: "telephone_number",
-      width: "25%",
+      title: `${message.shipper.tel_number}`,
+      dataIndex: "tel",
+      key: "tel",
+      width: "15%",
       editable: true,
     },
     {
-      title: `${message.Maintenance.endDate}`,
+      title: `${message.shipper.closing_date}`,
       dataIndex: "closing_date",
       width: "10%",
-      key: 'closing_date',
-      render: (endDate, record) => {
-        <DatePicker value={endDate} onChange={(date) => handleDateChange(date, record.key)} />
+      key: "closing_date",
+      render: (closingDate, record) => {
+        <DatePicker
+          value={closingDate}
+          onChange={(date) => handleDateChange(date, record.key)}
+        />;
       },
       editable: true,
     },
@@ -298,7 +308,10 @@ const ShipperList = () => {
         className="mx-auto flex flex-col content-h"
       >
         <div>
-          <div className="mt-4" style={{ marginRight: "80px", marginTop: "10px" }}>
+          <div
+            className="mt-4"
+            style={{ marginRight: "80px", marginTop: "10px" }}
+          >
             <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
             <Modal
               title={message.Maintenance.shipperMaster}
@@ -315,13 +328,12 @@ const ShipperList = () => {
               ]}
             >
               <div>
-
                 <div>
                   <label style={{ marginRight: "25px" }}>
                     {message.Maintenance.shipperName}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={shipperName}
                     onChange={handleShipperName}
                     style={{ width: "40%" }}
@@ -329,13 +341,11 @@ const ShipperList = () => {
                 </div>
 
                 <div>
-                  <label
-                    style={{ marginRight: "12px" }}
-                  >
+                  <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.postCode}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={postCode}
                     onChange={handlePostCode}
                     style={{ width: "30%", marginTop: "20px" }}
@@ -343,23 +353,23 @@ const ShipperList = () => {
                 </div>
                 <div>
                   <label style={{ marginRight: "24px" }}>
-                    {message.Maintenance.address1}
+                    {message.Maintenance.mainAddress}
                   </label>
                   <Input
-                    type='text'
-                    value={address1}
-                    onChange={handleAddress1}
+                    type="text"
+                    value={mainAddress}
+                    onChange={handleMainAddress}
                     style={{ width: "50%" }}
                   />
                 </div>
                 <div>
                   <label style={{ marginRight: "25px" }}>
-                    {message.Maintenance.address2}
+                    {message.Maintenance.subAddress}
                   </label>
                   <Input
-                    type='text'
-                    value={address2}
-                    onChange={handleAddress2}
+                    type="text"
+                    value={subAddress}
+                    onChange={handleSubAddress}
                     style={{ width: "50%" }}
                   />
                 </div>
@@ -368,62 +378,63 @@ const ShipperList = () => {
                     {message.Maintenance.telephoneNumber}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={tel}
                     onChange={handleTel}
-                    style={{ width: "30%" }} />
+                    style={{ width: "30%" }}
+                  />
                 </div>
 
                 <div>
                   <label style={{ marginRight: "38px" }}>
-                    {message.Maintenance.endDate}
+                    {message.Maintenance.closingDate}
                   </label>
                   <DatePicker
-                    type='text'
-                    value={endDate}
-                    onChange={handleEndDate}
+                    type="text"
+                    value={closingDate}
+                    onChange={handleClosingDate}
                     style={{ width: "30%", marginTop: "20px" }}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.calCategory}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={calCategory}
                     onChange={handleCalCategory}
                     style={{ width: "30%" }}
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.usedTsubos}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={usedTsubos}
                     onChange={handleUsedTsubo}
                     style={{ width: "30%" }}
                   />
-                </div>
+                </div> */}
                 {/* <div>
                   <label style={{ marginRight: "25px" }}>
                     {message.Maintenance.priceTsubo}
                   </label>
                   <Input style={{ width: "30%" }}/>
                 </div> */}
-                <div>
+                {/* <div>
                   <label style={{ marginRight: "26px" }}>
                     {message.Maintenance.discountRate}
                   </label>
                   <Input
-                    type='text'
+                    type="text"
                     value={discountRate}
                     onChange={handleDiscountRate}
                     style={{ width: "30%" }}
                   />
-                </div>
+                </div> */}
               </div>
             </Modal>
           </div>

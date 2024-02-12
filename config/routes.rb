@@ -14,6 +14,11 @@ Rails.application.routes.draw do
   put "/api/shipper" , to: 'shippers#update'
   delete "/api/shipper" , to: 'shippers#destroy'
 
+  get "/api/warehouse", to: 'warehouses#index'
+  post "/api/warehouse" , to: 'warehouses#create'
+  put "/api/warehouse" , to: 'warehouses#update'
+  delete "/api/warehouse" , to: 'warehouses#destroy'
+
   get "/api/product", to: 'products#index'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
