@@ -20,6 +20,8 @@
   /* 2 */
 }
 
+
+
 ::before,
 ::after {
   --tw-content: '';
@@ -194,6 +196,16 @@ table {
 3. Remove default padding in all browsers.
 */
 
+.items-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.cursor-pointer {
+  cursor: pointer;
+}
 button,
 input,
 optgroup,
@@ -638,6 +650,13 @@ video {
   position: sticky;
 }
 
+.w-20 {
+  width: 20px;
+}
+.w-190 {
+  width: 190px;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -652,7 +671,7 @@ video {
   margin-top: 2.5rem;
 }
 
-.mt-10 {
+.mt-5 {
   margin-top: 1.25rem;
 }
 
@@ -720,6 +739,9 @@ video {
   flex-direction: column;
 }
 
+.flex-row {
+  flex-direction: row;
+}
 .justify-center {
   justify-content: center;
 }

@@ -14,16 +14,30 @@ Rails.application.routes.draw do
   put "/api/shipper" , to: 'shippers#update'
   delete "/api/shipper" , to: 'shippers#destroy'
 
+  get "/api/warehouse", to: 'warehouses#index'
+  post "/api/warehouse" , to: 'warehouses#create'
+  put "/api/warehouse" , to: 'warehouses#update'
+  delete "/api/warehouse" , to: 'warehouses#destroy'
+
   get "/api/product", to: 'products#index'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
 
-  get "/api/unit_price", to: 'unit_prices#index'
-  post "/api/unit_price" , to: 'unit_prices#create'
-  put "/api/unit_price" , to: 'unit_prices#update'
-  delete "/api/unit_price" , to: 'unit_prices#destroy'
+  get "/api/warehouse_fee", to: 'warehouse_fees#index'
+  post "/api/warehouse_fee" , to: 'warehouse_fees#create'
+  put "/api/warehouse_fee" , to: 'warehouse_fees#update'
+  delete "/api/warehouse_fee" , to: 'warehouse_fees#destroy'
 
+  
+  get "/api/processing_data", to: 'processing_datas#index'
+  post "/api/processing_data", to: 'processing_datas#create'
+  put "/api/processing_data", to: 'processing_datas#update'
+  delete "/api/processing_data", to: 'processing_datas#destroy'
+  get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
+
+  get '/api/product' , to: 'products#index'
+  
   get '/*path', to: 'component#index'
  
   root 'component#index'

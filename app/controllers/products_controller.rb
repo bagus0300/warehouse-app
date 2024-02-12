@@ -1,46 +1,60 @@
+
 class ProductsController < ApplicationController
+
   def index
-    product = Product.all
 
-    render :json => {
-      data:       product,
-      status:     :accepted
-    }
+   puts "-------------"
+   puts "index"
+   products = Product.includes(:warehouse_fee).all
 
-  end
-  def create
-    product = Product.find_or_create_by(
-      name:                     params[:name],
-      number:                   params[:number],
-      packing:                  params[:packing],
-      unit_price_id:            params[:unit_price_id],
-    )
+   render json: {
+     data: products.map { |product| ProductSerializer.new(product).as_json },
+     status: :accepted
+   }
 
-    if product.save
-      render :json => {
-        shipperMaster:    product,
-        status:           :accepted
-      }
-    end
-  end
-  def update
-    if Product.where(id: params[:id]).update_all(
-        name:                     params[:name],
-        number:                   params[:number],
-        packing:                  params[:packing],
-        unit_price_id:            params[:unit_price_id],
-      )
-    render :json => {
-      status: :accepted
-    }
-    end
-  end
-  def destroy
-    product = Product.find params[:id]
-    if product.destroy
-      render :json => {
-        status: :accepted
-      }
-    end
-  end
+ end
+ def create
+   product = Product.find_or_create_by(
+     name:                     params[:name],
+     code:                     params[:code],
+     warehouse_fee_id:         params[:warehouse_fee_id],
+     specification:            params[:specification],
+   )
+
+   if product.save
+     render :json => {
+       shipper:          product,
+       status:           :accepted
+     }
+   end
+ end
+ def update
+   if Product.where(id: params[:id]).update_all(
+     name:                     params[:name],
+     code:                     params[:code],
+     warehouse_fee_id:         params[:warehouse_fee_id],
+     specification:            params[:specification],
+     )
+   render :json => {
+     status: :accepted
+   }
+   end
+ end
+ def show_by_id
+   puts "-----------------"
+   puts params[:id]
+   product = Product.includes(:warehouse_fee).find (params[:id])
+   render :json => {
+     data: ProductSerializer.new(product).as_json ,
+     status: :accepted
+   }
+ end
+ def destroy
+   product = Product.find params[:id]
+   if product.destroy
+     render :json => {
+       status: :accepted
+     }
+   end
+ end
 end

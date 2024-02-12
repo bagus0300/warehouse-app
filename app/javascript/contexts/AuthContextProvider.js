@@ -15,11 +15,9 @@ const AuthContextProvider = ({ children }) => {
     const res = await services.login(payload);
     if (!hasError(res?.status)) {
       authActions.loginAction(res)(dispatch);
-      history.replace("/home");
     } else {
       authActions.handleLoginErrorAction(res)(dispatch);
     }
-   
   };
 
   const signupAction = async (payload) => {

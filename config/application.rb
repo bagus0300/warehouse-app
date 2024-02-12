@@ -24,5 +24,13 @@ module App
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.action_controller.default_protection_from_forgery false
+
+    #disable csrf verification
+    # config.middleware.use ActionDispatch::Cookies
+    # config.middleware.delete ActionDispatch::Csrf
+    # config.middleware.insert_before(ActionDispatch::Cookies, SkipCSRFVerification)
+    # config.middleware.swap(ActionDispatch::Cookies, AppName::ConditionalCSRF) unless Rails.application.config.csrf_disabled
+    # config.csrf_disabled = true
+    #############################################
   end
 end

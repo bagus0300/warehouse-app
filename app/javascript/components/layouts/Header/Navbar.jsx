@@ -24,7 +24,22 @@ const NavbarSection = () => {
 
   // const breadcrumbTitle = label;
 
+
+
+  const location = useLocation();
+  useEffect(() => {
+    flattenNavigations = navigations.reduce(
+      (a, b) => a.concat(b.children ? b.children : b),
+      []
+    );
+  }, []);
+
+
   const handleMenuClick = ({ key }) => {
+    flattenNavigations = navigations.reduce(
+      (a, b) => a.concat(b.children ? b.children : b),
+      []
+    )
     const { url } = flattenNavigations.find((item) => item.key === key) || {};
     const { label } = flattenNavigations.find((item) => item.key === key) || {};
     console.log(label)
@@ -33,17 +48,10 @@ const NavbarSection = () => {
     if (url) {
       navigate(url);
     }
-  };
 
-  const location = useLocation();
-  useEffect(() => {
-    flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    );
-    // setSelectedKeys([location.pathname]);
-    // setCurrentMenu(navigations.find((item) => item.key === location.pathname));
-  });
+    setSelectedKeys([key]);
+    setCurrentMenu({ key, label })
+  };
 
 
   return (
@@ -63,7 +71,7 @@ const NavbarSection = () => {
         <Menu
           theme="light"
           mode="horizontal"
-          defaultSelectedKeys={["/"]}
+          selectedKeys={selectedKeys}
           items={navigations}
           style={{ flex: 1, minWidth: 0 }}
           onClick={handleMenuClick}

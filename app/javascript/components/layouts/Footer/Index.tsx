@@ -21,6 +21,7 @@ const FooterSection = () => {
         bottom: "0",
         width: "100%",
       }}
+      className="mt-10"
     >
       Soko Kanri system
     </Footer>

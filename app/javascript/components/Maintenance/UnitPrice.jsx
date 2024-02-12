@@ -1,318 +1,339 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, Tabs, notification } from 'antd';
-import axios from 'axios';
-import { unitPriceURL } from '../../utils/contants';
-import NavbarSection from '../layouts/Header/Navbar';
-import FooterSection from '../layouts/Footer/Index';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment/moment";
+import CTable from '../CTable'
+// import moment from "moment";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Table,
+  Layout,
+  Select,
+  Button,
+  Modal,
+  notification,
+} from "antd";
 
-import message from "../../utils/content/jp.json"
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
+import {
+  InfoCircleOutlined,
+  ScheduleOutlined,
+  SendOutlined,
 
+} from "@ant-design/icons";
+
+import NavbarSection from "../layouts/Header/Navbar";
+import FooterSection from "../layouts/Footer/Index";
+
+import message from "../../utils/content/jp.json";
+
+let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
 const UnitPrice = () => {
   const [form] = Form.useForm();
+
+  const [searchText, setSearchText] = useState("");
+  const [reget, setReget] = useState([]);
+  const [detailData, setDetailData] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [updateData, setUpdateData] = useState({});
+  const [isposted, setIsPosted] = useState(false);
+
+  const [updateStatus, setUpdateStatus] = useState("Create");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [allData, setAllData] = useState([]);
-  const [editingKey, setEditingKey] = useState('');
 
-  const [id, setID] = useState('');
-  const [packing, setPacking] = useState('');
-  const [handleUnit, setHandleUnit] = useState('');
-  const [stoUnit, setStoUnit] = useState('');
-  const [billClass, setBillClass] = useState('');
 
-  const handleId = (e) => {
-    setID(e.target.value);
-  }
-
-  const handlePacking = (e) => {
-    setPacking(e.target.value);
-  }
-  const handleHandle = (e) => {
-    setHandleUnit(e.target.value);
-  }
-  const handleSto = (e) => {
-    setStoUnit(e.target.value)
-  }
-  const handleBC = (value) => {
-    setBillClass(value)
-  }
-  const getAllPrice = () => {
-    axios.get('http://127.0.0.1:3000/api/unit_price').then((res) => {
-      let index = 0
-      const priceData = res.data.data.map((item) => {
+  const getAllUnitPrice = () => {
+    axios.get("http://127.0.0.1:3000/api/warehouse_fee").then((res) => {
+      let index = 1;
+      const feeData = res.data.data.map((item) => {
         return {
           ...item,
           key: index++,
         };
       });
-      setAllData(priceData);
-      // console.log(priceData, 'resData')
-      // console.log(allData, 'allData')
+      setAllData(feeData);
     });
+  };
+
+  const onSubmit = async () => {
+    try {
+      let fee = await form.validateFields();
+      if (updateData) {
+        await axios.put("http://127.0.0.1:3000/api/warehouse_fee", {
+          id: updateData.id, ...fee
+        }
+        );
+        notification.success({ message: 'Update Success' });
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
+      } else {
+        await axios.post("http://127.0.0.1:3000/api/warehouse_fee", fee);
+        notification.success({ message: 'Create Success', duration: 1 })
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
+      }
+    } catch (err) {
+      notification.error({ message: "Complete All Input Fields.", duration: 1 })
+    }
+
   }
+
+  const onDelete = async (item) => {
+    try {
+      const response = await axios.delete("http://127.0.0.1:3000/api/warehouse_fee", { data: { id: item.id } });
+      setIsPosted(!isposted);
+      notification.success({ message: "Delete Success.", duration: 1 });
+      //getAllShipper();
+    } catch (error) {
+      notification.error({ message: "Server Error", duration: 1 });
+    }
+  };
 
   useEffect(() => {
-    getAllPrice();
-  }, [])
+    getAllUnitPrice();
+  }, [isposted]);
 
-  const create = () => {
 
-    if (packing && handleUnit && stoUnit && billClass) {
-      axios.post('http://127.0.0.1:3000/api/unit_price', {
-        packing: packing,
-        handling_fee_unit: handleUnit,
-        storage_fee_unit: stoUnit,
-        billing_class: billClass
+  const onAction = async (item) => {
+
+    if (item) {
+      form.setFieldsValue({
+        packaging: item.packaging,
+        handling_fee_rate: item.handling_fee_rate,
+        storage_fee_rate: item.storage_fee_rate,
+        fee_category: item.fee_category,
+        code: item.code,
       })
-        .then((res) => {
-          notification.success({ message: "Success" })
-          getAllPrice();
-        })
     } else {
-      notification.warning({ message: "Complete All Input!" })
+      form.resetFields();
     }
+    setIsModalOpen(true);
+    setUpdateData(item)
   }
 
-
-  const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    form.setFieldsValue({
-      id: '',
-      packing: '',
-      handling_fee_unit: '',
-      storage_fee_unit: '',
-      billing_class: `${message.Maintenance.fullTimeRequest}`,
-      ...record,
-    });
-    setEditingKey(record.key);
+  const handleOk = () => {
+    setIsModalOpen(false);
   };
-  const cancel = () => {
-    setEditingKey('');
-  };
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...allData];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
+  const handleCancel = () => {
+    setIsModalOpen(false);
   };
 
-  const priceColumns = [
+  const feeListColumns = [
     {
-      title: `${message.Maintenance.unitPriceID}`,
-      dataIndex: 'id',
-      width: '10%',
-      editable: true,
-      height: '20px'
+      title: "No",
+      dataIndex: "key",
+      sorter: true,
+      align: "center",
+      width: "5%",
     },
     {
       title: `${message.Maintenance.packing}`,
-      dataIndex: 'packing',
-      width: '20%',
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.handlingFeeUnitPrice}`,
-      dataIndex: 'handling_fee_unit',
-      width: '10%',
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.storageFeeUnitPrice}`,
-      dataIndex: 'storage_fee_unit',
-      width: '10%',
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.billingClass}`,
-      dataIndex: 'billing_class',
-      width: '10%',
-      editable: true,
-    },
-    {
-      title: '',
-      width: '10%',
-      dataIndex: 'operation',
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-            {message.Maintenance.change}
-          </Typography.Link>
+      key: 'packaging',
+      dataIndex: "packaging",
+      align: 'center',
+      render: (text, record, dataIndex) => {
+        return (
+          <div>
+            {record.packaging.slice(0, 18)}
+            {text.length >= 18 ? "..." : ""}
+          </div>
         );
       },
     },
+    {
+      title: `${message.Maintenance.handlingFeeUnitPrice}`,
+      dataIndex: 'handling_fee_rate',
+      key: 'handling_fee_rate',
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.handling_fee_rate.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
+    },
+    {
+      title: `${message.Maintenance.storageFeeUnitPrice}`,
+      dataIndex: "storage_fee_rate",
+      key: 'storage_fee_rate',
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.storage_fee_rate.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
+    },
+    {
+      title: `${message.Maintenance.billingClass}`,
+      dataIndex: "fee_category",
+      key: 'fee_category',
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.tel.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
+    },
+
+    {
+      title: `${message.buttons.change}`,
+      dataIndex: "operation",
+      render: (text, record, dataIndex) => {
+        return (
+          <div className="flex justify-center items-center">
+            <div className="hidden rounded-full">
+              {(star_color = record.done == true ? "text-yellow-500" : "")}
+            </div>
+            <div className="p-2 rounded-full cursor-pointer items-center text-center">
+              <PencilSquareIcon
+                shape="circle"
+                className="w-20"
+                style={{ marginRight: "5px" }}
+                onClick={() => {
+                  setUpdateStatus("Edit");
+                  onAction(record);
+                }}
+              />
+            </div>
+            <div className="p-2 rounded-full cursor-pointer items-center text-center">
+              <TrashIcon
+                shape="circle"
+                className="w-20"
+                onClick={() => {
+                  onDelete(record);
+                }}
+              />
+            </div>
+          </div>
+        );
+      },
+      align: "center",
+    },
   ];
 
-  const mergedPriceColumns = priceColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'id' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
+
   return (
     <div>
       <NavbarSection />
-      <Content style={{ width: 1024 }}
-        className="mx-auto flex flex-col content-h">
-        <div className='flex flex-col items-center'>
-          <div style={{ marginTop: "10px", marginBottom: '10px' }}>
-
-            <span style={{ marginLeft: '130px' }}>{message.Maintenance.packing}</span>
-          </div>
-          <div className='flex flex-row items-center'>
-            {/* <Input
-              type='text'
-              name="id"
-              style={{ width: "14%" }}
-              value={id}
-              onChange={handleId}
-
-            /> */}
-            <Input
-              type='text'
-              name='packing'
-              value={packing}
-              onChange={handlePacking}
-              style={{ marginLeft: '14%', width: "29%" }}
-            />
-            <Input
-              type='text'
-              name='handling_fee_unit'
-              value={handleUnit}
-              onChange={handleHandle}
-              style={{ width: "14%" }}
-            />
-            <Input
-              type='text'
-              name='unitPrice.storage_fee_unit'
-              value={stoUnit}
-              onChange={handleSto}
-              style={{ width: "14%" }}
-            />
-
-            <Select
-              style={{ width: "10%" }}
-              defaultValue={message.Maintenance.fullTimeRequest}
-              options={[
-                {
-                  value: `${message.Maintenance.fullTimeRequest}`,
-                  label: `${message.Maintenance.fullTimeRequest}`,
-                },
-                {
-                  value: `${message.Maintenance.firstBilling}`,
-                  label: `${message.Maintenance.firstBilling}`,
-                }
-              ]}
-              onChange={handleBC}
-              value={billClass}
-            />
-            <Button
-              onClick={create}
-              style={{ marginLeft: "70px", width: "10%" }}>
-              {message.Maintenance.register}
+      <Content
+        style={{ width: 1024 }}
+        className="mx-auto flex flex-col content-h"
+      >
+        <div>
+          <div
+            className="mt-5"
+            style={{ marginLeft: "880px" }}
+          >
+            <Button onClick={() => {
+              onAction();
+              setUpdateStatus("Create")
+            }}>
+              {message?.Maintenance?.addNew}
             </Button>
+            <Modal
+              title={message.Maintenance.shipperMaster}
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              footer={[
+                <Button key="ok" onClick={onSubmit}>
+                  {message.Maintenance.register}
+                </Button>,
+                <Button key="cancel" onClick={handleCancel}>
+                  {message.buttons.cancel}
+                </Button>,
+              ]}
+            >
+              <div>
+                <Form
+                  form={form}
+                  size="middle"
+                  scrollToFirstError
+                  labelCol={{ span: 7 }}
+                  labelAlign="left"
+                >
+                  <Form.Item
+                    label={message.Maintenance.packing}
+                    name={"packaging"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.code}
+                    name={"code"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.handlingFeeUnitPrice}
+                    name={"handling_fee_rate"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.storageFeeUnitPrice}
+                    name={"storage_fee_rate"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.billingClass}
+                    name={"fee_category"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Select
+
+                      defaultValue={message.Maintenance.fullTimeRequest}
+                      options={[
+                        {
+                          value: "0",
+                          label: `${message.Maintenance.fullTimeRequest}`,
+                        },
+                        {
+                          value: "1",
+                          label: `${message.Maintenance.firstBilling}`,
+                        }
+                      ]}
+                    />
+                  </Form.Item>
+                </Form>
+              </div>
+            </Modal>
+
           </div>
-          <div className='mt-2' style={{ marginTop: '10px' }}>
-            <Form form={form} component={false}>
-              <Table
-                components={{
-                  body: {
-                    cell: EditableCell,
-                  },
-                }}
-                bordered
-                dataSource={allData}
-                columns={mergedPriceColumns}
-                rowClassName="editable-row"
-                pagination={{
-                  // onChange: cancel,
-
-                }}
-
-              />
-            </Form>
+          <div className="mt-5">
+            <CTable
+              rowKey={(node) => node.id}
+              dataSource={allData}
+              columns={feeListColumns}
+              pagination={true}
+            />
           </div>
         </div>
       </Content>
       <FooterSection />
-
     </div>
   );
 };
