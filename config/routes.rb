@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   get '/api/product' , to: 'products#index'
   
   get '/*path', to: 'component#index'
+
+  # get "/api/warehouse", to: 'warehouses#index'
  
-  root 'component#index'
+  root 'component#index'  
 end

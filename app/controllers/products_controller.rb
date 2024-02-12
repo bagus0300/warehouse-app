@@ -1,3 +1,4 @@
+class ProductsController < ApplicationController
 
    def index
     products = Product.includes(:unit_price).all
