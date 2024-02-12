@@ -276,7 +276,7 @@ const ProductList = () => {
       <NavbarSection />
       <Content style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h">
-        <div>
+        <div className='mt-'>
           <div className='' style={{ marginRight: '80px', marginTop: '10px' }}>
             <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
             <Modal title="品名マスタ" open={isModalOpen}

@@ -208,24 +208,28 @@ const ShipperList = () => {
     {
       title: `${message.Maintenance.shipperID}`,
       dataIndex: "id",
+      key: 'id',
       width: "10%",
       editable: true,
     },
     {
       title: `${message.Maintenance.shipperName}`,
       dataIndex: "name",
+      key: 'name',
       width: "20%",
       editable: true,
     },
     {
       title: `${message.Maintenance.address}`,
       dataIndex: "address1",
+      key: 'address1',
       width: "25%",
       editable: true,
     },
     {
       title: `${message.Maintenance.telephone}`,
       dataIndex: "telephone_number",
+      key: "telephone_number",
       width: "25%",
       editable: true,
     },
@@ -233,6 +237,10 @@ const ShipperList = () => {
       title: `${message.Maintenance.endDate}`,
       dataIndex: "closing_date",
       width: "10%",
+      key: 'closing_date',
+      render: (endDate, record) => {
+        <DatePicker value={endDate} onChange={(date) => handleDateChange(date, record.key)} />
+      },
       editable: true,
     },
     {
