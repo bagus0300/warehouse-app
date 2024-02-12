@@ -10,11 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_09_083317) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_12_014710) do
   create_table "authority_client_pages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "user_authority_id"
     t.integer "client_page_id"
     t.boolean "is_edit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "bill_amounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "bill_id", null: false, comment: "請求id"
+    t.integer "last_amount", null: false, comment: "前回請求額"
+    t.integer "received_payment_amount", null: false, comment: "入金額"
+    t.integer "handling_fee", null: false, comment: "荷役料"
+    t.integer "storage_fee", null: false, comment: "保管料"
+    t.integer "tax", null: false, comment: "消費税"
+    t.integer "current_amount", null: false, comment: "請求額"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "bills", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "shipper_id", null: false, comment: "荷主id"
+    t.bigint "warehouse_id", null: false, comment: "倉庫id"
+    t.date "billed_on", null: false, comment: "請求年月日"
+    t.integer "closing_date", null: false, comment: "締日"
+    t.date "duration_from", null: false, comment: "対象期間 From"
+    t.date "duration_to", null: false, comment: "対象期間 To"
+    t.date "shipper_from", null: false, comment: "対象荷主 From"
+    t.date "shipper_to", null: false, comment: "対象荷主 To"
+    t.integer "billed", null: false, comment: "請求したかどうか"
+    t.integer "printed", null: false, comment: "請求書を作成したかどうか"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -28,58 +55,67 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_083317) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "processing_data", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.integer "processing_classification", default: 0, null: false, comment: "0->入庫, 1->出庫"
-    t.datetime "processing_date", default: "2024-02-09 12:08:44", null: false, comment: "入出庫日"
-    t.bigint "warehouse_id", null: false
-    t.bigint "shipper_id", null: false
-    t.integer "processing_no", null: false
-    t.integer "lot_num", null: false
-    t.decimal "weight", precision: 6, scale: 2, default: "0.0", null: false
-    t.string "processing_num", default: "", null: false
-    t.decimal "unit_price", precision: 6, scale: 2, default: "0.0", null: false
-    t.bigint "reg_user_id", null: false
-    t.bigint "update_user_id"
-    t.integer "is_canceled", default: 0, null: false, comment: "1->キャンセル"
+  create_table "products", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name", null: false, comment: "品名"
+    t.string "code", null: false, comment: "品名コード"
+    t.bigint "warehouse_fee_id", null: false, comment: "単価 id"
+    t.string "specification", null: false, comment: "規格・荷姿"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["reg_user_id"], name: "index_processing_data_on_reg_user_id"
-    t.index ["shipper_id"], name: "index_processing_data_on_shipper_id"
-    t.index ["update_user_id"], name: "index_processing_data_on_update_user_id"
-    t.index ["warehouse_id"], name: "index_processing_data_on_warehouse_id"
+    t.index ["code"], name: "index_products_on_code", unique: true
+    t.index ["name"], name: "index_products_on_name", unique: true
+    t.index ["specification"], name: "index_products_on_specification", unique: true
   end
 
-  create_table "products", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "number"
-    t.string "packing"
-    t.string "unit_price_id"
+  create_table "received_payments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "shipper_id", null: false, comment: "荷主id"
+    t.date "received_on", null: false, comment: "入金日"
+    t.integer "amount", null: false, comment: "入金額"
+    t.text "description", comment: "摘要"
+    t.date "processing_on", comment: "処理日"
+    t.integer "received", limit: 2, null: false, comment: "入金済みかどうか"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "shippers", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "post_code"
-    t.string "address1"
-    t.string "address2"
-    t.string "telephone_number"
-    t.string "closing_date"
-    t.string "calc_category"
-    t.float "used_tsubo_price"
-    t.float "discount_rate"
+    t.string "name", null: false, comment: "荷主名"
+    t.string "code", null: false, comment: "荷主コード"
+    t.string "post_code", null: false, comment: "郵便番号"
+    t.string "main_address", null: false, comment: "住所1"
+    t.string "sub_address", null: false, comment: "住所2"
+    t.string "tel", null: false, comment: "電話番号"
+    t.datetime "closing_date", null: false, comment: "締日"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "number"
+    t.index ["code"], name: "index_shippers_on_code", unique: true
+    t.index ["name"], name: "index_shippers_on_name", unique: true
   end
 
-  create_table "unit_prices", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "packing"
-    t.float "handling_fee_unit"
-    t.float "storage_fee_unit"
-    t.string "billing_class"
+  create_table "stock_inouts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "stock_id", null: false, comment: "在庫id"
+    t.bigint "creator_id", null: false, comment: "登録ユーザーid"
+    t.integer "category", null: false, comment: "登録ユーザーid"
+    t.date "inout_on", null: false, comment: "入出庫日"
+    t.integer "amount", null: false, comment: "入出庫数"
+    t.integer "handling_fee_rate", null: false, comment: "荷役単価"
+    t.integer "storage_fee_rate", null: false, comment: "保管単価"
+    t.string "lot_number", null: false, comment: "ロット番号"
+    t.string "weight", null: false, comment: "重量"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "stocks", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "warehouse_id", null: false, comment: "倉庫id"
+    t.bigint "shipper_id", null: false, comment: "荷主id"
+    t.bigint "product_id", null: false, comment: "品名id"
+    t.bigint "total_amount", null: false, comment: "在庫数"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_stocks_on_product_id", unique: true
+    t.index ["shipper_id"], name: "index_stocks_on_shipper_id", unique: true
+    t.index ["warehouse_id"], name: "index_stocks_on_warehouse_id", unique: true
   end
 
   create_table "user_authorities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -116,14 +152,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_09_083317) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "warehouses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.string "name"
+  create_table "warehouse_fees", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "packaging", null: false
+    t.integer "handling_fee_rate", null: false
+    t.integer "storage_fee_rate", null: false
+    t.integer "fee_category", limit: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_warehouse_fees_on_code", unique: true
   end
 
-  add_foreign_key "processing_data", "shippers"
-  add_foreign_key "processing_data", "users", column: "reg_user_id"
-  add_foreign_key "processing_data", "users", column: "update_user_id"
-  add_foreign_key "processing_data", "warehouses"
+  create_table "warehouses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.string "name", null: false, comment: "倉庫名"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_warehouses_on_name", unique: true
+  end
+
 end
