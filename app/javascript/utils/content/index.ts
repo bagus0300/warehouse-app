@@ -71,8 +71,8 @@ export const navigations = [
       },
       {
         label: "単価区分マスタ",
-        key: "/unit_price",
-        url: "/unit_price",
+        key: "/warehouse_fee",
+        url: "/warehouse_fee",
       },
     ],
   },

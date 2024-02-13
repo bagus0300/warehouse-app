@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
+  get "/api/product_dd", to:'products#show_by_id'
 
   get "/api/warehouse_fee", to: 'warehouse_fees#index'
   post "/api/warehouse_fee" , to: 'warehouse_fees#create'

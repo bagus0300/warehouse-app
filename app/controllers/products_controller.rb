@@ -1,12 +1,13 @@
 
 class ProductsController < ApplicationController
-  def index
-   products = Product.includes(:warehouse_fee).all
 
-   render json: {
-     data: products.map { |product| ProductSerializer.new(product).as_json },
-     status: :accepted
-   }
+   def index
+    products = Product.includes(:warehouse_fee).all
+
+    render json: {
+      data: products.map { |product| ProductSerializer.new(product).as_json },
+      status: :accepted
+    }
 
   end
   def create
@@ -37,6 +38,8 @@ class ProductsController < ApplicationController
     end
   end
   def show_by_id
+    puts "-----------------"
+    puts params[:id]
     product = Product.includes(:warehouse_fee).find (params[:id])
     render :json => {
       data: ProductSerializer.new(product).as_json ,
