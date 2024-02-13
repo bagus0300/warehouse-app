@@ -1,395 +1,427 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, notification } from 'antd';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment/moment";
+import CTable from '../CTable'
+// import moment from "moment";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Layout,
+  Popconfirm,
+  DatePicker,
+  Table,
+  Select,
+  Button,
+  Modal,
+  notification,
+} from "antd";
 
-import NavbarSection from '../layouts/Header/Navbar';
-import FooterSection from '../layouts/Footer/Index';
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 
-import message from "../../utils/content/jp.json"
-import axios from 'axios';
-const { Search } = Input;
+import NavbarSection from "../layouts/Header/Navbar";
+import FooterSection from "../layouts/Footer/Index";
 
+import message from "../../utils/content/jp.json";
+
+
+let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const ProductList = () => {
   const [form] = Form.useForm();
-  const [allData, setAllData] = useState([]);
-  const [editingKey, setEditingKey] = useState('');
+
+  const [searchText, setSearchText] = useState("");
+  const [updateData, setUpdateData] = useState({});
+  const [isposted, setIsPosted] = useState(false);
+
+  const [updateStatus, setUpdateStatus] = useState("Create");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allData, setAllData] = useState([]);
+  const [showData, setShowData] = useState([]);
+  //fee
+  const [feeData, setFeeData] = useState([]);
+  const [feePackaging, setFeePackaging] = useState('');
+  const [feeID, setFeeID] = useState('');
 
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
-  const [packing, setPacking] = useState('');
-  const [unitPrice, setUnitPrice] = useState('');
-  const [price, setPrice] = useState([]);
-  const [priceId, setPriceID] = useState('');
-  const [priceOne, setPriceOne] = useState({});
-  const [] = useState('');
-  const [] = useState('');
-  const [] = useState('');
-
-
-  const handleName = (e) => {
-    setName(e.target.value);
-  }
-  const handleNumber = (e) => {
-    setNumber(e.target.value);
-  }
-
-  const handlePacking = (e) => {
-    setPacking(e.target.value);
-  }
-
-  const handleUnitPrice = (value) => {
-    setUnitPrice(value);
-  }
-  //   const getOne = () => {
-  //     const one = price.find(item => item.id === unitPrice);
-  //     setPriceOne(one);
-  //   }
-
-  // useEffect(()=>{
-  //   getOne();
-  // },[unitPrice])
+  const [handlingFeeRate, setHandlingFeeRate] = useState("");
+  const [feeCategory, setFeeCategory] = useState("");
+  const [storageFeeRate, setStorageFeeRate] = useState("");
 
 
-  const getAllPrice = () => {
-    axios.get('http://127.0.0.1:3000/api/unit_price').then((res) => {
-      let index = 0
+  const getAllProduct = () => {
+    axios.get("http://127.0.0.1:3000/api/product").then((res) => {
+      let index = 1;
+      let products = res.data.data.map((item) => {
+        let feeData = item.data.attributes.warehouse_fee;
+        return {
+          key: index++,
+          name: item.data.attributes.name,
+          packaging: feeData.packaging,
+          storage_fee_rate: feeData.storage_fee_rate,
+          handling_fee_rate: feeData.handling_fee_rate,
+          fee_category: feeData.fee_category
+        };
+      });
+      setAllData(products);
+      setShowData(products);
+
+    });
+  };
+
+  const getAllFeeData = () => {
+    axios.get('http://127.0.0.1:3000/api/warehouse_fee').then((res) => {
+      let index = 1
       const priceData = res.data.data.map((item) => {
         return {
           ...item,
           key: index++,
         };
       });
-      console.log(priceData)
-      setPrice(priceData);
-
-      const priceIds = priceData.map(item => item.id)
-      setPriceID(priceIds)
+      setFeeData(priceData);
+      const feePackaging = priceData.map(item => item.packaging)
+      setFeePackaging(feePackaging)
     });
   }
 
-  const getAllProduct = () => {
-    axios.get('http://127.0.0.1:3000/api/product').then((res) => {
-      let index = 0
-      const productData = res.data.data.map((item) => {
-        return {
-          ...item,
-          key: index++,
-        };
-      });
+  const onSubmit = async () => {
+    try {
+      let product = await form.validateFields();
+      if (updateData) {
+        await axios.put("http://127.0.0.1:3000/api/product", {
+          id: updateData.id, ...product
+        }
+        );
+        notification.success({ message: 'Update Success', duration: 1 });
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
 
-      setAllData(productData);
+      } else {
+        const postProduct = { ...product, warehouse_fee_id: feeID }
+        await axios.post("http://127.0.0.1:3000/api/product", { ...product, warehouse_fee_id: feeID });
+        notification.success({ message: 'Create Success', duration: 1 })
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
 
-    });
+      }
+    } catch (err) {
+      notification.error({ message: "Complete All Input Fields.", duration: 1 })
+    }
+
   }
+
+  const handleSearchText = (e) => {
+    setSearchText(e.target.value)
+  }
+
+  const handleSelect = (value) => {
+
+    const selectedFeeData = feeData.find((item) => item.packaging === value);
+
+    if (selectedFeeData) {
+      setHandlingFeeRate(selectedFeeData.handling_fee_rate);
+      setFeeCategory(selectedFeeData.fee_category);
+      setStorageFeeRate(selectedFeeData.storage_fee_rate);
+      setFeeID(selectedFeeData.id);
+    } else {
+      setHandlingFeeRate("");
+      setFeeCategory("");
+      setStorageFeeRate("");
+    }
+  }
+
+  const getBySearch = (data) => {
+    if (searchText) {
+      return data.filter((item) => item.name.includes(searchText));
+    } else {
+      return data;
+    }
+  };
+  const getShowData = () => {
+    const res = getBySearch(allData);
+    setShowData(res);
+  }
+
 
   useEffect(() => {
     getAllProduct();
-    getAllPrice();
-  }, [])
+  }, [isposted]);
 
+  useEffect(() => {
+    getShowData();
+    console.log(searchText)
+    console.log("first", showData)
+  }, [searchText]);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    if (name && number && packing && unitPrice) {
-      axios.post('http://127.0.0.1:3000/api/product', {
-        name: name,
-        number: number,
-        packing: packing,
-        unit_price_id: unitPrice
-      })
-        .then((res) => {
-          notification.success({ message: "Success" })
-          getAllProduct();
-          setName('');
-          setNumber('');
-          setPacking('');
-          setUnitPrice('');
-          setIsModalOpen(false);
+  useEffect(() => {
+    getAllFeeData();
+    getShowData();
+  }, []);
 
-        })
+  const onAction = async (item) => {
+    if (item) {
+      form.setFieldsValue({
+        name: item.name,
+        code: item.code,
+        specification: item.specification,
+        packaging: item.packaging,
+      });
+      setHandlingFeeRate(item.handling_fee_rate);
+      setFeeCategory(item.fee_category);
+      setStorageFeeRate(item.storage_fee_rate);
     } else {
-      notification.warning({ message: "Complete All Inputs!" })
+      form.resetFields();
+      setHandlingFeeRate("");
+      setFeeCategory("");
+      setStorageFeeRate("");
     }
+    setIsModalOpen(true);
+    setUpdateData(item);
+  };
 
+  const onDelete = async (item) => {
+    try {
+      const response = await axios.delete("http://127.0.0.1:3000/api/product", { data: { id: item.id } });
+      setIsPosted(!isposted);
+      notification.success({ message: "Delete Success.", duration: 1 });
+    } catch (error) {
+      notification.error({ message: "Server Error", duration: 1 });
+    }
+  };
+
+
+  const handleOk = () => {
+    setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    form.setFieldsValue({
-      name: '',
-      age: '',
-      address: '',
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-  const cancel = () => {
-    setEditingKey('');
-  };
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
-  const listColumns = [
+  const productListColumns = [
     {
-      title: `${message.Maintenance.productNumber}`,
-      dataIndex: 'number',
-      width: '10%',
-      editable: true,
+      title: "No",
+      dataIndex: "key",
+      sorter: true,
+      align: "center",
+      width: "5%",
     },
     {
       title: `${message.Maintenance.productName}`,
-      dataIndex: 'name',
-      width: '25%',
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.productPacking}`,
-      dataIndex: 'packing',
-      width: '25%',
-      editable: true,
+      key: 'name',
+      width: '20%',
+      dataIndex: "name",
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.name.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
     },
     {
       title: `${message.Maintenance.handlingFee}`,
-      dataIndex: 'handling_fee_unit',
-      width: '10%',
-      editable: true,
+      dataIndex: "handling_fee_rate",
+      key: 'handling_fee_rate',
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.tel.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
     },
     {
       title: `${message.Maintenance.storageFee}`,
-      dataIndex: 'storage_fee_unit',
-      width: '10%',
-      editable: true,
+      dataIndex: "storage_fee_rate",
+      key: 'storage_fee_rate',
+      align: 'center',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.tel.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
     },
     {
       title: `${message.Maintenance.billingClass}`,
-      dataIndex: 'billing_class',
-      width: '10%',
-      editable: true,
+      dataIndex: "fee_category",
+      align: 'center',
+      key: 'fee_category',
+      // render: (text, record, dataIndex) => {
+      //   return (
+      //     <div>
+      //       {record.tel.slice(0, 18)}
+      //       {text.length >= 18 ? "..." : ""}
+      //     </div>
+      //   );
+      // },
     },
     {
-      title: '',
-      dataIndex: 'operation',
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-            {message.Maintenance.change}
-          </Typography.Link>
+      title: `${message.buttons.change}`,
+      dataIndex: "operation",
+      render: (text, record, dataIndex) => {
+        return (
+          <div className="flex justify-center">
+            <div className="hidden rounded-full">
+              {(star_color = record.done == true ? "text-yellow-500" : "")}
+            </div>
+            <div className="p-2 rounded-full cursor-pointer text-center">
+              <PencilSquareIcon
+                shape="circle"
+                className="w-20"
+                style={{ marginRight: "5px" }}
+                onClick={() => {
+                  setUpdateStatus("Edit");
+                  onAction(record);
+                }}
+              />
+            </div>
+            <div className="p-2 rounded-full cursor-pointer items-center text-center">
+              <TrashIcon
+                shape="circle"
+                className="w-20"
+                onClick={() => {
+                  onDelete(record);
+                }}
+              />
+            </div>
+          </div>
         );
       },
+      align: "center",
     },
   ];
 
-  const mergedListColumns = listColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
 
   return (
     <div>
       <NavbarSection />
-      <Content style={{ width: 1024 }}
-        className="mx-auto flex flex-col content-h">
-        <div className='mt-'>
-          <div className='' style={{ marginRight: '80px', marginTop: '10px' }}>
-            <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
-            <Modal title="品名マスタ" open={isModalOpen}
+      <Content
+        style={{ width: 1024 }}
+        className="mx-auto content-h"
+      >
+        <div>
+          <div className="mt-5" >
+            <div className="flex flex-row items-center">
+              {/* <label style={{ width: '50px' }} >{message.Maintenance.productName}</label> */}
+              <Input.Search
+                value={searchText}
+                className="w-190"
+                placeholder={"Search"}
+                onChange={handleSearchText}
+              />
+              <Button
+                style={{ marginLeft: "640px" }}
+                onClick={() => {
+                  onAction();
+                  setUpdateStatus("Create")
+                }}>
+                {message?.Maintenance?.addNew}
+              </Button>
+            </div>
+            <Modal
+              title={message.Maintenance.productMaster}
+              open={isModalOpen}
               onOk={handleOk}
               onCancel={handleCancel}
               footer={[
-                <Button key="ok" onClick={handleOk}>
+                <Button key="ok" onClick={onSubmit}>
                   {message.Maintenance.register}
                 </Button>,
                 <Button key="cancel" onClick={handleCancel}>
                   {message.buttons.cancel}
                 </Button>,
-                <Button key="delete" onClick={handleCancel}>
-                  {message.buttons.delete}
-                </Button>
-              ]}>
-
+              ]}
+            >
               <div>
-                <div>
-                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label>
-                  <Input
-                    type='text'
-                    value={name}
-                    onChange={handleName}
-                    style={{ width: '40%', marginTop: '20px' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productName}</label>
-                  <Input
-                    type='text'
-                    value={number}
-                    onChange={handleNumber}
-                    style={{ width: '50%', marginTop: '20px' }}
-                  />
-                </div>
-                <div>
-                  <label >{message.Maintenance.productPacking}</label>
-                  <Input
-                    type='text'
-                    value={packing}
-                    onChange={handlePacking}
-                    style={{ width: '50%', marginTop: '20px' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: '25px' }}>{message.Maintenance.unitPriceID}</label>
-                  <Select
-                    onChange={handleUnitPrice}
-                    options={[...priceId].map((item) => ({
-                      value: item,
-                      label: item
-                    }))}
-                    value={unitPrice}
-                    style={{ width: '30%' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: '42px' }}>{message.Maintenance.packing}</label>
-                  <Input
-                    style={{ width: '30%' }}
-                    value={priceOne.packing}
-                  />
-                </div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.handlingFee}</label>
-                  <Input
-                    style={{ width: '30%' }}
-                    value={priceOne.handling_fee_unit}
-                  />
-                </div>
-                <div><label style={{ marginRight: '27px' }}>{message.Maintenance.storageFee}</label>
-                  <Input
-                    style={{ width: '30%' }}
-                    value={priceOne.storage_fee_unit}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: '15px' }}>{message.Maintenance.billingClass}</label>
-                  <Input
-                    style={{ width: '30%' }}
-                    value={priceOne.billing_class}
-                  />
-                </div>
+                <Form
+                  form={form}
+                  size="middle"
+                  scrollToFirstError
+                  labelCol={{ span: 7 }}
+                  labelAlign="left"
+                >
+                  <Form.Item
+                    label={message.Maintenance.productName}
+                    name={"name"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.code}
+                    name={"code"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.productPacking}
+                    name={"specification"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.packing}
+                    name={"packaging"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Select
+                      options={[...feePackaging].map((item) => ({
+                        key: item,
+                        value: item,
+                        label: item,
+                      }))}
+                      onChange={handleSelect}
+
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.handlingFee}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input value={handlingFeeRate} />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.storageFee}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input value={storageFeeRate} />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.billingClass}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input value={feeCategory} />
+                  </Form.Item>
+                </Form>
               </div>
             </Modal>
           </div>
-          <div className='flex flex-row items-center ' style={{ marginTop: '10px' }}>
-            <div ><label style={{ marginRight: '5px' }}>品番</label> <Search style={{ width: '40%' }} name='品番' /></div>
-            <div><label style={{ marginRight: '5px' }}>品名</label><Search style={{ width: '60%' }} name='品名' /></div>
-            <div><Button>検索</Button></div>
-          </div>
-          <div className='' style={{ marginTop: '10px' }}>
-            <Form form={form} component={false}>
-              <Table
-                components={{
-                  body: {
-                    cell: EditableCell,
-                  },
-                }}
-                bordered
-                dataSource={allData}
-                columns={mergedListColumns}
-                rowClassName="editable-row"
-                pagination={{
-                  onChange: cancel,
-                }}
-              />
-            </Form>
+          <div className="mt-5">
+            <CTable
+              rowKey={(node) => node.key}
+              dataSource={showData}
+              columns={productListColumns}
+              pagination={true}
+            />
           </div>
         </div>
       </Content>
       <FooterSection />
-
     </div>
   );
 };

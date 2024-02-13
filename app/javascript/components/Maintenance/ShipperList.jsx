@@ -1,115 +1,45 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import moment from "moment";
+import moment from "moment";
+import CTable from '../CTable'
 import {
   Form,
   Input,
-  InputNumber,
   Layout,
-  Popconfirm,
-  DatePicker,
   Table,
-  Typography,
   Button,
   Modal,
   notification,
 } from "antd";
 
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
+
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
 
 import message from "../../utils/content/jp.json";
-import { render } from "react-dom";
 
-const { Search } = Input;
+let plan_color, star_color, plan_text;
+
 const { Content } = Layout;
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const ShipperList = () => {
   const [form] = Form.useForm();
-  const [editingKey, setEditingKey] = useState("");
+  const [updateData, setUpdateData] = useState({});
+  const [isposted, setIsPosted] = useState(false);
+
+  const [updateStatus, setUpdateStatus] = useState("Create");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allData, setAllData] = useState([]);
 
-  const [shipperName, setShipperName] = useState("");
-  const [postCode, setPostCode] = useState("");
-  const [mainAddress, setMainAddress] = useState("");
-  const [subAddress, setSubAddress] = useState("");
-  const [tel, setTel] = useState("");
-  // const [calCategory, setCalCategory] = useState("");
-  // const [usedTsubos, setUsedTsubos] = useState("");
-  // const [discountRate, setDiscountRate] = useState("");
-  const [closingDate, setClosingDate] = useState("");
-
-  const handleShipperName = (e) => {
-    setShipperName(e.target.value);
-  };
-
-  const handlePostCode = (e) => {
-    setPostCode(e.target.value);
-  };
-
-  const handleMainAddress = (e) => {
-    setMainAddress(e.target.value);
-  };
-
-  const handleSubAddress = (e) => {
-    setSubAddress(e.target.value);
-  };
-  const handleTel = (e) => {
-    setTel(e.target.value);
-  };
-  // const handleCalCategory = (e) => {
-  //   setCalCategory(e.target.value);
-  // };
-  // const handleUsedTsubo = (e) => {
-  //   setUsedTsubos(e.target.value);
-  // };
-  // const handleDiscountRate = (e) => {
-  //   setDiscountRate(e.target.value);
-  // };
-
-  const handleClosingDate = (value) => {
-    setClosingDate(value);
-  };
-
   const getAllShipper = () => {
     axios.get("http://127.0.0.1:3000/api/shipper").then((res) => {
-      let index = 0;
+      let index = 1;
       const shipperData = res.data.data.map((item) => {
         return {
           ...item,
@@ -117,58 +47,69 @@ const ShipperList = () => {
         };
       });
       setAllData(shipperData);
-      console.log(shipperData, "resData");
     });
   };
 
-  const createShipper = () => {
-    if (
-      shipperName &&
-      mainAddress &&
-      subAddress &&
-      postCode &&
-      tel &&
-      // calCategory &&
-      // usedTsubos &&
-      // discountRate &&
-      closingDate
-    ) {
-      axios
-        .post("http://127.0.0.1:3000/api/shipper", {
-          name: shipperName,
-          post_code: postCode,
-          mainAddress: mainAddress,
-          subAddress: subAddress,
-          tel: tel,
-          // calc_category: calCategory,
-          // used_tsubo_price: usedTsubos,
-          // discourt_rate: discountRate,
-          closng_date: closingDate,
-        })
-        .then((res) => {
-          notification.success({ message: "Success", duration: 1 });
-          setIsModalOpen(false);
-          setShipperName("");
-          setMainAddress("");
-          setSubAddress("");
-          // setCalCategory("");
-          // setDiscountRate("");
-          setClosingDate("");
-          setTel("");
-          getAllShipper();
-        });
-    } else {
-      notification.warning({ message: "Complete All Input!", duration: 1 });
+  const onSubmit = async () => {
+    try {
+      let shipper = await form.validateFields();
+      if (updateData) {
+        await axios.put("http://127.0.0.1:3000/api/shipper", {
+          id: updateData.id, ...shipper
+        }
+        );
+        notification.success({ message: 'Update Success', duration: 1 });
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
+      } else {
+        await axios.post("http://127.0.0.1:3000/api/shipper", shipper);
+        notification.success({ message: 'Create Success', duration: 1 })
+        setIsModalOpen(false);
+        setIsPosted(!isposted);
+      }
+    } catch (err) {
+      notification.error({ message: "Complete All Input Fields.", duration: 1 })
     }
-  };
+
+  }
 
   useEffect(() => {
     getAllShipper();
-  }, []);
+  }, [isposted]);
 
-  const showModal = () => {
+
+  const onAction = async (item) => {
+
+    if (item) {
+      form.setFieldsValue({
+        name: item.name,
+        main_address: item.main_address,
+        sub_address: item.sub_address,
+        code: item.code,
+        post_code: item.post_code,
+        tel: item.tel,
+        closing_date: moment(item.closing_date).format("YYYY-MM-DD")
+      })
+    } else {
+      form.resetFields();
+    }
+
     setIsModalOpen(true);
+    setUpdateData(item)
+  }
+
+
+  const onDelete = async (item) => {
+    try {
+      const response = await axios.delete("http://127.0.0.1:3000/api/shipper", { data: { id: item.id } });
+      setIsPosted(!isposted);
+      notification.success({ message: "Delete Success.", duration: 1 });
+    } catch (error) {
+      notification.error({ message: "Server Error", duration: 1 });
+    }
   };
+
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -176,129 +117,102 @@ const ShipperList = () => {
     setIsModalOpen(false);
   };
 
-  const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    form.setFieldsValue({
-      name: "",
-      age: "",
-      address: "",
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-  const cancel = () => {
-    setEditingKey("");
-  };
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...allData];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setAllData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setAllData(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
   const shipperListColumns = [
     {
-      title: `${message.tableCommon.no}`,
-      dataIndex: "id",
-      key: "id",
+      title: "No",
+      dataIndex: "key",
+      sorter: true,
+      align: "center",
       width: "5%",
-      editable: true,
     },
     {
       title: `${message.shipper.name}`,
+      key: 'name',
       dataIndex: "name",
-      key: "name",
-      width: "30%",
-      editable: true,
+      align: 'center',
+      render: (text, record, dataIndex) => {
+        return (
+          <div>
+            {record.name.slice(0, 18)}
+            {text.length >= 18 ? "..." : ""}
+          </div>
+        );
+      },
     },
     {
-      title: `${message.shipper.main_address}`,
+      title: `${message.shipper.mainAddress}`,
       dataIndex: "main_address",
-      key: "mainAddress",
-      width: "30%",
-      editable: true,
+      key: 'main_address',
+      align: 'center',
+      render: (text, record, dataIndex) => {
+        return (
+          <div>
+            {record.main_address.slice(0, 18)}
+            {text.length >= 18 ? "..." : ""}
+          </div>
+        );
+      },
     },
     {
       title: `${message.shipper.tel_number}`,
       dataIndex: "tel",
-      key: "tel",
-      width: "15%",
-      editable: true,
+      key: 'tel',
+      align: 'center',
+      render: (text, record, dataIndex) => {
+        return (
+          <div>
+            {record.tel.slice(0, 18)}
+            {text.length >= 18 ? "..." : ""}
+          </div>
+        );
+      },
     },
     {
       title: `${message.shipper.closing_date}`,
       dataIndex: "closing_date",
-      width: "10%",
-      key: "closing_date",
-      render: (closingDate, record) => {
-        <DatePicker
-          value={closingDate}
-          onChange={(date) => handleDateChange(date, record.key)}
-        />;
-      },
-      editable: true,
+      key: 'closing_date',
+      render: (txt) => moment(txt).format("YYYY-MM-DD"),
+      // sorter: (a, b) =>
+      //   a.closing_date.toLowerCase().localeCompare(b.closing_date.toLowerCase()),
+      align: "center",
+      width: "11%",
     },
     {
-      title: "",
+      title: `${message.buttons.change}`,
       dataIndex: "operation",
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
-          >
-            {message.Maintenance.change}
-          </Typography.Link>
+      render: (text, record, dataIndex) => {
+        return (
+          <div className="flex justify-center items-center">
+            <div className="hidden rounded-full">
+              {(star_color = record.done == true ? "text-yellow-500" : "")}
+            </div>
+            <div className="p-2 rounded-full cursor-pointer items-center text-center">
+              <PencilSquareIcon
+                shape="circle"
+                className="w-20"
+                style={{ marginRight: "5px" }}
+                onClick={() => {
+                  setUpdateStatus("Edit");
+                  onAction(record);
+                }}
+              />
+            </div>
+            <div className="p-2 rounded-full cursor-pointer items-center text-center">
+              <TrashIcon
+                shape="circle"
+                className="w-20"
+                onClick={() => {
+                  onDelete(record);
+                }}
+              />
+            </div>
+          </div>
         );
       },
+      align: "center",
     },
   ];
 
-  const mergedShipperListColumns = shipperListColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "age" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
 
   return (
     <div>
@@ -309,17 +223,22 @@ const ShipperList = () => {
       >
         <div>
           <div
-            className="mt-4"
-            style={{ marginRight: "80px", marginTop: "10px" }}
+            className="mt-5"
+            style={{ marginLeft: "880px" }}
           >
-            <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
+            <Button onClick={() => {
+              onAction();
+              setUpdateStatus("Create")
+            }}>
+              {message?.Maintenance?.addNew}
+            </Button>
             <Modal
               title={message.Maintenance.shipperMaster}
               open={isModalOpen}
               onOk={handleOk}
               onCancel={handleCancel}
               footer={[
-                <Button key="ok" onClick={createShipper}>
+                <Button key="ok" onClick={onSubmit}>
                   {message.Maintenance.register}
                 </Button>,
                 <Button key="cancel" onClick={handleCancel}>
@@ -328,133 +247,76 @@ const ShipperList = () => {
               ]}
             >
               <div>
-                <div>
-                  <label style={{ marginRight: "25px" }}>
-                    {message.Maintenance.shipperName}
-                  </label>
-                  <Input
-                    type="text"
-                    value={shipperName}
-                    onChange={handleShipperName}
-                    style={{ width: "40%" }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ marginRight: "12px" }}>
-                    {message.Maintenance.postCode}
-                  </label>
-                  <Input
-                    type="text"
-                    value={postCode}
-                    onChange={handlePostCode}
-                    style={{ width: "30%", marginTop: "20px" }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: "24px" }}>
-                    {message.Maintenance.mainAddress}
-                  </label>
-                  <Input
-                    type="text"
-                    value={mainAddress}
-                    onChange={handleMainAddress}
-                    style={{ width: "50%" }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: "25px" }}>
-                    {message.Maintenance.subAddress}
-                  </label>
-                  <Input
-                    type="text"
-                    value={subAddress}
-                    onChange={handleSubAddress}
-                    style={{ width: "50%" }}
-                  />
-                </div>
-                <div>
-                  <label style={{ marginRight: "12px" }}>
-                    {message.Maintenance.telephoneNumber}
-                  </label>
-                  <Input
-                    type="text"
-                    value={tel}
-                    onChange={handleTel}
-                    style={{ width: "30%" }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ marginRight: "38px" }}>
-                    {message.Maintenance.closingDate}
-                  </label>
-                  <DatePicker
-                    type="text"
-                    value={closingDate}
-                    onChange={handleClosingDate}
-                    style={{ width: "30%", marginTop: "20px" }}
-                  />
-                </div>
-                {/* <div>
-                  <label style={{ marginRight: "12px" }}>
-                    {message.Maintenance.calCategory}
-                  </label>
-                  <Input
-                    type="text"
-                    value={calCategory}
-                    onChange={handleCalCategory}
-                    style={{ width: "30%" }}
-                  />
-                </div> */}
-                {/* <div>
-                  <label style={{ marginRight: "12px" }}>
-                    {message.Maintenance.usedTsubos}
-                  </label>
-                  <Input
-                    type="text"
-                    value={usedTsubos}
-                    onChange={handleUsedTsubo}
-                    style={{ width: "30%" }}
-                  />
-                </div> */}
-                {/* <div>
-                  <label style={{ marginRight: "25px" }}>
-                    {message.Maintenance.priceTsubo}
-                  </label>
-                  <Input style={{ width: "30%" }}/>
-                </div> */}
-                {/* <div>
-                  <label style={{ marginRight: "26px" }}>
-                    {message.Maintenance.discountRate}
-                  </label>
-                  <Input
-                    type="text"
-                    value={discountRate}
-                    onChange={handleDiscountRate}
-                    style={{ width: "30%" }}
-                  />
-                </div> */}
+                <Form
+                  form={form}
+                  size="middle"
+                  scrollToFirstError
+                  labelCol={{ span: 7 }}
+                  labelAlign="left"
+                >
+                  <Form.Item
+                    label={message.Maintenance.shipperName}
+                    name={"name"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.code}
+                    name={"code"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.Maintenance.postCode}
+                    name={"post_code"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.main_address}
+                    name={"main_address"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.sub_address}
+                    name={"sub_address"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.tel_number}
+                    name={"tel"}
+                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label={message.shipper.closing_date}
+                    name={"closing_date"}
+                    rules={[
+                      { required: true, message: `${message.tableCommon.warning}` },
+                    ]}
+                  >
+                    <Input type="date" />
+                  </Form.Item>
+                </Form>
               </div>
             </Modal>
+
           </div>
-          <div className="mt-10">
-            <Form form={form} component={false}>
-              <Table
-                components={{
-                  body: {
-                    cell: EditableCell,
-                  },
-                }}
-                bordered
-                dataSource={allData}
-                columns={mergedShipperListColumns}
-                rowClassName="editable-row"
-                pagination={{
-                  onChange: cancel,
-                }}
-              />
-            </Form>
+          <div className="mt-5">
+            <CTable
+              rowKey={(node) => node.id}
+              dataSource={allData}
+              columns={shipperListColumns}
+              pagination={true}
+            />
           </div>
         </div>
       </Content>

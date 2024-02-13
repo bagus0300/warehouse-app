@@ -30,10 +30,10 @@ Rails.application.routes.draw do
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
 
-  get "/api/unit_price", to: 'unit_prices#index'
-  post "/api/unit_price" , to: 'unit_prices#create'
-  put "/api/unit_price" , to: 'unit_prices#update'
-  delete "/api/unit_price" , to: 'unit_prices#destroy'
+  get "/api/warehouse_fee", to: 'warehouse_fees#index'
+  post "/api/warehouse_fee" , to: 'warehouse_fees#create'
+  put "/api/warehouse_fee" , to: 'warehouse_fees#update'
+  delete "/api/warehouse_fee" , to: 'warehouse_fees#destroy'
 
   
   get "/api/processing_data", to: 'processing_datas#index'

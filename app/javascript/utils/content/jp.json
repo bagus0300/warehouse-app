@@ -72,13 +72,17 @@
     }
   ],
   "tableCommon": {
-    "no": "NO"
+    "no": "NO",
+    "warning" : "このフィールドは必ず入力してください"
   },
   "shipper": {
     "name": "荷主名",
-    "main_address": "住所",
+    "main_address": "住所1",
+    "sub_address": "住所2",
     "tel_number": "電話",
-    "closing_date": "締日"
+    "closing_date": "締日",
+    "code" : "コード",
+    "mainAddress":"住所"
   },
   "Maintenance": {
     "addNew": "新規登録",
@@ -114,7 +118,8 @@
     "endDate": "締日",
     "shipperlist": "荷主一覧",
     "shipperMaster": "荷主マスタ",
-    "fullTimeRequest": "全期請求"
+    "fullTimeRequest": "全期請求",
+    "firstBilling": "１期請求 "
   },
   "IncomePageJp": {
     "addition": "追加",
