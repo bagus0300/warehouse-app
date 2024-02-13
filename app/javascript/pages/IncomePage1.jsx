@@ -13,8 +13,6 @@ const { Content } = Layout;
 
 const IncomePage = () => {
 
-  const [ form ] = Form.useForm();
-
   const [insertProducts, setInsertProducts] = useState([]);
   const [allData, setAllData] = useState([]);
 
@@ -34,7 +32,7 @@ const IncomePage = () => {
   const [productNumber, setProductNumber] = useState('');
   
   // ----------------Openday--------------
-  const [receiptDate, setInoutOn] = useState(moment('2024-02-16'));
+  const [receiptDate, setReceiptDate] = useState(moment('2024-02-16'));
 
   // ---------productName----------
   const [insertProduct, setInsertProduct] = useState({id: "", name: ""});
@@ -63,10 +61,6 @@ const IncomePage = () => {
 
   const [btnName, setBtnName] = useState('messages.IncomePageJp.addition');
 
-  useEffect(() => {
-    console.log('warehouseid', warehouseId);
-  }, [warehouseId])
-
   const selWarehouseChange = (value, option) => {
     setWarehouseId(option.id);
   };
@@ -77,17 +71,15 @@ const IncomePage = () => {
   
   const onChangeName = (value, option) => {
       setInsertProduct({id:option.id, name: value});
-      debugger;
       axios.get(`http://127.0.0.1:3000/api/product_dd?id=${option.id}`).
       then((res) => {
-
-        const warehouseFee = res.data.data.data.attributes.warehouse_fee;
-
-        setPackaging(warehouseFee.packaging);
-        setStoragePrice(warehouseFee.storage_fee_rate);
-        setHandlePrice(warehouseFee.handling_fee_rate);
+        setPackaging(res.data.data.data.attributes.warehouse_fee.packaging)
+        setStoragePrice(res.data.data.data.attributes.warehouse_fee.storage_fee_rate)
+        setHandlePrice(res.data.data.data.attributes.warehouse_fee.handling_fee_rate)
       })
   };
+  
+  
   
   //  -------Get warehouse names--------
   const getWarehouse = () => {
@@ -164,7 +156,6 @@ const IncomePage = () => {
   }  
 
   const insertData = () => {
-    let index = 0
     let insertProductArr = insertProducts.slice();
     const newData = {
       handling_fee_rate : handlePrice,
@@ -179,7 +170,7 @@ const IncomePage = () => {
       warehouse_id : warehouseId,
       shipper_id : shipperId,
       inout_on : receiptDate,
-      key: index ++
+      key: insertProductArr.length+1
     };
     console.log(newData);
     
@@ -187,9 +178,6 @@ const IncomePage = () => {
     
     setInsertProducts(insertProductArr);
 
-    setLotNumber("");
-    setStock(''),
-    setWeight('')
     setHandlePrice('');
     setLotNumber('');
     setStock('');
@@ -197,23 +185,25 @@ const IncomePage = () => {
     setPackaging('');
     setInsertProduct('');
     setWeight('');
-
   };
   
-  const editRow = (productId) => {
+  const editRow = (id) => {
+    console.log($("#sel_warehouse"));
     const newData = insertProducts.slice();
-    const editData = newData.filter((data) => data.product_id == productId)[0];
-    debugger;
-    setLotNumber(editData.lotNumber);
-    setStock(editData.stock);
-    setWeight(editData.weight);
-    setPackaging(editData.product_type);
-    setHandlePrice(editData.handling_fee_rate);
-    setStoragePrice(editData.storage_fee_rate);
-    setWarehouseId(editData.warehouse_id);
-    setShipperId(editData.shipper_id);
-    setInsertProduct({id: editData.product_id, value: editData.product_name});
-    setInoutOn(editData.inout_on);
+    const editData = newData.filter((data) => data.product_id == id)[0];
+    const index = newData.indexOf(editData);
+    console.log(insertProducts[index]);
+    setLotNumber(insertProducts[index].lotNumber);
+    setStock(insertProducts[index].stock);
+    setWeight(insertProducts[index].weight);
+    setPackaging(insertProducts[index].product_type);
+    setHandlePrice(insertProducts[index].handling_fee_rate);
+    setStoragePrice(insertProducts[index].storage_fee_rate);
+    // setWarehouseId(insertProducts[index].warehouse_id);
+    // setShipperId(insertProducts[index].shipper_id);
+    // setInsertProduct(insertProducts[index].name);
+    // setInsertProduct(insertProducts[index].id);
+    setReceiptDate(insertProducts[index].inout_on);
   }
   
   
@@ -226,7 +216,7 @@ const IncomePage = () => {
   }
 
   const handleSubmit = () => [
-    // axios.post('http')
+    axios.post('http')
   ]
   // ----------When rerender, get all data------
   useEffect(() => {
@@ -235,7 +225,7 @@ const IncomePage = () => {
     getAllProduct();
     getWarehouseFee('');  
   }, [weight])
-
+  
   return (
     <div>
       <NavbarSection />
@@ -243,7 +233,7 @@ const IncomePage = () => {
         style={{ width: 1280 }}
         className="mx-auto flex flex-col justify-content content-h"
         >
-        <Form 
+        <div
           name="basic"
           autoComplete="off"
           style={{ margin: "50px 0 0px 0" }}
@@ -251,9 +241,8 @@ const IncomePage = () => {
           <Space style={{ display:"flex", flexDirection: "column", alignItems:"flex-start", }}>
             <Form.Item
               label={messages.IncomePageJp.warehouse}
-              name="warehouse"
+              name="username"
               style={{ display: "inline-block", width: 200, marginBottom: 10 }}
-              htmlFor="sel_warehouse"
               >
               <Select
                 id="sel_warehouse"
@@ -262,12 +251,11 @@ const IncomePage = () => {
                 style={{ width: 140, marginLeft: 14 }}
                 value={warehouseId}
                 options={warehouseOptions}
-                defaultValue={''}
               />
             </Form.Item>
             <Form.Item
               label={messages.IncomePageJp.shipper}
-              name="shipper"
+              name="username"
               style={{ display: "", width: 500, marginBottom: 10, flexFlow: "nowrap" }}
             >
               <Select
@@ -275,13 +263,12 @@ const IncomePage = () => {
                 onChange={selShipperChange}
                 options={shipperOptions}
                 value={shipperId}
-                defaultValue={''}
                 placeholder={messages.IncomePageJp.shipper}
               />
             </Form.Item>
             <Form.Item
               label={messages.IncomePageJp.receiptDate}
-              name="receiptDate"
+              name="username"
               style={{
                 display: "inline-block",
                 width: 350,
@@ -292,54 +279,76 @@ const IncomePage = () => {
               <DatePicker
                 value={receiptDate} 
                 onChange={(date, dateStr) => {
-                  setInoutOn(dateStr)}} 
+                  setReceiptDate(dateStr)}} 
                 placeholder={messages.IncomePageJp.receiptDate}
               />
             </Form.Item>
           </Space>
           <Divider />
+          {/* <div style={{ height: 0}}>
+            <Space direction="horizontal" style={{ margin: "0" }}>
+              <Form.Item
+                label={messages.IncomePageJp.productNumber}
+                name="username"
+                style={{
+                  display: "none",
+                  width: 350,
+                  marginBottom: 0,
+                }}
+              >
+                <Select
+                  placeholder={messages.IncomePageJp.productNumber}
+                  style={{marginLeft: 15 }}
+                  options={productOptions}
+                  value={insertProduct}
+                  onChange={onChangeNumber}
+                  // onSelect={handleSearch}
+                />
+              </Form.Item>
+            </Space>
+          </div> */}
           <div>
             <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
               <Form.Item
                 label={messages.IncomePageJp.productName}
-                name="product"
+                name="username"
                 style={{
                   display: "inline-block",
                   width: 250,
                   marginBottom: 0,
                 }}
               >
+                {/* <Space.Compact> */}
                   <Select
                     placeholder={messages.IncomePageJp.productName}
                     style={{marginLeft: 15,}}
                     value={insertProduct.id}
                     options={productOptions}
                     onChange={onChangeName}
-                    defaultValue={''}
                   />
+                {/* </Space.Compact> */}
               </Form.Item>
               <Form.Item
                 label={messages.IncomePageJp.packing}
-                name="packing"
+                name="username"
                 style={{
                   display: "inline-block",
                   width: 250,
                   marginLeft: 30,
                   marginBottom: 0,
                 }}
-
               >
                 <Space.Compact>
                   <Input 
                     style={{width: 150,}} 
                     placeholder={messages.IncomePageJp.packing}
                     value = {packaging}
-                    readOnly
+                    onChange={(e) => {setPackaging(e.target.value)}}
                   />                
                 </Space.Compact>
               </Form.Item>
               <Form.Item
-                name=""
+                name="username"
                 style={{
                   display: "inline-block",
                   width: 450,
@@ -352,13 +361,13 @@ const IncomePage = () => {
                     style={{width: 100}} 
                     placeholder={messages.IncomePageJp.cargoPrice}
                     value = {storagePrice} 
-                    readOnly
+                    onChange={(e) => {setStoragePrice(e.target.value)}}
                   />
                   <Input 
                     style={{width: 100}} 
                     placeholder={messages.IncomePageJp.storagePrice} 
                     value={handlePrice}
-                    readOnly
+                    onChange={(e) => {setHandlePrice(e.target.value)}}
                   />
                 </Space.Compact>
               </Form.Item>
@@ -405,10 +414,10 @@ const IncomePage = () => {
             </Space>
           </div>
           <Divider />
-        </Form>
+        </div>
         <IncomeTable
           data={insertProducts}
-          editRow={(key)=>editRow(key)}
+          editRow={editRow}
           deleteRow={deleteRow}
           pagination={false}
         />

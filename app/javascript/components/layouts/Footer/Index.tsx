@@ -17,7 +17,7 @@ const FooterSection = () => {
     <Footer
       style={{
         textAlign: "center",
-        position: "absolute",
+        display : "block",
         bottom: "0",
         width: "100%",
       }}

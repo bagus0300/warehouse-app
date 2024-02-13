@@ -1,25 +1,15 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, Tabs } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Layout, Popconfirm, Select, Table, Typography, Button, Modal, notification } from 'antd';
 
 import NavbarSection from '../layouts/Header/Navbar';
 import FooterSection from '../layouts/Footer/Index';
 
 import message from "../../utils/content/jp.json"
-import { render } from 'react-dom';
+import axios from 'axios';
 const { Search } = Input;
 
 
 const { Content } = Layout;
-
-const originData = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `${i}`,
-    age: 32,
-    address: `no. ${i}`,
-  });
-}
 const EditableCell = ({
   editing,
   dataIndex,
@@ -57,15 +47,109 @@ const EditableCell = ({
 
 const ProductList = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const [allData, setAllData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [packing, setPacking] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+  const [price, setPrice] = useState([]);
+  const [priceId, setPriceID] = useState('');
+  const [priceOne, setPriceOne] = useState({});
+  const [] = useState('');
+  const [] = useState('');
+  const [] = useState('');
+
+
+  const handleName = (e) => {
+    setName(e.target.value);
+  }
+  const handleNumber = (e) => {
+    setNumber(e.target.value);
+  }
+
+  const handlePacking = (e) => {
+    setPacking(e.target.value);
+  }
+
+  const handleUnitPrice = (value) => {
+    setUnitPrice(value);
+  }
+  //   const getOne = () => {
+  //     const one = price.find(item => item.id === unitPrice);
+  //     setPriceOne(one);
+  //   }
+
+  // useEffect(()=>{
+  //   getOne();
+  // },[unitPrice])
+
+
+  const getAllPrice = () => {
+    axios.get('http://127.0.0.1:3000/api/unit_price').then((res) => {
+      let index = 0
+      const priceData = res.data.data.map((item) => {
+        return {
+          ...item,
+          key: index++,
+        };
+      });
+      console.log(priceData)
+      setPrice(priceData);
+
+      const priceIds = priceData.map(item => item.id)
+      setPriceID(priceIds)
+    });
+  }
+
+  const getAllProduct = () => {
+    axios.get('http://127.0.0.1:3000/api/product').then((res) => {
+      let index = 0
+      const productData = res.data.data.map((item) => {
+        return {
+          ...item,
+          key: index++,
+        };
+      });
+
+      setAllData(productData);
+
+    });
+  }
+
+  useEffect(() => {
+    getAllProduct();
+    getAllPrice();
+  }, [])
+
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    setIsModalOpen(false);
+    if (name && number && packing && unitPrice) {
+      axios.post('http://127.0.0.1:3000/api/product', {
+        name: name,
+        number: number,
+        packing: packing,
+        unit_price_id: unitPrice
+      })
+        .then((res) => {
+          notification.success({ message: "Success" })
+          getAllProduct();
+          setName('');
+          setNumber('');
+          setPacking('');
+          setUnitPrice('');
+          setIsModalOpen(false);
+
+        })
+    } else {
+      notification.warning({ message: "Complete All Inputs!" })
+    }
+
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -109,37 +193,37 @@ const ProductList = () => {
   const listColumns = [
     {
       title: `${message.Maintenance.productNumber}`,
-      dataIndex: 'name',
+      dataIndex: 'number',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.productName}`,
-      dataIndex: 'age',
+      dataIndex: 'name',
       width: '25%',
       editable: true,
     },
     {
       title: `${message.Maintenance.productPacking}`,
-      dataIndex: 'address',
+      dataIndex: 'packing',
       width: '25%',
       editable: true,
     },
     {
       title: `${message.Maintenance.handlingFee}`,
-      dataIndex: 'address',
+      dataIndex: 'handling_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.storageFee}`,
-      dataIndex: 'address',
+      dataIndex: 'storage_fee_unit',
       width: '10%',
       editable: true,
     },
     {
       title: `${message.Maintenance.billingClass}`,
-      dataIndex: 'address',
+      dataIndex: 'billing_class',
       width: '10%',
       editable: true,
     },
@@ -192,8 +276,8 @@ const ProductList = () => {
       <NavbarSection />
       <Content style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h">
-        <div>
-          <div className='' style={{ marginRight: '80px' }}>
+        <div className='mt-'>
+          <div className='' style={{ marginRight: '80px', marginTop: '10px' }}>
             <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
             <Modal title="品名マスタ" open={isModalOpen}
               onOk={handleOk}
@@ -211,24 +295,80 @@ const ProductList = () => {
               ]}>
 
               <div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.productNameID}</label> <Input style={{ width: '30%' }} name='品名id' /></div>
-                <div><label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label><Input style={{ width: '40%', marginTop: '20px' }} name='品番' /></div>
-                <div><label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label><Input style={{ width: '50%', marginTop: '20px' }} name='品名' /></div>
-                <div><label >{message.Maintenance.productPacking}</label><Input style={{ width: '50%', marginTop: '20px' }} name='規格・荷姿' /></div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.unitPriceID}</label> <Select style={{ width: '30%' }} name='単価ID' /></div>
-                <div><label style={{ marginRight: '42px' }}>{message.Maintenance.packing}</label><Input style={{ width: '30%' }} name='荷姿' /></div>
-                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.handlingFee}</label> <Input style={{ width: '30%' }} name='荷役料' /></div>
-                <div><label style={{ marginRight: '27px' }}>{message.Maintenance.storageFee}</label><Input style={{ width: '30%' }} name='保管料' /></div>
-                <div><label style={{ marginRight: '15px' }}>{message.Maintenance.billingClass}</label><Input style={{ width: '30%' }} name='請求区分' /></div>
+                <div>
+                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productNumber}</label>
+                  <Input
+                    type='text'
+                    value={name}
+                    onChange={handleName}
+                    style={{ width: '40%', marginTop: '20px' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ marginRight: '38px' }}>{message.Maintenance.productName}</label>
+                  <Input
+                    type='text'
+                    value={number}
+                    onChange={handleNumber}
+                    style={{ width: '50%', marginTop: '20px' }}
+                  />
+                </div>
+                <div>
+                  <label >{message.Maintenance.productPacking}</label>
+                  <Input
+                    type='text'
+                    value={packing}
+                    onChange={handlePacking}
+                    style={{ width: '50%', marginTop: '20px' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ marginRight: '25px' }}>{message.Maintenance.unitPriceID}</label>
+                  <Select
+                    onChange={handleUnitPrice}
+                    options={[...priceId].map((item) => ({
+                      value: item,
+                      label: item
+                    }))}
+                    value={unitPrice}
+                    style={{ width: '30%' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ marginRight: '42px' }}>{message.Maintenance.packing}</label>
+                  <Input
+                    style={{ width: '30%' }}
+                    value={priceOne.packing}
+                  />
+                </div>
+                <div><label style={{ marginRight: '25px' }}>{message.Maintenance.handlingFee}</label>
+                  <Input
+                    style={{ width: '30%' }}
+                    value={priceOne.handling_fee_unit}
+                  />
+                </div>
+                <div><label style={{ marginRight: '27px' }}>{message.Maintenance.storageFee}</label>
+                  <Input
+                    style={{ width: '30%' }}
+                    value={priceOne.storage_fee_unit}
+                  />
+                </div>
+                <div>
+                  <label style={{ marginRight: '15px' }}>{message.Maintenance.billingClass}</label>
+                  <Input
+                    style={{ width: '30%' }}
+                    value={priceOne.billing_class}
+                  />
+                </div>
               </div>
             </Modal>
           </div>
-          <div className='flex flex-row items-center '>
+          <div className='flex flex-row items-center ' style={{ marginTop: '10px' }}>
             <div ><label style={{ marginRight: '5px' }}>品番</label> <Search style={{ width: '40%' }} name='品番' /></div>
             <div><label style={{ marginRight: '5px' }}>品名</label><Search style={{ width: '60%' }} name='品名' /></div>
             <div><Button>検索</Button></div>
           </div>
-          <div className=''>
+          <div className='' style={{ marginTop: '10px' }}>
             <Form form={form} component={false}>
               <Table
                 components={{
@@ -237,7 +377,7 @@ const ProductList = () => {
                   },
                 }}
                 bordered
-                dataSource={data}
+                dataSource={allData}
                 columns={mergedListColumns}
                 rowClassName="editable-row"
                 pagination={{

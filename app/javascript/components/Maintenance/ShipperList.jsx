@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// import moment from "moment";
 import {
   Form,
   Input,
   InputNumber,
   Layout,
   Popconfirm,
-  Select,
+  DatePicker,
   Table,
   Typography,
   Button,
   Modal,
-  Tabs,
+  notification,
 } from "antd";
 
 import NavbarSection from "../layouts/Header/Navbar";
@@ -22,15 +24,6 @@ import { render } from "react-dom";
 const { Search } = Input;
 const { Content } = Layout;
 
-const originData = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `${i}`,
-    age: 32,
-    address: `no${i}`,
-  });
-}
 const EditableCell = ({
   editing,
   dataIndex,
@@ -68,9 +61,110 @@ const EditableCell = ({
 
 const ShipperList = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allData, setAllData] = useState([]);
+
+  const [shipperName, setShipperName] = useState("");
+  const [postCode, setPostCode] = useState("");
+  const [mainAddress, setMainAddress] = useState("");
+  const [subAddress, setSubAddress] = useState("");
+  const [tel, setTel] = useState("");
+  // const [calCategory, setCalCategory] = useState("");
+  // const [usedTsubos, setUsedTsubos] = useState("");
+  // const [discountRate, setDiscountRate] = useState("");
+  const [closingDate, setClosingDate] = useState("");
+
+  const handleShipperName = (e) => {
+    setShipperName(e.target.value);
+  };
+
+  const handlePostCode = (e) => {
+    setPostCode(e.target.value);
+  };
+
+  const handleMainAddress = (e) => {
+    setMainAddress(e.target.value);
+  };
+
+  const handleSubAddress = (e) => {
+    setSubAddress(e.target.value);
+  };
+  const handleTel = (e) => {
+    setTel(e.target.value);
+  };
+  // const handleCalCategory = (e) => {
+  //   setCalCategory(e.target.value);
+  // };
+  // const handleUsedTsubo = (e) => {
+  //   setUsedTsubos(e.target.value);
+  // };
+  // const handleDiscountRate = (e) => {
+  //   setDiscountRate(e.target.value);
+  // };
+
+  const handleClosingDate = (value) => {
+    setClosingDate(value);
+  };
+
+  const getAllShipper = () => {
+    axios.get("http://127.0.0.1:3000/api/shipper").then((res) => {
+      let index = 0;
+      const shipperData = res.data.data.map((item) => {
+        return {
+          ...item,
+          key: index++,
+        };
+      });
+      setAllData(shipperData);
+      console.log(shipperData, "resData");
+    });
+  };
+
+  const createShipper = () => {
+    if (
+      shipperName &&
+      mainAddress &&
+      subAddress &&
+      postCode &&
+      tel &&
+      // calCategory &&
+      // usedTsubos &&
+      // discountRate &&
+      closingDate
+    ) {
+      axios
+        .post("http://127.0.0.1:3000/api/shipper", {
+          name: shipperName,
+          post_code: postCode,
+          mainAddress: mainAddress,
+          subAddress: subAddress,
+          tel: tel,
+          // calc_category: calCategory,
+          // used_tsubo_price: usedTsubos,
+          // discourt_rate: discountRate,
+          closng_date: closingDate,
+        })
+        .then((res) => {
+          notification.success({ message: "Success", duration: 1 });
+          setIsModalOpen(false);
+          setShipperName("");
+          setMainAddress("");
+          setSubAddress("");
+          // setCalCategory("");
+          // setDiscountRate("");
+          setClosingDate("");
+          setTel("");
+          getAllShipper();
+        });
+    } else {
+      notification.warning({ message: "Complete All Input!", duration: 1 });
+    }
+  };
+
+  useEffect(() => {
+    getAllShipper();
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -98,7 +192,7 @@ const ShipperList = () => {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      const newData = [...data];
+      const newData = [...allData];
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
@@ -106,11 +200,11 @@ const ShipperList = () => {
           ...item,
           ...row,
         });
-        setData(newData);
+        setAllData(newData);
         setEditingKey("");
       } else {
         newData.push(row);
-        setData(newData);
+        setAllData(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -119,33 +213,44 @@ const ShipperList = () => {
   };
   const shipperListColumns = [
     {
-      title: `${message.Maintenance.shipperID}`,
+      title: `${message.tableCommon.no}`,
+      dataIndex: "id",
+      key: "id",
+      width: "5%",
+      editable: true,
+    },
+    {
+      title: `${message.shipper.name}`,
       dataIndex: "name",
+      key: "name",
+      width: "30%",
+      editable: true,
+    },
+    {
+      title: `${message.shipper.main_address}`,
+      dataIndex: "main_address",
+      key: "mainAddress",
+      width: "30%",
+      editable: true,
+    },
+    {
+      title: `${message.shipper.tel_number}`,
+      dataIndex: "tel",
+      key: "tel",
+      width: "15%",
+      editable: true,
+    },
+    {
+      title: `${message.shipper.closing_date}`,
+      dataIndex: "closing_date",
       width: "10%",
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.shipperName}`,
-      dataIndex: "age",
-      width: "20%",
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.address}`,
-      dataIndex: "address",
-      width: "25%",
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.telephone}`,
-      dataIndex: "address",
-      width: "25%",
-      editable: true,
-    },
-    {
-      title: `${message.Maintenance.endDate}`,
-      dataIndex: "address",
-      width: "10%",
+      key: "closing_date",
+      render: (closingDate, record) => {
+        <DatePicker
+          value={closingDate}
+          onChange={(date) => handleDateChange(date, record.key)}
+        />;
+      },
       editable: true,
     },
     {
@@ -203,7 +308,10 @@ const ShipperList = () => {
         className="mx-auto flex flex-col content-h"
       >
         <div>
-          <div className="mt-4" style={{ marginRight: "80px" }}>
+          <div
+            className="mt-4"
+            style={{ marginRight: "80px", marginTop: "10px" }}
+          >
             <Button onClick={showModal}>{message?.Maintenance?.addNew}</Button>
             <Modal
               title={message.Maintenance.shipperMaster}
@@ -211,7 +319,7 @@ const ShipperList = () => {
               onOk={handleOk}
               onCancel={handleCancel}
               footer={[
-                <Button key="ok" onClick={handleOk}>
+                <Button key="ok" onClick={createShipper}>
                   {message.Maintenance.register}
                 </Button>,
                 <Button key="cancel" onClick={handleCancel}>
@@ -222,15 +330,14 @@ const ShipperList = () => {
               <div>
                 <div>
                   <label style={{ marginRight: "25px" }}>
-                    {message.Maintenance.shipperID}
-                  </label>{" "}
-                  <Input style={{ width: "30%" }} name="品名id" />
-                </div>
-                <div>
-                  <label style={{ marginRight: "25px" }}>
                     {message.Maintenance.shipperName}
                   </label>
-                  <Input style={{ width: "40%" }} name="品番" />
+                  <Input
+                    type="text"
+                    value={shipperName}
+                    onChange={handleShipperName}
+                    style={{ width: "40%" }}
+                  />
                 </div>
 
                 <div>
@@ -238,62 +345,96 @@ const ShipperList = () => {
                     {message.Maintenance.postCode}
                   </label>
                   <Input
+                    type="text"
+                    value={postCode}
+                    onChange={handlePostCode}
                     style={{ width: "30%", marginTop: "20px" }}
-                    name="品名"
                   />
                 </div>
                 <div>
-                  <label style={{ marginRight: "28px" }}>
-                    {message.Maintenance.address1}
-                  </label>{" "}
-                  <Input style={{ width: "50%" }} name="住所1" />
+                  <label style={{ marginRight: "24px" }}>
+                    {message.Maintenance.mainAddress}
+                  </label>
+                  <Input
+                    type="text"
+                    value={mainAddress}
+                    onChange={handleMainAddress}
+                    style={{ width: "50%" }}
+                  />
                 </div>
                 <div>
-                  <label style={{ marginRight: "22px" }}>
-                    {message.Maintenance.address2}
-                  </label>{" "}
-                  <Input style={{ width: "50%" }} name="住所２" />
+                  <label style={{ marginRight: "25px" }}>
+                    {message.Maintenance.subAddress}
+                  </label>
+                  <Input
+                    type="text"
+                    value={subAddress}
+                    onChange={handleSubAddress}
+                    style={{ width: "50%" }}
+                  />
                 </div>
                 <div>
                   <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.telephoneNumber}
                   </label>
-                  <Input style={{ width: "30%" }} name="荷姿" />
+                  <Input
+                    type="text"
+                    value={tel}
+                    onChange={handleTel}
+                    style={{ width: "30%" }}
+                  />
                 </div>
 
                 <div>
-                  <label style={{ marginRight: "36px" }}>
-                    {message.Maintenance.endDate}
-                  </label>{" "}
-                  <Input
+                  <label style={{ marginRight: "38px" }}>
+                    {message.Maintenance.closingDate}
+                  </label>
+                  <DatePicker
+                    type="text"
+                    value={closingDate}
+                    onChange={handleClosingDate}
                     style={{ width: "30%", marginTop: "20px" }}
-                    name="荷役料"
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.calCategory}
                   </label>
-                  <Input style={{ width: "30%" }} name="保管料" />
-                </div>
-                <div>
+                  <Input
+                    type="text"
+                    value={calCategory}
+                    onChange={handleCalCategory}
+                    style={{ width: "30%" }}
+                  />
+                </div> */}
+                {/* <div>
                   <label style={{ marginRight: "12px" }}>
                     {message.Maintenance.usedTsubos}
                   </label>
-                  <Input style={{ width: "30%" }} name="請求区分" />
-                </div>
-                <div>
+                  <Input
+                    type="text"
+                    value={usedTsubos}
+                    onChange={handleUsedTsubo}
+                    style={{ width: "30%" }}
+                  />
+                </div> */}
+                {/* <div>
                   <label style={{ marginRight: "25px" }}>
                     {message.Maintenance.priceTsubo}
                   </label>
-                  <Input style={{ width: "30%" }} name="請求区分" />
-                </div>
-                <div>
+                  <Input style={{ width: "30%" }}/>
+                </div> */}
+                {/* <div>
                   <label style={{ marginRight: "26px" }}>
                     {message.Maintenance.discountRate}
                   </label>
-                  <Input style={{ width: "30%" }} name="請求区分" />
-                </div>
+                  <Input
+                    type="text"
+                    value={discountRate}
+                    onChange={handleDiscountRate}
+                    style={{ width: "30%" }}
+                  />
+                </div> */}
               </div>
             </Modal>
           </div>
@@ -306,7 +447,7 @@ const ShipperList = () => {
                   },
                 }}
                 bordered
-                dataSource={data}
+                dataSource={allData}
                 columns={mergedShipperListColumns}
                 rowClassName="editable-row"
                 pagination={{

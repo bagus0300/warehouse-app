@@ -1,0 +1,2 @@
+class WarehouseFee < ApplicationRecord
+end

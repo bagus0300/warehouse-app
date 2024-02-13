@@ -15,6 +15,7 @@
   "signupFields": {
     "username": "ユーザー名",
     "loginId": "ログインID",
+    "email": "Eメール",
     "password": "パスワード",
     "confirm_password": "パスワードの確認",
     "to_login": "サインインペジロ",
@@ -25,14 +26,9 @@
     "register": "新規登録",
     "change": "変更",
     "delete": "削除",
-    "signUp": "新規登録",
-    "cancel":"キャンセル",
+    "cancel": "キャンセル",
     "csvExchange": "CSVダウンロード",
-    "confirmDeparture" : "出庫確定",
-    "next":"次へ",
-    "newPost":"新規発行",
-    "list":"一覧",
-    "detail":"明細"
+    "confirmDeparture": "出庫確定"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -75,89 +71,78 @@
       "url": "/billing_process"
     }
   ],
-    "IncomePageJp": {
-      "addition": "追加",
-      "lotNumber": "ロット番号",
-      "weight": "重量",
-      "itemNumber": "入庫数",
-      "cargoPrice": "荷役単価",
-      "storagePrice": "保管単価",
-      "packing": "荷姿",
-      "productName": "品名",
-      "productNumber": "品番",
-      "search": "検索",
-      "receiptDate": "入庫日",
-      "shipper": "荷主",
-      "warehouse": "倉庫"
-    },
-    "OutputPage": {
-      "departureDate": "出庫日",
-      "libraryNumber":"現在庫数",
-      "shipmentNumber": "出庫数"
-    },
-    "DepositPage": {
-      "payDay":"入金日",
-      "payDayFrom": "入金日From",
-      "payDayTo": "入金日To",
-      "shipperName":"荷主名",
-      "processingDate":"処理日",
-      "processingDateFrom":"処理日From",
-      "processingDateTo":"処理日To"
-    },
-    "Modal": {
-      "depositRegist":"入金登録",
-      "shipperId":"荷主id",
-      "depositDate":"入金年月日",
-      "depositAmount":"入金額"
-    },
-    "BillingPage" : {
-      "yearMonth":"年月",
-      "closingDate":"締日",
-      "number":"件数",
-      "targetPeriod":"対象期間",
-      "list":"一覧",
-      "detail":"明細"
-    },
-    "Maintenance": {
-      "addNew" : "新規登録",
-      "productNumber": "品番",
-      "productName": "品名",
-      "productPacking" : "規格・荷姿",
-      "handlingFee" : "荷役料",
-      "storageFee" : "保管料 ",
-      "change":"変更",
-      "productList" : "品名一覧",
-      "productMaster" : "品名マスタ",
-      "unitPriceMaster":"単価区分マスタ",
-      "unitPrice":"単価",
-      "packing":"荷姿",
-      "register":"登録",
-      "unitPriceID":"単価ID",
-      "handlingFeeUnitPrice":"荷役料単価",
-      "storageFeeUnitPrice":"保管料単価",
-      "billingClass":"請求区分",
-      "productNameID":"品名id",
-      "shipperID":"荷主ID",
-      "shipperName":"荷主名",
-      "address":"住所",
-      "postCode":"郵便番号",
-      "address1":"住所１",
-      "address2":"住所２",
-      "usedTsubos":"使用坪数",
-      "priceTsubo":"坪単価",
-      "discountRate":"値引率",
-      "calCategory":"計算区分",
-      "telephoneNumber":"電話番号",
-      "telephone":"電話",
-      "endDate":"締日",
-      "shipperlist":"荷主一覧",
-      "shipperMaster":"荷主マスタ",
-      "fullTimeRequest":"全期請求"
+  "tableCommon": {
+    "no": "NO"
+  },
+  "shipper": {
+    "name": "荷主名",
+    "main_address": "住所",
+    "tel_number": "電話",
+    "closing_date": "締日"
+  },
+  "Maintenance": {
+    "addNew": "新規登録",
+    "productNumber": "品番",
+    "productName": "品名",
+    "productPacking": "規格・荷姿",
+    "handlingFee": "荷役料",
+    "storageFee": "保管料 ",
+    "change": "変更",
+    "productList": "品名一覧",
+    "productMaster": "品名マスタ",
+    "unitPriceMaster": "単価区分マスタ",
+    "unitPrice": "単価",
+    "packing": "荷姿",
+    "register": "登録",
+    "unitPriceID": "単価ID",
+    "handlingFeeUnitPrice": "荷役料単価",
+    "storageFeeUnitPrice": "保管料単価",
+    "billingClass": "請求区分",
+    "productNameID": "品名id",
+    "shipperID": "荷主ID",
+    "shipperName": "荷主名",
+    "address": "住所",
+    "postCode": "郵便番号",
+    "address1": "住所１",
+    "address2": "住所２",
+    "usedTsubos": "使用坪数",
+    "priceTsubo": "坪単価",
+    "discountRate": "値引率",
+    "calCategory": "計算区分",
+    "telephoneNumber": "電話番号",
+    "telephone": "電話",
+    "endDate": "締日",
+    "shipperlist": "荷主一覧",
+    "shipperMaster": "荷主マスタ",
+    "fullTimeRequest": "全期請求"
+  },
+  "IncomePageJp": {
+    "addition": "追加",
+    "lotNumber": "ロット番号",
+    "weight": "重量",
+    "itemNumber": "入庫数",
+    "cargoPrice": "荷役単価",
+    "storagePrice": "保管単価",
+    "packing": "荷姿",
+    "productName": "品名",
+    "productNumber": "品番",
+    "search": "検索",
+    "receiptDate": "入庫日",
+    "shipper": "荷主",
+    "warehouse": "倉庫"
+  },
+  "OutputPage": {
+    "departureDate": "出庫日",
+    "libraryNumber": "現在庫数",
+    "shipmentNumber": "出庫数"
   },
   "messages": {
     "type_username": "ユーザー名を入力してください!",
     "type_loginId": "ログインIDを入力してください！",
     "type_password": "パスワードを入力してください！",
-    "type_repassword": "パスワードを確認してください!"
+    "type_repassword": "パスワードを確認してください!",
+    "type_email": "Eメールを入力してください！",
+    "invalid_email": "入力された電子メールは無効です!",
+    "no_matched_password": "入力した新しいパスワードが一致しません。"
   }
 }
