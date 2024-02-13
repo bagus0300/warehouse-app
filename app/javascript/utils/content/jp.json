@@ -28,7 +28,9 @@
     "delete": "削除",
     "cancel": "キャンセル",
     "csvExchange": "CSVダウンロード",
-    "confirmDeparture": "出庫確定"
+    "confirmDeparture": "出庫確定",
+    "next" : "次へ",
+    "save" : "保管"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -140,6 +142,16 @@
     "departureDate": "出庫日",
     "libraryNumber": "現在庫数",
     "shipmentNumber": "出庫数"
+  },
+  "DepositPage": {
+    "depositDate": "入金年月日",
+    "received_onFrom" : "入金日From",
+    "received_onTo":"入金日To",
+    "received_on":"入金日",
+    "processing_on" : "処理日",
+    "processing_onFrom" : "処理日From",
+    "processing_onTo" : "処理日To",
+    "amount" : "入金額"
   },
   "messages": {
     "type_username": "ユーザー名を入力してください!",

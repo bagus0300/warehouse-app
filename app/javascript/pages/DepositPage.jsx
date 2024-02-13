@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button, Modal} from "antd";
-
+import axios from 'axios';
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";
 import DepositTable from "../components/Deposit/DepositTable";
 import localeJP from "antd/es/date-picker/locale/ja_JP";
 import messages from "../utils/content/jp.json";
-import { useState } from "react";
+import {
+    shipperURL,
+  } from "../utils/contants";
 
 const { Search } = Input;
 const { Content } = Layout;
@@ -14,19 +17,78 @@ const { Content } = Layout;
 
 const DepositPage = () => {
 
+// ----------Modal---------
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const showModal = () => {
       setIsModalOpen(true);
     };
-    const handleOk = () => {
+
+    const handleOK = () => {
       setIsModalOpen(false);
+      initDataValue();
     };
+
     const handleCancel = () => {
       setIsModalOpen(false);
     };
-    
 
+    // -----------Modal Value------------
+    const [shipperId, setShipperId] = useState();
+    const [shipperOptions, setShipperOptions] = useState();
+    const selShipperChange = (value, option) => {
+        setShipperId(value);
+        console.log(value,"wwwwwwwww")
+    }
+    
+    const [depositDate, setDepositDate] = useState();
+    const selDepositDate = (value) => {
+        setDepositDate(value);
+        console.log(value,"wwwwwwwww");
+    }
+    
+    
+    const [amount, setAmount] = useState();
+    const selAmount = (value) => {
+        setAmount(value);
+        console.log(value,"wwwwwwwww");
+    }    
+
+    // -------Initize modal values when we click save button-------
+    const initDataValue = () =>{
+        setShipperId('');
+        setDepositDate('');
+        setAmount('');
+    }
+    
+    
+    // ------Get shipperId and shipperName for select value------
+    const getAllShipper = () => {
+        makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+          
+          let index = 0
+          const shipper = res.data.data.map((item) => {
+            return {
+              value:item.name,
+              label : item.name,
+              key: index++,
+              id: item.id
+            };
+          });
+          setShipperOptions(shipper);
+        })
+    };
+
+
+    const data = () => {
+        
+    }
+
+// ----------Modal End------------
+
+    useEffect(() => {
+        getAllShipper();
+    }, [])
 
 
     return (
@@ -38,80 +100,71 @@ const DepositPage = () => {
             >
                 <div
                     name="basic"
-                    initialValues={{ remember: true }}
                     autoComplete="off"
                     style={{ margin: "50px 0 0px 0" }}
                 >
                     <div>
-                        <Button onClick={showModal}>{messages.buttons.signUp}</Button>
-                        <Modal title={messages.Modal.depositRegist} open={isModalOpen}
-                            onOk={handleOk}
-                            onCancel={handleCancel}
-                            footer={[
-                            <Button key="ok" onClick={handleOk}>
-                                {messages.buttons.change}
+                        <Button style={{ width: 120 }} onClick={showModal}>{messages.buttons.register}</Button>
+                        <Modal 
+                        title={messages.buttons.register} 
+                        open={isModalOpen}
+                        onOk={handleOK}
+                        onCancel={handleCancel}
+                        footer={[
+                            <Button onClick={handleOK}>
+                                {messages.buttons.save}
                             </Button>,
-                            <Button key="cancel" onClick={handleCancel}>
-                                {messages.buttons.delete}
+                            <Button  key="cancel" onClick={handleCancel}>
+                                {messages.buttons.cancel}
                             </Button>
                             ]}>
-                            <div>
-                                {/* <Input name='shipperId' label={messages.Modal.shipperId} /> */}
+                            <Form>
                                 <Form.Item
-                                label={messages.Modal.shipperId}
-                                name="shipperId"
-                                style={{ display: "inline-block", width: 300, marginBottom: 0 }}
+                                label={messages.Maintenance.shipperName}
+                                style={{ display: "", width: 300, marginBottom: 0, flexFlow: "nowrap" }}
                                 >
                                     <Select
-                                        // defaultValue={storeVal.label}
-                                        style={{ width: 150, marginLeft: 45 }}
-                                        // onChange={selStoreChange}
-                                        // options={storeOptions}
-                                    />
-                                </Form.Item>
-                                <Form.Item
-                                label={messages.DepositPage.shipperName}
-                                name="shipperName"
-                                style={{ display: "", width: 400, marginBottom: 0, flexFlow: "nowrap" }}
-                                >
-                                    <Input
-                                        // defaultValue={shipperVal.label}
                                         style={{ width: 200, marginLeft: 43  }}
-                                        // onChange={selShipperChange}
-                                        // options={shipperOptions}
+                                        options={shipperOptions}
+                                        value={shipperId}
+                                        onChange={selShipperChange}
                                     />
                                 </Form.Item>
                                 <Divider/>
                                 <Form.Item
-                                name="depositDate"
-                                label={messages.Modal.depositDate}
+                                label={messages.DepositPage.depositDate}
                                 style={{
                                     display: "inline-block",
                                     width: 400,
                                     marginBottom: 0,
                                 }}
                                 >
-                                    <DatePicker placeholder={messages.Modal.depositDate} style={{marginLeft: 15, width: 150}} locale={localeJP} />
+                                    <Input
+                                        type="date"
+                                        placeholder={messages.DepositPage.depositDate} 
+                                        style={{marginLeft: 15, width: 200}} 
+                                        value={depositDate}
+                                        onChange={(e) => selDepositDate(e.target.value)}
+                                    />
                                 </Form.Item>
+                                <div style={{ height: 20 }}></div>
                                 <Form.Item
-                                label={messages.Modal.depositAmount}
-                                name="shipperName"
+                                label={messages.DepositPage.amount}
                                 style={{ display: "", width: 400, marginBottom: 0, flexFlow: "nowrap" }}
                                 >
                                     <Input
-                                        // defaultValue={shipperVal.label}
-                                        style={{ width: 150, marginLeft: 43 }}
-                                        // onChange={selShipperChange}
-                                        // options={shipperOptions}
+                                        style={{ width: 200, marginLeft: 43 }}
+                                        value={amount}
+                                        type="number"
+                                        onChange={(e) => selAmount(e.target.value)}
                                     />
                                 </Form.Item>
-                            </div>
+                            </Form>
                         </Modal>
                     </div>
                     <div style={{ height: 50}}></div>
                     <Form.Item
-                    label={messages.DepositPage.payDay}
-                    name="username"
+                    label={messages.DepositPage.received_on}
                     style={{
                         display: "inline-block",
                         width: 800,
@@ -119,28 +172,32 @@ const DepositPage = () => {
                         marginBottom: 0,
                     }}
                     >
-                        <DatePicker placeholder={messages.DepositPage.payDayFrom}  locale={localeJP} />
+                        <DatePicker 
+                        placeholder={messages.DepositPage.received_onFrom}  
+                        locale={localeJP} />
                         <span>～</span>
-                        <DatePicker placeholder={messages.DepositPage.payDayTo}  locale={localeJP} />
+                        <DatePicker 
+                        placeholder={messages.DepositPage.received_onTo}  
+                        locale={localeJP} />
                     </Form.Item>
                     <div style={{ height: 15 }}></div>
                     <Form.Item
                     label={messages.IncomePageJp.shipper}
-                    name="username"
+                    // name="username"
                     style={{ display: "", width: 300, marginBottom: 0, flexFlow: "nowrap" }}
                     >
                         <Select
                             // defaultValue={shipperVal.label}
                             style={{ width: 200, marginLeft: 14  }}
-                            placeholder={messages.DepositPage.shipperName}
+                            placeholder={messages.Maintenance.shipperName}
                             // onChange={selShipperChange}
                             // options={shipperOptions}
                         />
                     </Form.Item>
                     <div style={{ height: 15 }}></div>
                     <Form.Item
-                    label={messages.DepositPage.processingDate}
-                    name="username"
+                    label={messages.DepositPage.processing_on}
+                    // name="username"
                     style={{
                         display: "inline-block",
                         width: 1000,
@@ -148,9 +205,11 @@ const DepositPage = () => {
                         marginBottom: 0,
                     }}
                     >
-                        <DatePicker placeholder={messages.DepositPage.processingDateFrom}  locale={localeJP} />
+                        <DatePicker 
+                        placeholder={messages.DepositPage.processing_onFrom} 
+                         locale={localeJP} />
                         <span>～</span>
-                        <DatePicker placeholder={messages.DepositPage.processingDateTo}   locale={localeJP} />
+                        <DatePicker placeholder={messages.DepositPage.processing_onTo}   locale={localeJP} />
                         <Button style={{width: 120, marginLeft: 60}}>{messages.IncomePageJp.search}</Button>
                         <Button style={{width: 150, marginLeft: 60}}>{messages.buttons.csvExchange}</Button>
                     </Form.Item>

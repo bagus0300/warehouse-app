@@ -10,9 +10,11 @@ export const verifyAuthURL = baseUrl + "verify";
 
 export const logoutURL = baseUrl + "logout";
 
+// export const receivedPaymentURL = baseURL + ;
+
 //unit_price urls
 
-export const unitPriceURL = baseUrl + "api/shipper";
+export const shipperURL = baseUrl + "api/shipper";
 
 export const httpErrors = {
   400: "Bad Request",
