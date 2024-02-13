@@ -15,10 +15,12 @@ import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";
 import SectionCard from "../components/Top/SectionCard";
 import { cardTopics } from "../utils/content";
-
 const { Header, Content, Footer } = Layout;
+import { useAuth } from "../hooks/useAuth.js";
 
 const Top = () => {
+  const authState = useAuth();
+  console.log("----------------", authState.token);
   return (
     <div>
       <NavbarSection />

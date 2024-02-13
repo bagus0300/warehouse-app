@@ -12,7 +12,7 @@ class ShippersController < ApplicationController
     shipper = Shipper.find_or_create_by(
         name:                       params[:name],
         code:                       params[:code],
-        post_code:                  params[:warehouse_fee_id],
+        post_code:                  params[:post_code],
         main_address:               params[:main_address],
         sub_address:                params[:sub_address],
         tel:                        params[:tel],

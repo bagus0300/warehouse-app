@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get "/api/product_dd", to:'products#show_by_id'
   get "/api/product", to: 'products#index'
+  get "/api/product_detail", to:'products#show_with_warehouse_fee'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   delete "/api/processing_data", to: 'processing_datas#destroy'
   get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
 
+  post "/api/stock_inout"  , to: 'stock_inouts#create'
   
   get '/*path', to: 'component#index'
 

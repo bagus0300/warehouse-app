@@ -10,9 +10,13 @@ export const verifyAuthURL = baseUrl + "verify";
 
 export const logoutURL = baseUrl + "logout";
 
-
 //unit_price urls
 
 export const unitPriceURL = baseUrl + "api/shipper";
 
-
+export const httpErrors = {
+  400: "Bad Request",
+  401: "Unauthorized",
+  404: "Not Found",
+  default: "Internal Server Error",
+};
