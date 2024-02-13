@@ -10,6 +10,18 @@ export const verifyAuthURL = baseUrl + "verify";
 
 export const logoutURL = baseUrl + "logout";
 
+export const warehouseURL = baseUrl + "api/warehouse";
+
+export const shipperURL = baseUrl + "api/shipper";
+
+export const productURL = baseUrl + "api/product";
+
+export const warehouseFeeURL = baseUrl + "api/warehouse_fee";
+
+export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
+
+export const saveStockInoutUrl = baseUrl + "api/stock_inout";
+
 //unit_price urls
 
 export const unitPriceURL = baseUrl + "api/shipper";

@@ -1,7 +1,7 @@
 
 class ProductsController < ApplicationController
-
-   def index
+  protect_from_forgery 
+  def index
     products = Product.includes(:warehouse_fee).all
 
     render json: {

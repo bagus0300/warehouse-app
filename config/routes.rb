@@ -25,11 +25,11 @@ Rails.application.routes.draw do
   delete "/api/warehouse_fee" , to: 'warehouse_fees#destroy'
 
   get "/api/product", to: 'products#index'
-  get "/api/product_detail", to:'products#show_with_warehouse_fee'
+  # get "/api/product_detail", to:'products#show_with_warehouse_fee'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
-  get "/api/product_dd", to:'products#show_by_id'
+  get "/api/product_detail", to:'products#show_by_id'
 
   get "/api/warehouse_fee", to: 'warehouse_fees#index'
   post "/api/warehouse_fee" , to: 'warehouse_fees#create'
@@ -44,6 +44,11 @@ Rails.application.routes.draw do
   get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
 
   post "/api/stock_inout"  , to: 'stock_inouts#create'
+
+  get "/api/received_payment", to: 'received_payments#index'
+  post "/api/received_payment", to: 'received_payments#create'
+  put "/api/received_payment", to: 'received_payments#update'
+  delete "/api/received_payment", to: 'received_payments#destroy'
   
   get '/*path', to: 'component#index'
  

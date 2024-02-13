@@ -9,13 +9,23 @@ import {
   DatePicker,
   Divider,
   Button,
-  notification,
 } from "antd";
 import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";
 import IncomeTable from "../components/Income/IncomeTable";
 import messages from "../utils/content/jp.json";
 import moment from "moment";
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { openNotificationWithIcon } from "../components/common/notification";
+
+import {
+  warehouseURL,
+  shipperURL,
+  warehouseFeeURL,
+  productURL,
+  productDetailURL,
+  saveStockInoutUrl,
+} from "../utils/contants";
 
 const { Content } = Layout;
 
@@ -37,11 +47,10 @@ const IncomePage = () => {
   const [receiptDate, setInoutOn] = useState(moment("2024-02-16"));
 
   // ---------product----------
-  const [insertProduct, setInsertProduct] = useState({ id: "", name: "" });
+  const [selectedProduct, setSelectedProduct] = useState({ id: "", name: "" });
   const [productOptions, setProductOptions] = useState("");
 
   const [priceId, setPriceId] = useState();
-  const [price, setPrice] = useState();
 
   // -----------packing---------
   const [packaging, setPackaging] = useState();
@@ -63,35 +72,60 @@ const IncomePage = () => {
 
   const [btnName, setBtnName] = useState("messages.IncomePageJp.addition");
 
-  useEffect(() => {
-    console.log("warehouseid", warehouseId);
-  }, [warehouseId]);
+  //  -------init prepareProductItem--------
+  const initPrepareProductItem = () => {
+    setLotNumber("");
+    setStock(""), setWeight("");
+    setHandlePrice("");
+    setLotNumber("");
+    setStock("");
+    setStoragePrice("");
+    setPackaging("");
+    setSelectedProduct({});
+    setWeight("");
+  };
 
-  const selWarehouseChange = (value, option) => {
+  const setPrepareProductItem = () => {
+    setLotNumber(editData.lotNumber);
+    setStock(editData.stock);
+    setWeight(editData.weight);
+    setPackaging(editData.product_type);
+    setHandlePrice(editData.handling_fee_rate);
+    setStoragePrice(editData.storage_fee_rate);
+    setWarehouseId(editData.warehouse_id);
+    setShipperId(editData.shipper_id);
+    setSelectedProduct({
+      id: editData.product_id,
+      value: editData.product_name,
+    });
+    setInoutOn(editData.inout_on);
+  };
+
+  const onChangeWarehouse = (value, option) => {
     setWarehouseId(option.id);
   };
 
-  const selShipperChange = (value, option) => {
+  const onChangeShipper = (value, option) => {
     setShipperId(option.id);
   };
 
-  const onChangeName = (value, option) => {
-    setInsertProduct({ id: option.id, name: value });
-    debugger;
-    axios
-      .get(`http://127.0.0.1:3000/api/product_dd?id=${option.id}`)
-      .then((res) => {
+  const onChangeProduct = (value, option) => {
+    setSelectedProduct({ id: option.id, name: value });
+
+    makeHttpReq(makeHttpOptions({}, "get", productDetailURL(option.id))).then(
+      (res) => {
         const warehouseFee = res.data.data.data.attributes.warehouse_fee;
 
         setPackaging(warehouseFee.packaging);
         setStoragePrice(warehouseFee.storage_fee_rate);
         setHandlePrice(warehouseFee.handling_fee_rate);
-      });
+      }
+    );
   };
 
   //  -------Get warehouse names--------
-  const getWarehouse = () => {
-    axios.get("http://127.0.0.1:3000/api/warehouse").then((res) => {
+  const getWarehouses = () => {
+    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
       let index = 0;
       const warehouses = res.data.data.map((item) => {
         return {
@@ -106,8 +140,8 @@ const IncomePage = () => {
   };
 
   // --------Get shipper data--------
-  const getAllShipper = () => {
-    axios.get("http://127.0.0.1:3000/api/shipper").then((res) => {
+  const getShippers = () => {
+    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
       let index = 0;
       const shipperName = res.data.data.map((item) => {
         return {
@@ -122,8 +156,8 @@ const IncomePage = () => {
   };
 
   // ----------Get product data-----------
-  const getAllProduct = () => {
-    axios.get("http://127.0.0.1:3000/api/product").then((res) => {
+  const getProducts = () => {
+    makeHttpReq(makeHttpOptions({}, "get", productURL)).then((res) => {
       let index = 0;
       const productData = res.data.data.map((item) => {
         return {
@@ -146,9 +180,10 @@ const IncomePage = () => {
   };
 
   // ------------Get warehouse fees-----------
-  const getWarehouseFee = () => {
-    axios.get("http://127.0.0.1:3000/api/warehouse_fee").then((res) => {
+  const getWarehouseFees = () => {
+    makeHttpReq(makeHttpOptions({}, "get", warehouseFeeURL)).then((res) => {
       let index = 0;
+
       const priceIds = res.data.data.map((item) => {
         return {
           ...item,
@@ -156,18 +191,37 @@ const IncomePage = () => {
           key: index++,
         };
       });
+
       setPriceId(priceIds);
     });
   };
 
-  const insertData = () => {
+  const savePrepareProducts = () => {
+    // console.log("prepareProducts", prepareProducts);
+    makeHttpReq(
+      makeHttpOptions(
+        { stock_inout: prepareProducts },
+        "post",
+        saveStockInoutUrl
+      )
+    )
+      .then((res) => {
+        setPrepareProducts([]);
+      })
+      .catch((err) => {
+        openNotificationWithIcon("error", "error", err.messages);
+      });
+  };
+
+  const doPrepareProducts = () => {
     let index = 0;
-    let insertProductArr = prepareProducts.slice();
+    let selectedProductArr = prepareProducts.slice();
+
     const newData = {
       handling_fee_rate: handlePrice,
       storage_fee_rate: storagePrice,
-      product_id: insertProduct.id,
-      product_name: insertProduct.name,
+      product_id: selectedProduct.id,
+      product_name: selectedProduct.name,
       product_type: packaging,
       catagory: 0,
       lotNumber: lotNumber,
@@ -178,37 +232,35 @@ const IncomePage = () => {
       inout_on: receiptDate,
       key: index++,
     };
-    console.log(newData);
 
-    insertProductArr.push(newData);
+    selectedProductArr.push(newData);
 
-    setPrepareProducts(insertProductArr);
-
-    setLotNumber("");
-    setStock(""), setWeight("");
-    setHandlePrice("");
-    setLotNumber("");
-    setStock("");
-    setStoragePrice("");
-    setPackaging("");
-    setInsertProduct("");
-    setWeight("");
+    setPrepareProducts(selectedProductArr);
+    initPrepareProductItem();
   };
+
+  useEffect(() => {
+    console.log("warehouse_id", warehouseId);
+  }, [warehouseId]);
 
   const editRow = (productId) => {
     const newData = prepareProducts.slice();
     const editData = newData.filter((data) => data.product_id == productId)[0];
-    setLotNumber(editData.lotNumber);
-    setStock(editData.stock);
-    setWeight(editData.weight);
-    setPackaging(editData.product_type);
-    setHandlePrice(editData.handling_fee_rate);
-    setStoragePrice(editData.storage_fee_rate);
-    setWarehouseId(editData.warehouse_id);
-    setShipperId(editData.shipper_id);
-    setInsertProduct({ id: editData.product_id, value: editData.product_name });
-    setInoutOn(editData.inout_on);
+
+    setPrepareProductItem(editData);
   };
+
+  const ss = () => {
+    console.log("ss", ss);
+    setSelectedProduct({
+      id: 1,
+      value: "123123",
+    });
+  };
+
+  useEffect(() => {
+    console.log("change seletedProduct");
+  }, [selectedProduct]);
 
   const deleteRow = (id) => {
     const newData = prepareProducts.slice();
@@ -218,15 +270,16 @@ const IncomePage = () => {
     setPrepareProducts(newData);
   };
 
-  const handleSubmit = () => [
-    // axios.post('http')
-  ];
+  const manualSetWarehouse = () => {
+    setWarehouseId(2);
+  };
+
   // ----------When rerender, get all data------
   useEffect(() => {
-    getWarehouse();
-    getAllShipper();
-    getAllProduct();
-    getWarehouseFee("");
+    getWarehouses();
+    getShippers();
+    getProducts();
+    getWarehouseFees("");
   }, [weight]);
 
   return (
@@ -257,14 +310,14 @@ const IncomePage = () => {
               <Select
                 id="sel_warehouse"
                 placeholder={messages.IncomePageJp.warehouse}
-                onChange={selWarehouseChange}
+                onChange={onChangeWarehouse}
                 style={{ width: 140, marginLeft: 14 }}
                 value={warehouseId}
                 options={warehouseOptions}
                 defaultValue={""}
               />
             </Form.Item>
-            <Form.Item
+            {/*<Form.Item
               label={messages.IncomePageJp.shipper}
               name="shipper"
               style={{
@@ -276,7 +329,7 @@ const IncomePage = () => {
             >
               <Select
                 style={{ width: 300, marginLeft: 14 }}
-                onChange={selShipperChange}
+                onChange={onChangeShipper}
                 options={shipperOptions}
                 value={shipperId}
                 defaultValue={""}
@@ -300,11 +353,11 @@ const IncomePage = () => {
                 }}
                 placeholder={messages.IncomePageJp.receiptDate}
               />
-            </Form.Item>
+            </Form.Item> */}
           </Space>
           <Divider />
           <div>
-            <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
+            {/* <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
               <Form.Item
                 label={messages.IncomePageJp.productName}
                 name="product"
@@ -317,11 +370,12 @@ const IncomePage = () => {
                 <Select
                   placeholder={messages.IncomePageJp.productName}
                   style={{ marginLeft: 15 }}
-                  value={insertProduct.id}
+                  value={selectedProduct.id}
                   options={productOptions}
-                  onChange={onChangeName}
+                  onChange={onChangeProduct}
                   defaultValue={""}
                 />
+                <button onClick={ss}>click</button>
               </Form.Item>
               <Form.Item
                 label={messages.IncomePageJp.packing}
@@ -402,10 +456,12 @@ const IncomePage = () => {
                 />
               </Form.Item>
               <Button
-                onClick={insertData}
+                onClick={doPrepareProducts}
                 style={{ fontWeight: "bold", width: "100px", fontSize: "15px" }}
-              ></Button>
-            </Space>
+              >
+                add
+              </Button>
+            </Space> */}
           </div>
           <Divider />
         </Form>
@@ -419,12 +475,7 @@ const IncomePage = () => {
         <div style={{ justifyContent: "flex-end", display: "flex" }}>
           <Button style={{ width: 150 }}>{messages.buttons.csvExchange}</Button>
           <div style={{ width: 40 }}></div>
-          <Button
-            style={{ width: 150 }}
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-          >
+          <Button style={{ width: 150 }} onClick={savePrepareProducts}>
             {messages.buttons.confirmDeparture}
           </Button>
         </div>
