@@ -1,8 +1,4 @@
-<<<<<<< HEAD:app/javascript/components/router/AppRouter.jsx
 import React, { useEffect } from "react";
-=======
-import React from "react";
->>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454:app/javascript/components/router/AppRouter.js
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../../pages/LoginPage";
 import TopPage from "../../pages/TopPage";

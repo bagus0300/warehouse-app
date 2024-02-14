@@ -152,11 +152,6 @@ const ProductPage = () => {
 
   useEffect(() => {
     getShowData();
-<<<<<<< HEAD:app/javascript/components/Maintenance/ProductList.jsx
-=======
-    console.log(searchText);
-    console.log("first", showData);
->>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454:app/javascript/pages/ProductPage.jsx
   }, [searchText]);
 
   useEffect(() => {
