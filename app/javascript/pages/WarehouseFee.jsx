@@ -22,17 +22,16 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
+import NavbarSection from "../components/layouts/Header/Navbar";
+import FooterSection from "../components/layouts/Footer/Index";
 
-import NavbarSection from "../layouts/Header/Navbar";
-import FooterSection from "../layouts/Footer/Index";
-
-import message from "../../utils/content/jp.json";
+import message from "../utils/content/jp.json";
 
 let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const UnitPrice = () => {
+const WarehouseFee = () => {
   const [form] = Form.useForm();
 
   const [searchText, setSearchText] = useState("");
@@ -46,7 +45,6 @@ const UnitPrice = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allData, setAllData] = useState([]);
-
 
   const getAllUnitPrice = () => {
     axios.get(`${feeUrl}`).then((res) => {
@@ -79,10 +77,12 @@ const UnitPrice = () => {
         setIsPosted(!isposted);
       }
     } catch (err) {
-      notification.error({ message: "Complete All Input Fields.", duration: 1 })
+      notification.error({
+        message: "Complete All Input Fields.",
+        duration: 1,
+      });
     }
-
-  }
+  };
 
   const onDelete = async (item) => {
     try {
@@ -99,7 +99,6 @@ const UnitPrice = () => {
     getAllUnitPrice();
   }, [isposted]);
 
-
   const onAction = async (item) => {
     if (item) {
       form.setFieldsValue({
@@ -108,13 +107,13 @@ const UnitPrice = () => {
         storage_fee_rate: item.storage_fee_rate,
         fee_category: item.fee_category,
         code: item.code,
-      })
+      });
     } else {
       form.resetFields();
     }
     setIsModalOpen(true);
-    setUpdateData(item)
-  }
+    setUpdateData(item);
+  };
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -133,9 +132,9 @@ const UnitPrice = () => {
     },
     {
       title: `${message.Maintenance.packing}`,
-      key: 'packaging',
+      key: "packaging",
       dataIndex: "packaging",
-      align: 'center',
+      align: "center",
       render: (text, record, dataIndex) => {
         return (
           <div>
@@ -147,9 +146,9 @@ const UnitPrice = () => {
     },
     {
       title: `${message.Maintenance.handlingFeeUnitPrice}`,
-      dataIndex: 'handling_fee_rate',
-      key: 'handling_fee_rate',
-      align: 'center',
+      dataIndex: "handling_fee_rate",
+      key: "handling_fee_rate",
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -162,8 +161,8 @@ const UnitPrice = () => {
     {
       title: `${message.Maintenance.storageFeeUnitPrice}`,
       dataIndex: "storage_fee_rate",
-      key: 'storage_fee_rate',
-      align: 'center',
+      key: "storage_fee_rate",
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -176,8 +175,8 @@ const UnitPrice = () => {
     {
       title: `${message.Maintenance.billingClass}`,
       dataIndex: "fee_category",
-      key: 'fee_category',
-      align: 'center',
+      key: "fee_category",
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -224,7 +223,6 @@ const UnitPrice = () => {
     },
   ];
 
-
   return (
     <div>
       <NavbarSection />
@@ -233,14 +231,13 @@ const UnitPrice = () => {
         className="mx-auto flex flex-col content-h"
       >
         <div>
-          <div
-            className="mt-5"
-            style={{ marginLeft: "880px" }}
-          >
-            <Button onClick={() => {
-              onAction();
-              setUpdateStatus("Create")
-            }}>
+          <div className="mt-5" style={{ marginLeft: "880px" }}>
+            <Button
+              onClick={() => {
+                onAction();
+                setUpdateStatus("Create");
+              }}
+            >
               {message?.Maintenance?.addNew}
             </Button>
             <Modal
@@ -268,38 +265,62 @@ const UnitPrice = () => {
                   <Form.Item
                     label={message.Maintenance.packing}
                     name={"packaging"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.code}
                     name={"code"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.handlingFeeUnitPrice}
                     name={"handling_fee_rate"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.storageFeeUnitPrice}
                     name={"storage_fee_rate"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.billingClass}
                     name={"fee_category"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Select
-
                       defaultValue={message.Maintenance.fullTimeRequest}
                       options={[
                         {
@@ -309,14 +330,13 @@ const UnitPrice = () => {
                         {
                           value: "1",
                           label: `${message.Maintenance.firstBilling}`,
-                        }
+                        },
                       ]}
                     />
                   </Form.Item>
                 </Form>
               </div>
             </Modal>
-
           </div>
           <div className="mt-5">
             <CTable
@@ -332,4 +352,4 @@ const UnitPrice = () => {
     </div>
   );
 };
-export default UnitPrice;
+export default WarehouseFee;

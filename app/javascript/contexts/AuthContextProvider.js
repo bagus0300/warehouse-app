@@ -3,7 +3,7 @@ import React, { useReducer } from "react";
 import { AuthContext } from "./auth.context";
 import { AuthReducer, initialAuthState } from "./auth.reducer";
 import services from "../services/services";
-import { hasError } from "../utils/helper";
+import { hasError, saveAuthUser } from "../utils/helper";
 import authActions from "./auth.actions";
 
 const AuthContextProvider = ({ children }) => {
@@ -11,23 +11,31 @@ const AuthContextProvider = ({ children }) => {
 
   //const history = useHistory();
 
-  const loginAction = async (payload) => {
-    const res = await services.login(payload);
-    if (!hasError(res?.status)) {
-      authActions.loginAction(res)(dispatch);
-    } else {
-      authActions.handleLoginErrorAction(res)(dispatch);
-    }
+  const loginAction = (payload) => {
+    services
+      .login(payload)
+      .then((res) => {
+        // if (!hasError(res?.status))
+        authActions.loginAction(res)(dispatch);
+        setBeforeRequestAction(false);
+      })
+      .catch((err) => {
+        authActions.handleLoginErrorAction(err)(dispatch);
+        setBeforeRequestAction(false);
+      });
   };
 
   const signupAction = async (payload) => {
-    const res = await services.signup(payload);
-    if (!hasError(res?.status)) {
-      authActions.signupAction(res)(dispatch);
-  
-    } else {
-      authActions.handleSignupErrorAction(res)(dispatch);
-    }
+    services
+      .signup(payload)
+      .then((res) => {
+        authActions.signupAction(res)(dispatch);
+        setBeforeRequestAction(false);
+      })
+      .catch((err) => {
+        authActions.handleSignupErrorAction(err)(dispatch);
+        setBeforeRequestAction(false);
+      });
   };
 
   const logoutAction = async () => {
@@ -38,6 +46,10 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const setBeforeRequestAction = (flag) => {
+    authActions.setBeforeRequestAction(flag)(dispatch);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -45,6 +57,7 @@ const AuthContextProvider = ({ children }) => {
         signupAction,
         loginAction,
         logoutAction,
+        setBeforeRequestAction,
       }}
     >
       {children}

@@ -272,6 +272,7 @@ GEM
     thor (1.3.0)
     tilt (2.3.0)
     timeout (0.4.1)
+    transactional (0.1.0)
     turbo-rails (1.5.0)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -325,6 +326,7 @@ DEPENDENCIES
   spreadsheet_architect
   sprockets-rails
   stimulus-rails
+  transactional
   turbo-rails
   tzinfo-data
   warden

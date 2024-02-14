@@ -9,7 +9,7 @@ import {
 import {
   makeHttpReq,
   getAuthUserToken,
-  makeURLOptions,
+  makeHttpOptions,
   makeURLOptionsWtoken,
 } from "../utils/helper";
 
@@ -17,11 +17,11 @@ const verifyAuth = async (token = getAuthUserToken()) =>
   makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token));
 
 const login = async (payload) => {
-  makeHttpReq(loginURL, makeURLOptions(payload, "POST"), true);
+  return makeHttpReq(makeHttpOptions(payload, "POST", loginURL));
 };
 
 const signup = async (payload) =>
-  makeHttpReq(signupURL, makeURLOptions(payload, "POST"), true);
+  makeHttpReq(makeHttpOptions(payload, "POST", signupURL));
 
 const logout = async () =>
   makeHttpReq(

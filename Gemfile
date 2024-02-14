@@ -80,4 +80,8 @@ gem 'jsonapi-serializer'
 
 gem "warden"
 
-# gem "spreadsheet_architect"
+gem "spreadsheet_architect"
+
+# gem "sidekiq"
+
+gem 'transactional'

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
-import { useAuth } from "../../hooks/userAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import messages from "../../utils/content/jp.json";
+<<<<<<< HEAD
 
 
 
@@ -13,40 +15,58 @@ import messages from "../../utils/content/jp.json";
 //     navigate("/");
 //   }
 // }, []);
+=======
+import { openNotificationWithIcon } from "../common/notification";
+// import AlertComponent from "../common/alert";
+>>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454
 
 const LoginForm = ({ token }) => {
   const navigate = useNavigate();
 
   const {
-    state: { loginErrors },
+    state: { loginErrors, beforeRequest },
     loginAction,
-    logoutAction,
+    setBeforeRequestAction,
   } = useAuth();
+
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
   const onFormSubmit = ({ login_id, password }) => {
-    loginAction({ user: { login_id, password } }).then((res) => {
-      console.log(res)
-      //navigate('/home')
-    });
-
+    loginAction({ user: { login_id, password } });
   };
+
+  useEffect(() => {
+    if (loginErrors != null && !beforeRequest) {
+      openNotificationWithIcon("error", "error", loginErrors);
+      setBeforeRequestAction(true);
+    } else if (loginErrors == null && !beforeRequest) {
+      navigate("/home");
+    } else {
+    }
+  }, [loginErrors, beforeRequest]);
 
   return (
     <div style={{ width: 450 }} className="mx-auto">
-      <div className="py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm">
+      <div className="py-18 flex flex-col justify-center h-full min-h-screen gap-6 xs:gap-7 xs:mt-0 sm">
+        <Title
+          level={4}
+          className="text-center"
+          style={{ marginTop: 10, marginBottom: 20 }}
+        >
+          {messages.SiteInfo.title}
+        </Title>
         <Card style={{ width: 450 }} className="py-4">
+          {/* {loginErrors && <AlertComponent type="error" message={loginErrors} />} */}
           <Title
-            level={4}
+            level={5}
             className="text-center"
-            style={{ marginTop: 10, marginBottom: 50 }}
+            style={{ marginTop: 10, marginBottom: 40 }}
           >
-            {messages.SiteInfo.title}
+            {messages.pages.login}
           </Title>
-          {loginErrors && <p>{loginErrors}</p>}
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -93,7 +113,6 @@ const LoginForm = ({ token }) => {
             </Form.Item>
           </Form>
         </Card>
-        <button onClick={logoutAction}>logout</button>
       </div>
     </div>
   );

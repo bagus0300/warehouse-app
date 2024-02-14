@@ -1,4 +1,5 @@
 class ShippersController < ApplicationController
+  protect_from_forgery 
   def index
     shipper = Shipper.all
 

@@ -24,17 +24,16 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
-import NavbarSection from "../layouts/Header/Navbar";
-import FooterSection from "../layouts/Footer/Index";
+import NavbarSection from "../components/layouts/Header/Navbar";
+import FooterSection from "../components/layouts/Footer/Index";
 
-import message from "../../utils/content/jp.json";
-
+import message from "../utils/content/jp.json";
 
 let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const ProductList = () => {
+const ProductPage = () => {
   const [form] = Form.useForm();
 
   const [searchText, setSearchText] = useState("");
@@ -48,13 +47,12 @@ const ProductList = () => {
   const [showData, setShowData] = useState([]);
   //fee
   const [feeData, setFeeData] = useState([]);
-  const [feePackaging, setFeePackaging] = useState('');
-  const [feeID, setFeeID] = useState('');
+  const [feePackaging, setFeePackaging] = useState("");
+  const [feeID, setFeeID] = useState("");
 
   const [handlingFeeRate, setHandlingFeeRate] = useState("");
   const [feeCategory, setFeeCategory] = useState("");
   const [storageFeeRate, setStorageFeeRate] = useState("");
-
 
   const getAllProduct = () => {
     axios.get(`${productUrl}`).then((res) => {
@@ -68,12 +66,11 @@ const ProductList = () => {
           packaging: feeData.packaging,
           storage_fee_rate: feeData.storage_fee_rate,
           handling_fee_rate: feeData.handling_fee_rate,
-          fee_category: feeData.fee_category
+          fee_category: feeData.fee_category,
         };
       });
       setAllData(products);
       setShowData(products);
-
     });
   };
 
@@ -87,10 +84,10 @@ const ProductList = () => {
         };
       });
       setFeeData(priceData);
-      const feePackaging = priceData.map(item => item.packaging)
-      setFeePackaging(feePackaging)
+      const feePackaging = priceData.map((item) => item.packaging);
+      setFeePackaging(feePackaging);
     });
-  }
+  };
 
   const onSubmit = async () => {
     try {
@@ -103,27 +100,26 @@ const ProductList = () => {
         notification.success({ message: 'Update Success', duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
-
       } else {
         const postProduct = { ...product, warehouse_fee_id: feeID }
         await axios.post(`${productUrl}`, { ...product, warehouse_fee_id: feeID });
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
-
       }
     } catch (err) {
-      notification.error({ message: "Complete All Input Fields.", duration: 1 })
+      notification.error({
+        message: "Complete All Input Fields.",
+        duration: 1,
+      });
     }
-
-  }
+  };
 
   const handleSearchText = (e) => {
-    setSearchText(e.target.value)
-  }
+    setSearchText(e.target.value);
+  };
 
   const handleSelect = (value) => {
-
     const selectedFeeData = feeData.find((item) => item.packaging === value);
 
     if (selectedFeeData) {
@@ -136,7 +132,7 @@ const ProductList = () => {
       setFeeCategory("");
       setStorageFeeRate("");
     }
-  }
+  };
 
   const getBySearch = (data) => {
     if (searchText) {
@@ -148,8 +144,7 @@ const ProductList = () => {
   const getShowData = () => {
     const res = getBySearch(allData);
     setShowData(res);
-  }
-
+  };
 
   useEffect(() => {
     getAllProduct();
@@ -157,6 +152,11 @@ const ProductList = () => {
 
   useEffect(() => {
     getShowData();
+<<<<<<< HEAD:app/javascript/components/Maintenance/ProductList.jsx
+=======
+    console.log(searchText);
+    console.log("first", showData);
+>>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454:app/javascript/pages/ProductPage.jsx
   }, [searchText]);
 
   useEffect(() => {
@@ -187,14 +187,15 @@ const ProductList = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete("http://127.0.0.1:3000/api/product", { data: { id: item.id } });
+      const response = await axios.delete("http://127.0.0.1:3000/api/product", {
+        data: { id: item.id },
+      });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
     } catch (error) {
       notification.error({ message: "Server Error", duration: 1 });
     }
   };
-
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -213,10 +214,10 @@ const ProductList = () => {
     },
     {
       title: `${message.Maintenance.productName}`,
-      key: 'name',
-      width: '20%',
+      key: "name",
+      width: "20%",
       dataIndex: "name",
-      align: 'center',
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -229,8 +230,8 @@ const ProductList = () => {
     {
       title: `${message.Maintenance.handlingFee}`,
       dataIndex: "handling_fee_rate",
-      key: 'handling_fee_rate',
-      align: 'center',
+      key: "handling_fee_rate",
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -243,8 +244,8 @@ const ProductList = () => {
     {
       title: `${message.Maintenance.storageFee}`,
       dataIndex: "storage_fee_rate",
-      key: 'storage_fee_rate',
-      align: 'center',
+      key: "storage_fee_rate",
+      align: "center",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -257,8 +258,8 @@ const ProductList = () => {
     {
       title: `${message.Maintenance.billingClass}`,
       dataIndex: "fee_category",
-      align: 'center',
-      key: 'fee_category',
+      align: "center",
+      key: "fee_category",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -304,16 +305,12 @@ const ProductList = () => {
     },
   ];
 
-
   return (
     <div>
       <NavbarSection />
-      <Content
-        style={{ width: 1024 }}
-        className="mx-auto content-h"
-      >
+      <Content style={{ width: 1024 }} className="mx-auto content-h">
         <div>
-          <div className="mt-5" >
+          <div className="mt-5">
             <div className="flex flex-row items-center">
               {/* <label style={{ width: '50px' }} >{message.Maintenance.productName}</label> */}
               <Input.Search
@@ -326,8 +323,9 @@ const ProductList = () => {
                 style={{ marginLeft: "640px" }}
                 onClick={() => {
                   onAction();
-                  setUpdateStatus("Create")
-                }}>
+                  setUpdateStatus("Create");
+                }}
+              >
                 {message?.Maintenance?.addNew}
               </Button>
             </div>
@@ -356,28 +354,48 @@ const ProductList = () => {
                   <Form.Item
                     label={message.Maintenance.productName}
                     name={"name"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.code}
                     name={"code"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.productPacking}
                     name={"specification"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.packing}
                     name={"packaging"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Select
                       options={[...feePackaging].map((item) => ({
@@ -386,24 +404,38 @@ const ProductList = () => {
                         label: item,
                       }))}
                       onChange={handleSelect}
-
                     />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.handlingFee}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input value={handlingFeeRate} />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.storageFee}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input value={storageFeeRate} />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.billingClass}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input value={feeCategory} />
                   </Form.Item>
@@ -425,4 +457,4 @@ const ProductList = () => {
     </div>
   );
 };
-export default ProductList;
+export default ProductPage;

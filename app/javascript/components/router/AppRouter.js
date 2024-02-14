@@ -1,12 +1,16 @@
+<<<<<<< HEAD:app/javascript/components/router/AppRouter.jsx
 import React, { useEffect } from "react";
+=======
+import React from "react";
+>>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454:app/javascript/components/router/AppRouter.js
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../../pages/LoginPage";
 import TopPage from "../../pages/TopPage";
 import SignupPage from "../../pages/SignupPage";
 import IncomePage from "../../pages/IncomePage";
-import ProductList from "../Maintenance/ProductList";
-import ShipperList from "../Maintenance/ShipperList";
-import UnitPrice from "../Maintenance/UnitPrice";
+import ProductPage from "../../pages/ProductPage";
+import ShipperPage from "../../pages/ShipperPage";
+import WarehouseFee from "../../pages/WarehouseFee";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 import OutputPage from "../../pages/OutputPage";
 // import InventoryPage from "../../pages/InventoryPage"
@@ -14,9 +18,6 @@ import { getAuthUserToken } from "../../utils/helper";
 import PrivateRoute from "./PrivateRoute";
 
 export const AppRouter = () => {
-
-  const token = getAuthUserToken();
-
   return (
     <AuthContextProvider>
       <BrowserRouter>

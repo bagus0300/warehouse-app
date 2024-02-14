@@ -148,6 +148,7 @@
     "type_repassword": "パスワードを確認してください!",
     "type_email": "Eメールを入力してください！",
     "invalid_email": "入力された電子メールは無効です!",
-    "no_matched_password": "入力した新しいパスワードが一致しません。"
+    "no_matched_password": "入力した新しいパスワードが一致しません。",
+    "something_wrong": "何か問題が発生しました。"
   }
 }

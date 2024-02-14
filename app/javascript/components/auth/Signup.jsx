@@ -1,15 +1,19 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
-import { useAuth } from "../../hooks/userAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 
 import messages from "../../utils/content/jp.json";
+import AlertComponent from "../common/alert";
+import { openNotificationWithIcon } from "../common/notification";
 
 const Signup = () => {
   const {
-    state: { signupErrors },
+    state: { signupErrors, beforeRequest },
     signupAction,
+    setBeforeRequestAction,
   } = useAuth();
 
   const formItemLayout = {
@@ -23,6 +27,8 @@ const Signup = () => {
     },
   };
 
+  const navigate = useNavigate();
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -31,11 +37,30 @@ const Signup = () => {
     signupAction({ user_name, email, login_id, password });
   };
 
-  useEffect(() => { });
+  useEffect(() => {
+    if (signupErrors != null) {
+      openNotificationWithIcon("error", "error", signupErrors);
+    } else if (signupErrors == null && !beforeRequest) {
+      openNotificationWithIcon("success", "success", "success registeration");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+
+      setBeforeRequestAction(true);
+    }
+  }, [signupErrors, beforeRequest]);
 
   return (
     <div style={{ width: 550 }} className="mx-auto">
-      <div className="py-18 flex flex-col justify-center h-full min-h-screen gap-6 mt-12 xs:gap-7 xs:mt-0 sm">
+      <div className="py-18 flex flex-col justify-center h-full min-h-screen gap-6 xs:gap-7 xs:mt-0 sm">
+        <Title
+          level={4}
+          className="text-center"
+          style={{ marginTop: 10, marginBottom: 20 }}
+        >
+          {messages.SiteInfo.title}
+        </Title>{" "}
         <Card style={{ width: 550 }} className="py-4">
           <Title
             level={4}
@@ -44,7 +69,9 @@ const Signup = () => {
           >
             {messages.pages.signup}
           </Title>
-          {signupErrors && <p>{signupErrors}</p>}
+          {/* {signupErrors && (
+            <AlertComponent type="error" message={signupErrors} />
+          )} */}
           <Form
             {...formItemLayout}
             name="basic"

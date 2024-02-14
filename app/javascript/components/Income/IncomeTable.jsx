@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Space, Table, Button, Pagination } from "antd";
 import messages from "../../utils/content/jp.json";
 
-const IncomeTable = ({data, editRow, deleteRow}) => {
+const IncomeTable = ({ data, editRow, deleteRow }) => {
   const columns = [
     {
       title: "品番",
@@ -36,20 +36,39 @@ const IncomeTable = ({data, editRow, deleteRow}) => {
       key: "stock",
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       render: (_, record) => (
         <Space size="small">
-          <Button onClick={() => editRow(record.product_id)}>{ messages.buttons.change }</Button>
-          <Button onClick={() => deleteRow(record.product_id)}>{ messages.buttons.delete }</Button>
+          <Button onClick={() => editRow(record.product_id)}>
+            {messages.buttons.change}
+          </Button>
+          <Button onClick={() => deleteRow(record.product_id)}>
+            {messages.buttons.delete}
+          </Button>
         </Space>
       ),
-    }
+    },
   ];
   return (
-    <Table columns={columns} dataSource={data} pagination={false} />
+    <Table
+      columns={columns}
+      pagination={false}
+      dataSource={data.map((row, index) => {
+        return {
+          ...row,
+          key: index + 1,
+          actions: (
+            <div>
+              {/* <a onClick={() => editRow(row.product_id)}>{messages.common.edit}</a>&nbsp;&nbsp;
+            <a onClick={() => deleteRow(row.product_id)}>{messages.common.delete}</a> */}
+            </div>
+          ),
+        };
+      })}
+    />
     // <Pagination pageSizeOptions={5} defaultPageSize={5}/>
-  )
+  );
 };
 
 export default IncomeTable;
