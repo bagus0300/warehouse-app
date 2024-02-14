@@ -22,10 +22,10 @@ export const AppRouter = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={<PrivateRoute Component={TopPage} />} />
           <Route path="/in_process" element={<PrivateRoute Component={IncomePage} />} />
-          <Route path="/product" element={<PrivateRoute Component={ProductList} />} />
-          <Route path="/shipper" element={<PrivateRoute Component={ShipperList} />} />
+          <Route path="/product" element={<PrivateRoute Component={ProductPage} />} />
+          <Route path="/shipper" element={<PrivateRoute Component={ShipperPage} />} />
           <Route path="/out_process" element={<PrivateRoute Component={OutputPage} />} />
-          <Route path="/unit_price" element={<PrivateRoute Component={UnitPrice} />} />
+          <Route path="/unit_price" element={<PrivateRoute Component={WarehouseFee} />} />
           <Route path="/" element={<LoginPage />} />
           {/* <Route path="/inventory_process" element={<InventoryPage />} /> */}
         </Routes>

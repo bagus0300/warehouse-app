@@ -6,19 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import messages from "../../utils/content/jp.json";
-<<<<<<< HEAD
-
-
-
-// useEffect(() => {
-//   if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-//     navigate("/");
-//   }
-// }, []);
-=======
 import { openNotificationWithIcon } from "../common/notification";
 // import AlertComponent from "../common/alert";
->>>>>>> 6eeb1e2e47ec88274bc497e2f02f83d98426a454
 
 const LoginForm = ({ token }) => {
   const navigate = useNavigate();
