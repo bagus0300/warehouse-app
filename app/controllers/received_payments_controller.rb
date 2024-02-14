@@ -1,9 +1,10 @@
 class ReceivedPaymentsController < ApplicationController
-  protect_from_forgery 
+  # protect_from_forgery 
   def index
+    
     receivedPayments = ReceivedPayment.all
 
-    return :json => {
+    render :json => {
       data: receivedPayments,
       status: :accepted
     }
@@ -18,7 +19,7 @@ class ReceivedPaymentsController < ApplicationController
       received:         params[:received]
     )
 
-    if receivedPayment.persist?
+    if receivedPayment.save
       render :json => {
         status: :accepted
       }

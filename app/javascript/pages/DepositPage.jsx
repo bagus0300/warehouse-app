@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button, Modal} from "antd";
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import NavbarSection from "../components/layouts/Header/Navbar";
@@ -9,7 +10,7 @@ import messages from "../utils/content/jp.json";
 import {
     shipperURL,
     postReceivedPaymentUrl,
-    // getReceivedPaymentUrl
+    getReceivedPaymentUrl
   } from "../utils/contants";
 
 const { Search } = Input;
@@ -19,7 +20,9 @@ const { Content } = Layout;
 const DepositPage = () => {
 
 // -----------Table Data--------------
-    // const [prepareProducts, setPrepareProducts] = useState([]);
+    const [prepareProducts, setPrepareProducts] = useState([]);
+
+    const [id, setId] = useState();
 
 // ----------Modal---------
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,8 +38,10 @@ const DepositPage = () => {
          shipper_name: shipperId.name,
          received_on: depositDate ,
          amount: amount ,
-      }, "post", postReceivedPaymentUrl)).then(() => {
-        console.log(req.data, 'fffffffffffffffff')
+         description: '',
+         processing_on: '',
+        received: '0',
+      }, "post", postReceivedPaymentUrl)).then((req) => {
       })
       initDataValue();
     };
@@ -82,28 +87,30 @@ const DepositPage = () => {
               value:item.name,
               label : item.name,
               key: index++,
-              id: item.id
+              id: item.id,
+              code: item.code,
             };
           });
           setShipperOptions(shipper);
-          console.log(shipper, "0000000000")
         })
     };
 
     // ---------Get shipperId and shipperName for select value from database "received_on"--------
-    // const getAllReceivedValue = () => {
-    //     makeHttpReq(makeHttpOptions({}, "get", getReceivedPaymentUrl)).then((res) => {
-          
-    //       let index = 0
-    //       const receivedShipper = res.data.data.map((item) => {
-    //         return {
-    //           
-    //         };
-    //       });
-    //       setShipperOptions(shipper);
-    //       console.log(shipper, "0000000000")
-    //     })
-    // };
+    const getAllReceivedValue = () => {
+        makeHttpReq(makeHttpOptions({}, "get", getReceivedPaymentUrl)).then((res) => {
+            let index = 0
+            const receivedPayment = res.data.data.map((item) => {  
+              
+                return { ...item, 
+                    key: index++, 
+                    id : item.id,
+                };  
+                });
+
+            // const receivedPaymentName = res.data.data
+          setPrepareProducts(receivedPayment);
+        })
+    };
     
 
 // ----------Modal End------------
@@ -115,10 +122,27 @@ const DepositPage = () => {
     //     setReceivedShipperId({ id: option.id, name: value });
     // }
 
+
+    const editRow = (id) => {
+        setIsModalOpen(true);
+
+        makeHttpReq(makeHttpOptions({
+            
+        }, "put", postReceivedPaymentUrl)).then((res) => {
+            console.log("eeeee", res)
+        })
+    };
+
+
+    const deleteRow = (id) => {
+        makeHttpReq(makeHttpOptions({id}, "delete", postReceivedPaymentUrl)).then((res) => {
+        })
+    };   
+
     useEffect(() => {
         getAllShipper();
-        // getAllReceivedValue();
-    }, [])
+        getAllReceivedValue();
+    }, [amount, id])
 
 
     return (
@@ -245,10 +269,10 @@ const DepositPage = () => {
                 </div>
                 <Divider/>
                 <DepositTable
-                    // data={prepareProducts}
-                    // editRow={(key) => editRow(key)}
-                    // deleteRow={deleteRow}
-                    // pagination={false}
+                    data={prepareProducts}
+                    editRow={(key) => editRow(key)}
+                    deleteRow={deleteRow}
+                    pagination={false}
                 />
                 <div style={{    display: "flex", marginTop: 20, justifyContent: "flex-end"}}>
                     <Button style={{width: 120, }}>{messages.buttons.next}</Button>
