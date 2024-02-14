@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import CTable from '../CTable'
-import {
-  Form,
-  Input,
-  Layout,
-  Table,
-  Button,
-  Modal,
-  notification,
-} from "antd";
+import CTable from "../components/CTable";
 
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  CalendarDaysIcon,
-} from "@heroicons/react/24/outline";
+import { Form, Input, Layout, Table, Button, Modal, notification } from "antd";
 
-import NavbarSection from "../layouts/Header/Navbar";
-import FooterSection from "../layouts/Footer/Index";
+// import {
+//   TrashIcon,
+//   PencilSquareIcon,
+//   CalendarDaysIcon,
+// } from "@heroicons/react/24/outline";
 
-import message from "../../utils/content/jp.json";
+import NavbarSection from "../components/layouts/Header/Navbar";
+import FooterSection from "../components/layouts/Footer/Index";
+
+import message from "../utils/content/jp.json";
 
 let plan_color, star_color, plan_text;
 
@@ -55,31 +48,31 @@ const ShipperList = () => {
       let shipper = await form.validateFields();
       if (updateData) {
         await axios.put("http://127.0.0.1:3000/api/shipper", {
-          id: updateData.id, ...shipper
-        }
-        );
-        notification.success({ message: 'Update Success', duration: 1 });
+          id: updateData.id,
+          ...shipper,
+        });
+        notification.success({ message: "Update Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
         await axios.post("http://127.0.0.1:3000/api/shipper", shipper);
-        notification.success({ message: 'Create Success', duration: 1 })
+        notification.success({ message: "Create Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
     } catch (err) {
-      notification.error({ message: "Complete All Input Fields.", duration: 1 })
+      notification.error({
+        message: "Complete All Input Fields.",
+        duration: 1,
+      });
     }
-
-  }
+  };
 
   useEffect(() => {
     getAllShipper();
   }, [isposted]);
 
-
   const onAction = async (item) => {
-
     if (item) {
       form.setFieldsValue({
         name: item.name,
@@ -88,27 +81,27 @@ const ShipperList = () => {
         code: item.code,
         post_code: item.post_code,
         tel: item.tel,
-        closing_date: moment(item.closing_date).format("YYYY-MM-DD")
-      })
+        closing_date: moment(item.closing_date).format("YYYY-MM-DD"),
+      });
     } else {
       form.resetFields();
     }
 
     setIsModalOpen(true);
-    setUpdateData(item)
-  }
-
+    setUpdateData(item);
+  };
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete("http://127.0.0.1:3000/api/shipper", { data: { id: item.id } });
+      const response = await axios.delete("http://127.0.0.1:3000/api/shipper", {
+        data: { id: item.id },
+      });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
     } catch (error) {
       notification.error({ message: "Server Error", duration: 1 });
     }
   };
-
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -127,9 +120,9 @@ const ShipperList = () => {
     },
     {
       title: `${message.shipper.name}`,
-      key: 'name',
+      key: "name",
       dataIndex: "name",
-      align: 'center',
+      align: "center",
       render: (text, record, dataIndex) => {
         return (
           <div>
@@ -142,8 +135,8 @@ const ShipperList = () => {
     {
       title: `${message.shipper.mainAddress}`,
       dataIndex: "main_address",
-      key: 'main_address',
-      align: 'center',
+      key: "main_address",
+      align: "center",
       render: (text, record, dataIndex) => {
         return (
           <div>
@@ -156,8 +149,8 @@ const ShipperList = () => {
     {
       title: `${message.shipper.tel_number}`,
       dataIndex: "tel",
-      key: 'tel',
-      align: 'center',
+      key: "tel",
+      align: "center",
       render: (text, record, dataIndex) => {
         return (
           <div>
@@ -170,7 +163,7 @@ const ShipperList = () => {
     {
       title: `${message.shipper.closing_date}`,
       dataIndex: "closing_date",
-      key: 'closing_date',
+      key: "closing_date",
       render: (txt) => moment(txt).format("YYYY-MM-DD"),
       // sorter: (a, b) =>
       //   a.closing_date.toLowerCase().localeCompare(b.closing_date.toLowerCase()),
@@ -213,7 +206,6 @@ const ShipperList = () => {
     },
   ];
 
-
   return (
     <div>
       <NavbarSection />
@@ -222,14 +214,13 @@ const ShipperList = () => {
         className="mx-auto flex flex-col content-h"
       >
         <div>
-          <div
-            className="mt-5"
-            style={{ marginLeft: "880px" }}
-          >
-            <Button onClick={() => {
-              onAction();
-              setUpdateStatus("Create")
-            }}>
+          <div className="mt-5" style={{ marginLeft: "880px" }}>
+            <Button
+              onClick={() => {
+                onAction();
+                setUpdateStatus("Create");
+              }}
+            >
               {message?.Maintenance?.addNew}
             </Button>
             <Modal
@@ -257,42 +248,72 @@ const ShipperList = () => {
                   <Form.Item
                     label={message.Maintenance.shipperName}
                     name={"name"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.code}
                     name={"code"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.Maintenance.postCode}
                     name={"post_code"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.main_address}
                     name={"main_address"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.sub_address}
                     name={"sub_address"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
                     label={message.shipper.tel_number}
                     name={"tel"}
-                    rules={[{ required: true, message: `${message.tableCommon.warning}` }]}
+                    rules={[
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
+                    ]}
                   >
                     <Input />
                   </Form.Item>
@@ -300,7 +321,10 @@ const ShipperList = () => {
                     label={message.shipper.closing_date}
                     name={"closing_date"}
                     rules={[
-                      { required: true, message: `${message.tableCommon.warning}` },
+                      {
+                        required: true,
+                        message: `${message.tableCommon.warning}`,
+                      },
                     ]}
                   >
                     <Input type="date" />
@@ -308,7 +332,6 @@ const ShipperList = () => {
                 </Form>
               </div>
             </Modal>
-
           </div>
           <div className="mt-5">
             <CTable

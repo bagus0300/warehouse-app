@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button, Modal} from "antd";
-import axios from 'axios';
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";
@@ -9,6 +8,8 @@ import localeJP from "antd/es/date-picker/locale/ja_JP";
 import messages from "../utils/content/jp.json";
 import {
     shipperURL,
+    postReceivedPaymentUrl,
+    // getReceivedPaymentUrl
   } from "../utils/contants";
 
 const { Search } = Input;
@@ -16,6 +17,9 @@ const { Content } = Layout;
 
 
 const DepositPage = () => {
+
+// -----------Table Data--------------
+    // const [prepareProducts, setPrepareProducts] = useState([]);
 
 // ----------Modal---------
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +30,14 @@ const DepositPage = () => {
 
     const handleOK = () => {
       setIsModalOpen(false);
+      makeHttpReq(makeHttpOptions({
+         shipper_id: shipperId.id ,
+         shipper_name: shipperId.name,
+         received_on: depositDate ,
+         amount: amount ,
+      }, "post", postReceivedPaymentUrl)).then(() => {
+        console.log(req.data, 'fffffffffffffffff')
+      })
       initDataValue();
     };
 
@@ -34,24 +46,22 @@ const DepositPage = () => {
     };
 
     // -----------Modal Value------------
-    const [shipperId, setShipperId] = useState();
+    const [shipperId, setShipperId] = useState({id: "", name: ""});
     const [shipperOptions, setShipperOptions] = useState();
     const selShipperChange = (value, option) => {
-        setShipperId(value);
-        console.log(value,"wwwwwwwww")
+        setShipperId({ id: option.id, name: value });
     }
+
     
     const [depositDate, setDepositDate] = useState();
     const selDepositDate = (value) => {
         setDepositDate(value);
-        console.log(value,"wwwwwwwww");
     }
     
     
     const [amount, setAmount] = useState();
     const selAmount = (value) => {
         setAmount(value);
-        console.log(value,"wwwwwwwww");
     }    
 
     // -------Initize modal values when we click save button-------
@@ -62,7 +72,7 @@ const DepositPage = () => {
     }
     
     
-    // ------Get shipperId and shipperName for select value------
+    // ------Get shipperId and shipperName for select value from database "shippers"------
     const getAllShipper = () => {
         makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
           
@@ -76,18 +86,38 @@ const DepositPage = () => {
             };
           });
           setShipperOptions(shipper);
+          console.log(shipper, "0000000000")
         })
     };
 
-
-    const data = () => {
-        
-    }
+    // ---------Get shipperId and shipperName for select value from database "received_on"--------
+    // const getAllReceivedValue = () => {
+    //     makeHttpReq(makeHttpOptions({}, "get", getReceivedPaymentUrl)).then((res) => {
+          
+    //       let index = 0
+    //       const receivedShipper = res.data.data.map((item) => {
+    //         return {
+    //           
+    //         };
+    //       });
+    //       setShipperOptions(shipper);
+    //       console.log(shipper, "0000000000")
+    //     })
+    // };
+    
 
 // ----------Modal End------------
 
+// ----------table value-----------
+    // const [receivedShipperId, setReceivedShipperId] = useState({id: "", name: ""});
+    // const [receivedShipperOptions, setReceivedShipperOptions] = useState();
+    // const selReceiShipperChange = (value, option) => {
+    //     setReceivedShipperId({ id: option.id, name: value });
+    // }
+
     useEffect(() => {
         getAllShipper();
+        // getAllReceivedValue();
     }, [])
 
 
@@ -126,7 +156,7 @@ const DepositPage = () => {
                                     <Select
                                         style={{ width: 200, marginLeft: 43  }}
                                         options={shipperOptions}
-                                        value={shipperId}
+                                        value={shipperId.name}
                                         onChange={selShipperChange}
                                     />
                                 </Form.Item>
@@ -187,11 +217,10 @@ const DepositPage = () => {
                     style={{ display: "", width: 300, marginBottom: 0, flexFlow: "nowrap" }}
                     >
                         <Select
-                            // defaultValue={shipperVal.label}
                             style={{ width: 200, marginLeft: 14  }}
                             placeholder={messages.Maintenance.shipperName}
                             // onChange={selShipperChange}
-                            // options={shipperOptions}
+                            // options={receivedShipperOptions}
                         />
                     </Form.Item>
                     <div style={{ height: 15 }}></div>
@@ -215,7 +244,12 @@ const DepositPage = () => {
                     </Form.Item>
                 </div>
                 <Divider/>
-                <DepositTable/>
+                <DepositTable
+                    // data={prepareProducts}
+                    // editRow={(key) => editRow(key)}
+                    // deleteRow={deleteRow}
+                    // pagination={false}
+                />
                 <div style={{    display: "flex", marginTop: 20, justifyContent: "flex-end"}}>
                     <Button style={{width: 120, }}>{messages.buttons.next}</Button>
                 </div>

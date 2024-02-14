@@ -1,4 +1,5 @@
 class ShippersController < ApplicationController
+  # protect_from_forgery 
   def index
     shipper = Shipper.all
 
@@ -18,7 +19,6 @@ class ShippersController < ApplicationController
         tel:                        params[:tel],
         closing_date:               params[:closing_date],
     )
-
     if shipper.save
       render :json => {
         shipper:          shipper,

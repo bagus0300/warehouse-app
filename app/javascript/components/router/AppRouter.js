@@ -4,9 +4,9 @@ import LoginPage from "../../pages/LoginPage";
 import TopPage from "../../pages/TopPage";
 import SignupPage from "../../pages/SignupPage";
 import IncomePage from "../../pages/IncomePage";
-import ProductList from "../Maintenance/ProductList";
-import ShipperList from "../Maintenance/ShipperList";
-import UnitPrice from "../Maintenance/UnitPrice";
+import ProductPage from "../../pages/ProductPage";
+import ShipperPage from "../../pages/ShipperPage";
+import WarehouseFee from "../../pages/WarehouseFee";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 import OutputPage from "../../pages/OutputPage";
 import InventoryPage from "../../pages/InventoryPage";
@@ -14,7 +14,6 @@ import DepositPage from "../../pages/DepositPage";
 import BillingPage from "../../pages/BillingPage";
 // import InventoryPage from "../../pages/InventoryPage";
 import { useAuth } from "../../hooks/useAuth";
-import Top from "../../pages/TopPage";
 
 export const AppRouter = () => {
   const user = useAuth();
@@ -30,13 +29,15 @@ export const AppRouter = () => {
           <Route path="/" element={<LoginPage />} />
           <Route path="/home" element={<TopPage />} />
           <Route path="/in_process" element={<IncomePage />} />
-          <Route path="/product" element={<ProductList />} />
-          <Route path="/shipper" element={<ShipperList />} />
+          <Route path="/product" element={<ProductPage />} />
+          <Route path="/shipper" element={<ShipperPage />} />
           <Route path="/out_process" element={<OutputPage />} />
+
           <Route path="/inventory_control" element={<InventoryPage />} />
           <Route path="/deposit_process" element={<DepositPage />} />
           <Route path="/billing_process" element={<BillingPage />} />
-          <Route path="/unit_price" element={<UnitPrice />} />
+          {/* <Route path="/unit_price" element={<UnitPrice />} /> */}
+          <Route path="/warehouse_fee" element={<WarehouseFee />} />
         </Routes>
       </BrowserRouter>
     </AuthContextProvider>
