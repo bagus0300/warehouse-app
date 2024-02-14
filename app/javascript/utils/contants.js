@@ -11,8 +11,11 @@ export const verifyAuthURL = baseUrl + "verify";
 export const logoutURL = baseUrl + "logout";
 
 
+
 //unit_price urls
 
-export const unitPriceURL = baseUrl + "api/shipper";
+export const shipperUrl = baseUrl + "api/shipper"
+export const productUrl = baseUrl + "api/product"
+export const feeUrl = baseUrl + "api/warehouse_fee"
 
 

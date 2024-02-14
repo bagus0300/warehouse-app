@@ -31,7 +31,7 @@ const Signup = () => {
     signupAction({ user_name, email, login_id, password });
   };
 
-  useEffect(() => {});
+  useEffect(() => { });
 
   return (
     <div style={{ width: 550 }} className="mx-auto">
@@ -123,7 +123,7 @@ const Signup = () => {
                 {messages.signupFields.signup}
               </Button>
               <small style={{ marginLeft: 20 }}>
-                <Link to="/">{messages.signupFields.to_login}</Link>
+                {messages.signupFields.to_login}
               </small>
             </Form.Item>
           </Form>

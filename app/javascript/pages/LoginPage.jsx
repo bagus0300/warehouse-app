@@ -5,7 +5,7 @@ import { falsy, getAuthUser } from "../utils/helper";
 
 import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const LoginPage = ({ }) => {
   const token = useMemo(() => getAuthUser().token, [getAuthUser().token]);
   const navigate = useNavigate()
 
@@ -14,7 +14,7 @@ const LoginPage = () => {
       navigate('/home')
       return;
     } else {
-      navigate('/')
+      navigate('/signin')
       return;
     }
   }, [token]);

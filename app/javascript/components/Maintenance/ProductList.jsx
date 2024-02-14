@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment/moment";
+import moment from "moment";
+import { feeUrl, productUrl } from "../../utils/contants";
 import CTable from '../CTable'
 // import moment from "moment";
 import {
@@ -56,8 +57,9 @@ const ProductList = () => {
 
 
   const getAllProduct = () => {
-    axios.get("http://127.0.0.1:3000/api/product").then((res) => {
+    axios.get(`${productUrl}`).then((res) => {
       let index = 1;
+
       let products = res.data.data.map((item) => {
         let feeData = item.data.attributes.warehouse_fee;
         return {
@@ -76,7 +78,7 @@ const ProductList = () => {
   };
 
   const getAllFeeData = () => {
-    axios.get('http://127.0.0.1:3000/api/warehouse_fee').then((res) => {
+    axios.get(`${feeUrl}`).then((res) => {
       let index = 1
       const priceData = res.data.data.map((item) => {
         return {
@@ -94,7 +96,7 @@ const ProductList = () => {
     try {
       let product = await form.validateFields();
       if (updateData) {
-        await axios.put("http://127.0.0.1:3000/api/product", {
+        await axios.put(`${productUrl}`, {
           id: updateData.id, ...product
         }
         );
@@ -104,7 +106,7 @@ const ProductList = () => {
 
       } else {
         const postProduct = { ...product, warehouse_fee_id: feeID }
-        await axios.post("http://127.0.0.1:3000/api/product", { ...product, warehouse_fee_id: feeID });
+        await axios.post(`${productUrl}`, { ...product, warehouse_fee_id: feeID });
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
@@ -155,8 +157,6 @@ const ProductList = () => {
 
   useEffect(() => {
     getShowData();
-    console.log(searchText)
-    console.log("first", showData)
   }, [searchText]);
 
   useEffect(() => {

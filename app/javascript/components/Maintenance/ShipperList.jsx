@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { shipperUrl } from "../../utils/contants";
 import CTable from '../CTable'
 import {
   Form,
@@ -38,7 +39,7 @@ const ShipperList = () => {
   const [allData, setAllData] = useState([]);
 
   const getAllShipper = () => {
-    axios.get("http://127.0.0.1:3000/api/shipper").then((res) => {
+    axios.get(`${shipperUrl}`).then((res) => {
       let index = 1;
       const shipperData = res.data.data.map((item) => {
         return {
@@ -54,7 +55,7 @@ const ShipperList = () => {
     try {
       let shipper = await form.validateFields();
       if (updateData) {
-        await axios.put("http://127.0.0.1:3000/api/shipper", {
+        await axios.put(`${shipperUrl}`, {
           id: updateData.id, ...shipper
         }
         );
@@ -62,7 +63,7 @@ const ShipperList = () => {
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post("http://127.0.0.1:3000/api/shipper", shipper);
+        await axios.post(`${shipperUrl}`, shipper);
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
@@ -101,7 +102,7 @@ const ShipperList = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete("http://127.0.0.1:3000/api/shipper", { data: { id: item.id } });
+      const response = await axios.delete(`${shipperUrl}`, { data: { id: item.id } });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
     } catch (error) {

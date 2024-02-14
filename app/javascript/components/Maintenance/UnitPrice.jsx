@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment/moment";
+import moment from "moment";
 import CTable from '../CTable'
-// import moment from "moment";
+import { feeUrl } from "../../utils/contants";
+
 import {
   Form,
   Input,
@@ -48,7 +49,7 @@ const UnitPrice = () => {
 
 
   const getAllUnitPrice = () => {
-    axios.get("http://127.0.0.1:3000/api/warehouse_fee").then((res) => {
+    axios.get(`${feeUrl}`).then((res) => {
       let index = 1;
       const feeData = res.data.data.map((item) => {
         return {
@@ -64,7 +65,7 @@ const UnitPrice = () => {
     try {
       let fee = await form.validateFields();
       if (updateData) {
-        await axios.put("http://127.0.0.1:3000/api/warehouse_fee", {
+        await axios.put(`${feeUrl}`, {
           id: updateData.id, ...fee
         }
         );
@@ -72,7 +73,7 @@ const UnitPrice = () => {
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post("http://127.0.0.1:3000/api/warehouse_fee", fee);
+        await axios.post(`${feeUrl}`, fee);
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
@@ -85,7 +86,7 @@ const UnitPrice = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete("http://127.0.0.1:3000/api/warehouse_fee", { data: { id: item.id } });
+      const response = await axios.delete(`${feeUrl}`, { data: { id: item.id } });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
       //getAllShipper();
@@ -100,7 +101,6 @@ const UnitPrice = () => {
 
 
   const onAction = async (item) => {
-
     if (item) {
       form.setFieldsValue({
         packaging: item.packaging,

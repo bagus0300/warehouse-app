@@ -24,7 +24,7 @@ const AuthContextProvider = ({ children }) => {
     const res = await services.signup(payload);
     if (!hasError(res?.status)) {
       authActions.signupAction(res)(dispatch);
-      // history.replace("/login");
+  
     } else {
       authActions.handleSignupErrorAction(res)(dispatch);
     }
@@ -34,7 +34,7 @@ const AuthContextProvider = ({ children }) => {
     const res = await services.logout();
     if (res?.data?.ok) {
       authActions.logoutAction(dispatch);
-      // history.replace("/");
+
     }
   };
 

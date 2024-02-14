@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useMatch } from "react-router-dom";
-// import {
-//   LaptopOutlined,
-//   NotificationOutlined,
-//   UserOutlined,
-// } from "@ant-design/icons";
+
 import { Typography, Breadcrumb } from "antd";
 
 import { Layout, Menu, theme } from "antd";
@@ -18,15 +14,7 @@ const NavbarSection = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
   let flattenNavigations = [];
-  // const urlSlice = useLocation().pathname;
-  // const { label, url } =
-  //   navigations.find((item) => item.key === useLocation().pathname) || {};
 
-  // const breadcrumbTitle = label;
-
-
-
-  const location = useLocation();
   useEffect(() => {
     flattenNavigations = navigations.reduce(
       (a, b) => a.concat(b.children ? b.children : b),

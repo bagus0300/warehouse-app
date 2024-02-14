@@ -8,7 +8,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (!falsy(token)) {
-      // history.replaceState("/");
       return;
     }
   }, [token]);

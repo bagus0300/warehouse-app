@@ -3,10 +3,10 @@ import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
 import { useAuth } from "../../hooks/userAuth";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import messages from "../../utils/content/jp.json";
 
-// const navigate = useNavigate();
+
 
 // useEffect(() => {
 //   if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
@@ -14,7 +14,9 @@ import messages from "../../utils/content/jp.json";
 //   }
 // }, []);
 
-const LoginForm = () => {
+const LoginForm = ({ token }) => {
+  const navigate = useNavigate();
+
   const {
     state: { loginErrors },
     loginAction,
@@ -26,7 +28,11 @@ const LoginForm = () => {
   };
 
   const onFormSubmit = ({ login_id, password }) => {
-    loginAction({ user: { login_id, password } }).then((res) => {});
+    loginAction({ user: { login_id, password } }).then((res) => {
+      console.log(res)
+      //navigate('/home')
+    });
+
   };
 
   return (
