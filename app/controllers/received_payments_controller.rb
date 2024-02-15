@@ -26,20 +26,22 @@ class ReceivedPaymentsController < ApplicationController
     end
   end
   def update
-    receivedPayment = ReceivedPayment.find params[:id]
+    # if ReceivedPayment.where(id: params[:id]).update_all
+    # receivedPayment = ReceivedPayment.find params[:id]
+    # receivedPayment.update_all
 
-    receivedPayment.upadate_all(
+    if ReceivedPayment.where(id: params[:id]).update_all(
       shipper_id:       params[:shipper_id],
       received_on:      params[:received_on],
       amount:           params[:amount],
       description:      params[:description],
       processing_on:    params[:processing_on],
       received:         params[:received]
-    )
-
-    render :json => {
-      status: :accepted
-    }
+      )
+      render :json => {
+        status: :accepted
+      }
+    end
   end
   def destroy
     ReceivedPayment.destroy(params[:id])

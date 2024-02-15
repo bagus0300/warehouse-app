@@ -151,7 +151,12 @@
     "processing_on" : "処理日",
     "processing_onFrom" : "処理日From",
     "processing_onTo" : "処理日To",
-    "amount" : "入金額"
+    "amount" : "入金額",
+    "shipperCode" : "荷主コード",
+    "processing_onDate" : "処理日時",
+    "description" : "摘要",
+    "received" : "入金"
+
   },
   "messages": {
     "type_username": "ユーザー名を入力してください!",

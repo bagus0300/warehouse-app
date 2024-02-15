@@ -5,11 +5,11 @@ import CTable from "../components/CTable";
 
 import { Form, Input, Layout, Table, Button, Modal, notification } from "antd";
 
-// import {
-//   TrashIcon,
-//   PencilSquareIcon,
-//   CalendarDaysIcon,
-// } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 
 import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";

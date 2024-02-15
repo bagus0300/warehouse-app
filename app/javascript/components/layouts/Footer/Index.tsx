@@ -23,7 +23,7 @@ const FooterSection = () => {
       }}
       className="mt-10"
     >
-      Soko Kanri system
+      <p>Soko Kanri system</p>
     </Footer>
   );
 };

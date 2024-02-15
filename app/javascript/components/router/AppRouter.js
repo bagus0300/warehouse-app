@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import LoginPage from "../../pages/LoginPage";
 import TopPage from "../../pages/TopPage";
 import SignupPage from "../../pages/SignupPage";
@@ -12,15 +13,9 @@ import OutputPage from "../../pages/OutputPage";
 import InventoryPage from "../../pages/InventoryPage";
 import DepositPage from "../../pages/DepositPage";
 import BillingPage from "../../pages/BillingPage";
-// import InventoryPage from "../../pages/InventoryPage";
-import { useAuth } from "../../hooks/useAuth";
 
 export const AppRouter = () => {
   const user = useAuth();
-
-  // if () {
-
-  // }
   return (
     <AuthContextProvider>
       <BrowserRouter>
@@ -32,11 +27,9 @@ export const AppRouter = () => {
           <Route path="/product" element={<ProductPage />} />
           <Route path="/shipper" element={<ShipperPage />} />
           <Route path="/out_process" element={<OutputPage />} />
-
           <Route path="/inventory_control" element={<InventoryPage />} />
           <Route path="/deposit_process" element={<DepositPage />} />
           <Route path="/billing_process" element={<BillingPage />} />
-          {/* <Route path="/unit_price" element={<UnitPrice />} /> */}
           <Route path="/warehouse_fee" element={<WarehouseFee />} />
         </Routes>
       </BrowserRouter>

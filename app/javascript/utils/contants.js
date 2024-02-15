@@ -24,7 +24,7 @@ export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
 export const postReceivedPaymentUrl = baseUrl + "api/received_payment";
 
-export const getReceivedPaymentUrl = baseUrl + "/api/received_payment";
+export const getReceivedPaymentUrl = baseUrl + "api/received_payment";
 //unit_price urls
 
 
