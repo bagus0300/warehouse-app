@@ -12,6 +12,7 @@ import ShipperPage from "../../pages/ShipperPage";
 import WarehouseFee from "../../pages/WarehouseFee";
 import OutputPage from "../../pages/OutputPage";
 import BillingProcess from "../../pages/BillingProcess";
+import BillingList from "../../pages/BillingList";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
@@ -32,6 +33,10 @@ export const AppRouter = () => {
           <Route
             path="/billing_process"
             element={<PrivateRoute Component={BillingProcess} />}
+          />
+          <Route
+            path="/billing_list"
+            element={<PrivateRoute Component={BillingList} />}
           />
           <Route
             path="/in_process"

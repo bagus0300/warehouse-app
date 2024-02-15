@@ -6,8 +6,6 @@ import {
   Col
 } from "antd";
 
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 import SectionCard from "../components/Top/SectionCard";
 import { cardTopic } from "../utils/content";
 const { Header, Content, Footer } = Layout;

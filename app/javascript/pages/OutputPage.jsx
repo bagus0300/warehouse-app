@@ -1,8 +1,6 @@
 import React from "react";
 import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button } from "antd";
 
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 import IncomeTable from "../components/Income/IncomeTable";
 import localeJP from "antd/es/date-picker/locale/ja_JP";
 import messages from "../utils/content/jp.json";

@@ -10,8 +10,7 @@ import {
   Divider,
   Button,
 } from "antd";
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
+
 import IncomeTable from "../components/Income/IncomeTable";
 import messages from "../utils/content/jp.json";
 import moment from "moment";

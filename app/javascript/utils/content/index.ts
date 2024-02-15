@@ -77,7 +77,17 @@ export const navigations = [
   },
   {
     label: "請求処理",
-    key: "/billing_process",
+    key: "/billing",
+    children: [
+      {
+        label: "請求処理",
+        key: "/billing_process",
+      },
+      {
+        label: "請求一覧",
+        key: "/billing_list",
+      }
+    ],
   },
   {
     label: "マスタ保守",

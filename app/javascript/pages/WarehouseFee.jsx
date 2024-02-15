@@ -22,8 +22,6 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 
 import message from "../utils/content/jp.json";
 
