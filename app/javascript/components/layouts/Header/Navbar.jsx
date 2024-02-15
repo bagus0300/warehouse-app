@@ -124,8 +124,14 @@ const NavbarSection = () => {
           onClick={onMenuClick}
           selectedKeys={[current]}
           mode="horizontal"
-          style={{ flex: 1, minWidth: 0 }}
+
           items={navigations}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            backgroundColor: "#000",
+            color: "#fff",
+          }}
         />
         <Button
           onClick={logoutAction}
@@ -133,7 +139,7 @@ const NavbarSection = () => {
         >
           <Link to='/signin'>LogOut</Link>
         </Button>
-      </Header>
+      </Header >
       <Breadcrumb
         items={[
           { title },
@@ -141,7 +147,7 @@ const NavbarSection = () => {
         style={{ padding: "10px 50px ", backgroundColor: "#fff" }}
       />
 
-    </Layout>
+    </Layout >
 
   );
 
