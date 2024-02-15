@@ -109,7 +109,10 @@ const NavbarSection = () => {
         style={{
           display: "flex",
           alignItems: "right",
-          backgroundColor: "#fff",
+          backgroundColor: "#000",
+          position: "fixed",
+          width: "100%",
+          zIndex: "10",
         }}
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
@@ -135,7 +138,7 @@ const NavbarSection = () => {
         items={[
           { title },
         ]}
-        style={{ padding: "10px 50px " }}
+        style={{ padding: "10px 50px ", backgroundColor: "#fff" }}
       />
 
     </Layout>
