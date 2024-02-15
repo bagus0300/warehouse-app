@@ -84,4 +84,4 @@ gem "spreadsheet_architect"
 
 # gem "sidekiq"
 
-gem 'transactional'
+# gem 'transactional'

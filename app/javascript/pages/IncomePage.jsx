@@ -12,6 +12,8 @@ import {
   Card,
   Row,
   Col,
+  Popconfirm,
+  Button,
 } from "antd";
 import NavbarSection from "../components/layouts/Header/Navbar";
 import FooterSection from "../components/layouts/Footer/Index";
@@ -80,8 +82,8 @@ const IncomePage = () => {
   // ---------------weight---------------
   const [weight, setWeight] = useState("");
 
-  // -------------stock--------------
-  const [stock, setStock] = useState("");
+  // -------------amount--------------
+  const [amount, setStock] = useState("");
 
   const [editMode, setEditMode] = useState("new");
   //  -------init prepareProductItem--------
@@ -92,8 +94,8 @@ const IncomePage = () => {
   };
 
   const setPrepareProductItem = (editData) => {
-    setLotNumber(editData.lotNumber);
-    setStock(editData.stock);
+    setLotNumber(editData.lot_number);
+    setStock(editData.amount);
     setWeight(editData.weight);
     setPackaging(editData.product_type);
     setHandlePrice(editData.handling_fee_rate);
@@ -209,6 +211,7 @@ const IncomePage = () => {
     )
       .then((res) => {
         setPrepareProducts([]);
+        openNotificationWithIcon("success", "", $lang.messages.success);
       })
       .catch((err) => {
         openNotificationWithIcon("error", "error", err.messages);
@@ -226,7 +229,7 @@ const IncomePage = () => {
     } else if (lotNumber == "") {
       openNotificationWithIcon("warning", $lang.messages.input_lotNumber);
       return false;
-    } else if (stock == "") {
+    } else if (amount == "") {
       openNotificationWithIcon("warning", "", $lang.messages.input_stock);
       return false;
     } else if (weight == "") {
@@ -250,15 +253,16 @@ const IncomePage = () => {
       product_name: selectedProduct.label,
       product_type: packaging,
       catagory: 0,
-      lotNumber: lotNumber,
+      lot_number: lotNumber,
       weight: weight,
-      stock: stock,
+      amount: amount,
       warehouse_id: selectedWarehouse.value,
       warehouse_name: selectedWarehouse.label,
       shipper_id: seletedShipper.value,
       shipper_name: seletedShipper.label,
       inout_on: receiptDate,
       idx: index++,
+      category: 0,
     };
 
     selectedProductArr.push(newData);
@@ -266,7 +270,7 @@ const IncomePage = () => {
     setPrepareProducts(selectedProductArr);
     initPrepareProductItem();
 
-    setAddButtonVisability(true);
+    // setAddButtonVisability(true);
   };
 
   const editRow = (productId) => {
@@ -292,6 +296,11 @@ const IncomePage = () => {
     setDiabledProduct(false);
   };
 
+  const confirmInitPrepareProducts = () => {
+    if (prepareProducts.length > 0) setPrepareProducts([]);
+    else openNotificationWithIcon("warning", "", "no data");
+  };
+
   const updatePrepareProduct = () => {
     let oldData = prepareProducts.slice();
     const updateData = oldData.filter(
@@ -304,9 +313,9 @@ const IncomePage = () => {
     updateData.shipper_name = seletedShipper.label;
     updateData.inout_on = receiptDate;
 
-    updateData.lotNumber = lotNumber;
+    updateData.lot_number = lotNumber;
     updateData.weight = weight;
-    updateData.stock = stock;
+    updateData.amount = amount;
 
     //
     setPrepareProducts(oldData);
@@ -320,7 +329,7 @@ const IncomePage = () => {
     getWarehouses();
     getShippers();
     getProducts();
-  }, [weight]);
+  }, []);
 
   return (
     <div>
@@ -347,7 +356,7 @@ const IncomePage = () => {
               handlePrice: "",
               lotNumber: "",
               weight: "",
-              stock: "",
+              amount: "",
             }}
           >
             <Row className="my-2">
@@ -462,7 +471,7 @@ const IncomePage = () => {
                   <Input
                     style={{ width: 100 }}
                     placeholder={$lang.IncomePageJp.itemNumber}
-                    value={stock}
+                    value={amount}
                     onChange={(e) => {
                       setStock(e.target.value);
                     }}
@@ -523,6 +532,18 @@ const IncomePage = () => {
               title={$lang.buttons.confirmDeparture}
               visability={true}
             ></CustomButton>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={confirmInitPrepareProducts}
+              okText="Yes"
+              cancelText="No"
+              className=" ml-2"
+            >
+              <Button type="primary" danger>
+                {$lang.buttons.init}
+              </Button>
+            </Popconfirm>
           </div>
         </Card>
       </Content>

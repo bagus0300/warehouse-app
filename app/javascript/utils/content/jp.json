@@ -29,7 +29,8 @@
     "cancel": "キャンセル",
     "csvExchange": "CSVダウンロード",
     "confirmDeparture": "出庫確定",
-    "add": "追加"
+    "add": "追加",
+    "init": "初期化"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -153,6 +154,7 @@
     "input_lotNumber": "ロット番号を入力してください!",
     "input_stock": "入庫数を入力してください!",
     "input_weight": "重量(kg)を入力してください!",
-    "input_in_stock_date": "入庫日を入力してください!"
+    "input_in_stock_date": "入庫日を入力してください!",
+    "success": "操作に成功しました。"
   }
 }
