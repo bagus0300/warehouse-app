@@ -28,7 +28,8 @@
     "delete": "削除",
     "cancel": "キャンセル",
     "csvExchange": "CSVダウンロード",
-    "confirmDeparture": "出庫確定"
+    "confirmDeparture": "出庫確定",
+    "add": "追加"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -73,7 +74,7 @@
   ],
   "tableCommon": {
     "no": "NO",
-    "warning" : "このフィールドは必ず入力してください"
+    "warning": "このフィールドは必ず入力してください"
   },
   "shipper": {
     "name": "荷主名",
@@ -81,8 +82,8 @@
     "sub_address": "住所2",
     "tel_number": "電話",
     "closing_date": "締日",
-    "code" : "コード",
-    "mainAddress":"住所"
+    "code": "コード",
+    "mainAddress": "住所"
   },
   "Maintenance": {
     "addNew": "新規登録",
@@ -122,7 +123,6 @@
     "firstBilling": "１期請求 "
   },
   "IncomePageJp": {
-    "addition": "追加",
     "lotNumber": "ロット番号",
     "weight": "重量",
     "itemNumber": "入庫数",
@@ -149,6 +149,10 @@
     "type_email": "Eメールを入力してください！",
     "invalid_email": "入力された電子メールは無効です!",
     "no_matched_password": "入力した新しいパスワードが一致しません。",
-    "something_wrong": "何か問題が発生しました。"
+    "something_wrong": "何か問題が発生しました。",
+    "input_lotNumber": "ロット番号を入力してください!",
+    "input_stock": "入庫数を入力してください!",
+    "input_weight": "重量(kg)を入力してください!",
+    "input_in_stock_date": "入庫日を入力してください!"
   }
 }
