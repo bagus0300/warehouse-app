@@ -1,53 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useMatch, Link } from "react-router-dom";
-import { Typography, Breadcrumb } from "antd";
+import { Typography, Breadcrumb, Button } from "antd";
 import { Layout, Menu, theme } from "antd";
-import { siteInfo } from "../../../utils/content";
-
-const navigations = [
-  {
-    label: "TOP",
-    key: "/home",
-  },
-  {
-    label: "入庫処理",
-    key: "/in_process",
-  },
-  {
-    label: "出庫処理",
-    key: "/configout_process",
-  },
-  {
-    label: "在庫管理",
-    key: "/inventory_control",
-  },
-  {
-    label: "入金処理",
-    key: "/deposit_process",
-  },
-  {
-    label: "請求処理",
-    key: "/billing_process",
-  },
-  {
-    label: "マスタ保守",
-    key: "/maintenance",
-    children: [
-      {
-        label: "品名一覧",
-        key: "/product",
-      },
-      {
-        label: "荷主一覧",
-        key: "/shipper",
-      },
-      {
-        label: "単価区分マスタ",
-        key: "/warehouse_fee",
-      },
-    ],
-  },
-];
+import { siteInfo, navigations } from "../../../utils/content";
+import { useAuth } from "../../../hooks/useAuth";
 
 // const NavbarSection = () => {
 //   const [currentMenu, setCurrentMenu] = useState({});
@@ -128,6 +84,8 @@ const navigations = [
 
 const NavbarSection = () => {
 
+  const { logoutAction } = useAuth();
+
   const { Title } = Typography;
   const { Header } = Layout;
 
@@ -166,6 +124,12 @@ const NavbarSection = () => {
           style={{ flex: 1, minWidth: 0 }}
           items={navigations}
         />
+        <Button
+          onClick={logoutAction}
+          style={{ marginLeft: '300px', marginTop: '15px' }}
+        >
+          <Link to='/signin'>LogOut</Link>
+        </Button>
       </Header>
       <Breadcrumb
         items={[
@@ -173,6 +137,7 @@ const NavbarSection = () => {
         ]}
         style={{ padding: "10px 50px " }}
       />
+
     </Layout>
 
   );

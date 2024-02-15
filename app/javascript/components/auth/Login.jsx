@@ -47,7 +47,6 @@ const LoginForm = ({ token }) => {
           {messages.SiteInfo.title}
         </Title>
         <Card style={{ width: 450 }} className="py-4">
-          {/* {loginErrors && <AlertComponent type="error" message={loginErrors} />} */}
           <Title
             level={5}
             className="text-center"
