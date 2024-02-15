@@ -13,7 +13,7 @@ import { navigations, siteInfo } from "../../../utils/content";
 const NavbarSection = () => {
   const [currentMenu, setCurrentMenu] = useState({});
   const [selectedKeys, setSelectedKeys] = useState([]);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const { Header } = Layout;
   const { Title } = Typography;
   const navigate = useNavigate();
@@ -24,8 +24,6 @@ const NavbarSection = () => {
 
   // const breadcrumbTitle = label;
 
-
-
   const location = useLocation();
   useEffect(() => {
     flattenNavigations = navigations.reduce(
@@ -34,15 +32,14 @@ const NavbarSection = () => {
     );
   }, []);
 
-
   const handleMenuClick = ({ key }) => {
     flattenNavigations = navigations.reduce(
       (a, b) => a.concat(b.children ? b.children : b),
       []
-    )
+    );
     const { url } = flattenNavigations.find((item) => item.key === key) || {};
     const { label } = flattenNavigations.find((item) => item.key === key) || {};
-    console.log(label)
+    console.log(label);
     setTitle(label);
 
     if (url) {
@@ -50,9 +47,8 @@ const NavbarSection = () => {
     }
 
     setSelectedKeys([key]);
-    setCurrentMenu({ key, label })
+    setCurrentMenu({ key, label });
   };
-
 
   return (
     <Layout>
@@ -60,11 +56,14 @@ const NavbarSection = () => {
         style={{
           display: "flex",
           alignItems: "right",
-          backgroundColor: "#fff",
+          backgroundColor: "#000",
+          position: "fixed",
+          width: "100%",
+          zIndex: "10",
         }}
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
-          <Title level={4} style={{ marginTop: 15 }}>
+          <Title level={4} style={{ marginTop: 15, color: "#fff" }}>
             {siteInfo.title}
           </Title>
         </div>
@@ -73,7 +72,12 @@ const NavbarSection = () => {
           mode="horizontal"
           selectedKeys={selectedKeys}
           items={navigations}
-          style={{ flex: 1, minWidth: 0 }}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            backgroundColor: "#000",
+            color: "#fff",
+          }}
           onClick={handleMenuClick}
         />
       </Header>
@@ -83,7 +87,7 @@ const NavbarSection = () => {
             title: `${title}`,
           },
         ]}
-        style={{ padding: "10px 50px " }}
+        style={{ padding: "10px 50px ", backgroundColor: "#fff" }}
       />
     </Layout>
   );

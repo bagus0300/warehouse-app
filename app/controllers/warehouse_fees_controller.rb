@@ -1,4 +1,5 @@
 class WarehouseFeesController < ApplicationController
+  protect_from_forgery 
   def index
     warehouse_fee = WarehouseFee.all
     

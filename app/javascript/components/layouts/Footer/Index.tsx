@@ -17,9 +17,10 @@ const FooterSection = () => {
     <Footer
       style={{
         textAlign: "center",
-        display : "block",
+        display: "block",
         bottom: "0",
         width: "100%",
+        backgroundColor: "#fff",
       }}
       className="mt-10"
     >
