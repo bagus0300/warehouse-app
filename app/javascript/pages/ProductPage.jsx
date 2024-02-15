@@ -16,6 +16,7 @@ import {
   Button,
   Modal,
   notification,
+  Pagination
 } from "antd";
 
 import {
@@ -32,6 +33,7 @@ const { Content } = Layout;
 
 const ProductPage = () => {
   const [form] = Form.useForm();
+
 
   const [searchText, setSearchText] = useState("");
   const [updateData, setUpdateData] = useState({});
@@ -51,6 +53,11 @@ const ProductPage = () => {
   const [feeCategory, setFeeCategory] = useState("");
   const [storageFeeRate, setStorageFeeRate] = useState("");
 
+
+
+
+
+
   const getAllProduct = () => {
     axios.get(`${productUrl}`).then((res) => {
       let index = 1;
@@ -68,6 +75,8 @@ const ProductPage = () => {
       });
       setAllData(products);
       setShowData(products);
+      //setPaginatedData(products.slice(1, 10));
+
     });
   };
 
@@ -130,6 +139,9 @@ const ProductPage = () => {
       setStorageFeeRate("");
     }
   };
+
+
+
 
   const getBySearch = (data) => {
     if (searchText) {
@@ -194,6 +206,23 @@ const ProductPage = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemPerPage] = useState(10);
+  const [startIndex, setStartIndex] = useState(1);
+  const [endIndex, setEndIndex] = useState(10);
+  const [paginatedData, setPaginatedData] = useState(allData.slice(1, 10));
+
+  const handlePageChange = (page, pageSize) => {
+
+    setCurrentPage(page);
+    setItemPerPage(pageSize);
+    setStartIndex((currentPage - 1) * itemsPerPage);
+    setEndIndex(startIndex + itemsPerPage)
+    setShowData(showData.slice(startIndex, endIndex))
+
   };
 
   const productListColumns = [
@@ -439,7 +468,16 @@ const ProductPage = () => {
               rowKey={(node) => node.key}
               dataSource={showData}
               columns={productListColumns}
-              pagination={true}
+            />
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={showData.length}
+              onChange={handlePageChange}
+              pageSizeOptions={[10, 20, 50, 100]}
+              showSizeChanger
+              className="p-1"
+
             />
           </div>
         </div>
