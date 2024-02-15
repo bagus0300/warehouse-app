@@ -1,9 +1,10 @@
 class ReceivedPaymentsController < ApplicationController
-  protect_from_forgery 
+  # protect_from_forgery 
   def index
+    
     receivedPayments = ReceivedPayment.all
 
-    return :json => {
+    render :json => {
       data: receivedPayments,
       status: :accepted
     }
@@ -18,27 +19,29 @@ class ReceivedPaymentsController < ApplicationController
       received:         params[:received]
     )
 
-    if receivedPayment.persist?
+    if receivedPayment.save
       render :json => {
         status: :accepted
       }
     end
   end
   def update
-    receivedPayment = ReceivedPayment.find params[:id]
+    # if ReceivedPayment.where(id: params[:id]).update_all
+    # receivedPayment = ReceivedPayment.find params[:id]
+    # receivedPayment.update_all
 
-    receivedPayment.upadate_all(
+    if ReceivedPayment.where(id: params[:id]).update_all(
       shipper_id:       params[:shipper_id],
       received_on:      params[:received_on],
       amount:           params[:amount],
       description:      params[:description],
       processing_on:    params[:processing_on],
       received:         params[:received]
-    )
-
-    render :json => {
-      status: :accepted
-    }
+      )
+      render :json => {
+        status: :accepted
+      }
+    end
   end
   def destroy
     ReceivedPayment.destroy(params[:id])

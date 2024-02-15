@@ -28,7 +28,7 @@ import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
-const IncomePage = () => {
+const InventoryPage = () => {
   // ---------Warehouse--------
   const [selectedWarehouse, setSelectedWarehouse] = useState({
     value: "",
@@ -259,4 +259,4 @@ const IncomePage = () => {
   );
 };
 
-export default IncomePage;
+export default InventoryPage;

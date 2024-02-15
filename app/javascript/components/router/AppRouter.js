@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
 import NotFonud from "../../pages/404";
@@ -11,6 +10,7 @@ import ProductPage from "../../pages/ProductPage";
 import ShipperPage from "../../pages/ShipperPage";
 import WarehouseFee from "../../pages/WarehouseFee";
 import OutputPage from "../../pages/OutputPage";
+
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
@@ -21,7 +21,12 @@ import PrivateRoute from "./PrivateRoute";
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
 
+import InventoryPage from "../../pages/InventoryPage";
+import DepositPage from "../../pages/DepositPage";
+import BillingPage from "../../pages/BillingPage";
+
 export const AppRouter = () => {
+  const user = useAuth();
   return (
     <AuthContextProvider>
       <BrowserRouter>

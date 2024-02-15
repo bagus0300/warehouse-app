@@ -1,9 +1,14 @@
 
 class ProductsController < ApplicationController
-  protect_from_forgery 
+
+
+  
+  # def index
+  #  products = Product.includes(:warehouse_fee).all
+
+  # protect_from_forgery 
   def index
     products = Product.includes(:warehouse_fee).all
-
     render json: {
       data: products.map { |product| ProductSerializer.new(product).as_json },
       status: :accepted

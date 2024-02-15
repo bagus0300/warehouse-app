@@ -22,12 +22,15 @@ export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
-
 //unit_price urls
 
-export const shipperUrl = baseUrl + "api/shipper"
-export const productUrl = baseUrl + "api/product"
-export const feeUrl = baseUrl + "api/warehouse_fee"
+export const shipperUrl = baseUrl + "api/shipper";
+export const productUrl = baseUrl + "api/product";
+export const feeUrl = baseUrl + "api/warehouse_fee";
+export const postReceivedPaymentUrl = baseUrl + "api/received_payment";
+
+export const getReceivedPaymentUrl = baseUrl + "api/received_payment";
+//unit_price urls
 
 export const httpErrors = {
   400: "Bad Request",

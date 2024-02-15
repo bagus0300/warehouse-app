@@ -21,11 +21,11 @@ import {
   Flex,
 } from "antd";
 
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  CalendarDaysIcon,
-} from "@heroicons/react/24/outline";
+// import {
+//   TrashIcon,
+//   PencilSquareIcon,
+//   CalendarDaysIcon,
+// } from "@heroicons/react/24/outline";
 
 import $lang from "../utils/content/jp.json";
 import { right } from "@popperjs/core";
