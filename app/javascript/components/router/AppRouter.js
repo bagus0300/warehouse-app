@@ -39,7 +39,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={BillingList} />}
           />
           <Route
-            path="/in_process"
+            path="/in_stock"
             element={<PrivateRoute Component={IncomePage} />}
           />
           <Route
@@ -51,7 +51,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={ShipperPage} />}
           />
           <Route
-            path="/out_process"
+            path="/out_stock"
             element={<PrivateRoute Component={OutputPage} />}
           />
           <Route
@@ -59,7 +59,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={WarehouseFee} />}
           />
           <Route
-            path="/inventory_control"
+            path="/stock"
             element={<PrivateRoute Component={InventoryPage} />}
           />
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />

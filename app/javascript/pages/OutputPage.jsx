@@ -333,7 +333,7 @@ const IncomePage = () => {
   return (
     <div>
       <Content
-        style={{ width: 1280, marginTop: 100 }}
+        style={{ width: 1280, marginTop: 20 }}
         className="mx-auto flex flex-col justify-content content-h"
       >
         <Card

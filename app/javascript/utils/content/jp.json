@@ -21,8 +21,17 @@
     "to_login": "サインインペジロ",
     "signup": "登録"
   },
+  "stock": {
+    "inventory_report": "在庫報告書",
+    "productName": "品名",
+    "packaging": "荷姿",
+    "lotoNumber": "ロット番号",
+    "amount": "数量",
+    "inStockDate": "入庫日"
+  },
   "buttons": {
     "login": "ログイン",
+    "logout": "ログアウト",
     "register": "新規登録",
     "change": "変更",
     "delete": "削除",
@@ -30,7 +39,8 @@
     "csvExchange": "CSVダウンロード",
     "confirmDeparture": "出庫確定",
     "add": "追加",
-    "init": "初期化"
+    "init": "初期化",
+    "search": "検索"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -43,7 +53,7 @@
   ],
   "Navigations": [
     {
-      "label": "TOP",
+      "label": "トップ",
       "key": "/home",
       "url": "/home"
     },
@@ -86,17 +96,17 @@
     "code": "コード",
     "mainAddress": "住所"
   },
-  "billing" : {
-    "new" : "請求一覧",
-    "YM" : "年月",
-    "day" : "締日",
-    "yymm" : "年/月",
+  "billing": {
+    "new": "請求一覧",
+    "YM": "年月",
+    "day": "締日",
+    "yymm": "年/月",
     "closing_date": "締日",
-    "period" : "対象期間",
-    "processDate" : "処理日時",
-    "list" : "一覧",
-    "productList" : "明細",
-    "next" : "次へ"
+    "period": "対象期間",
+    "processDate": "処理日時",
+    "list": "一覧",
+    "productList": "明細",
+    "next": "次へ"
   },
   "Maintenance": {
     "addNew": "新規登録",
