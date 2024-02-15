@@ -4,19 +4,19 @@ import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-
 import messages from "../../utils/content/jp.json";
 import { openNotificationWithIcon } from "../common/notification";
 // import AlertComponent from "../common/alert";
 
-const LoginForm = () => {
+const LoginForm = ({ token }) => {
+  const navigate = useNavigate();
+
   const {
     state: { loginErrors, beforeRequest },
     loginAction,
     setBeforeRequestAction,
   } = useAuth();
 
-  const navigate = useNavigate();
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -47,7 +47,6 @@ const LoginForm = () => {
           {messages.SiteInfo.title}
         </Title>
         <Card style={{ width: 450 }} className="py-4">
-          {/* {loginErrors && <AlertComponent type="error" message={loginErrors} />} */}
           <Title
             level={5}
             className="text-center"

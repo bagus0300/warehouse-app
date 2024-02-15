@@ -14,7 +14,7 @@ const LoginPage = () => {
       navigate('/home')
       return;
     } else {
-      navigate('/')
+      navigate('/signin')
       return;
     }
   }, [token]);

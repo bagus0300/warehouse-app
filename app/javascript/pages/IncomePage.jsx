@@ -15,8 +15,7 @@ import {
   Popconfirm,
   Button,
 } from "antd";
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
+
 import IncomeTable from "../components/Income/IncomeTable";
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
@@ -333,7 +332,6 @@ const IncomePage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1280, marginTop: 100 }}
         className="mx-auto flex flex-col justify-content content-h"
@@ -547,9 +545,7 @@ const IncomePage = () => {
           </div>
         </Card>
       </Content>
-
-      <FooterSection />
-    </div>
+    </div >
   );
 };
 

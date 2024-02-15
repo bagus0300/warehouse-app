@@ -13,7 +13,7 @@ export const loginFileds: LoginItemType = {
   rememberme: "remember me",
 };
 
-export const cardTopics: string[] = [
+export const cardTopics = [
   "１．入庫処理",
   "４．入金処理",
   "２．出庫処理",
@@ -23,56 +23,87 @@ export const cardTopics: string[] = [
   " 7 . 荷主一覧",
 ];
 
+export const cardTopic = [
+  {
+    label:  "１．入庫処理",
+    key: "/in_process",
+  },
+  {
+    label: "４．入金処理",
+    key: "/deposit_process",
+  },
+  {
+    label: "２．出庫処理",
+    key: "/configout_process",
+  },
+  {
+    label: "５．請求処理",
+    key: "/billing_process",
+  },
+  {
+    label: "３．倉庫管理",
+    key: "/inventory_control",
+  },
+  {
+    label: "６．マスタ保守",
+    key: "/product",
+  },
+  {
+    label: " 7 . 荷主一覧",
+    key: "/shipper",
+  },
+];
+
 export const navigations = [
   {
     label: "TOP",
     key: "/home",
-    url: "/home",
   },
   {
     label: "入庫処理",
     key: "/in_process",
-    url: "/in_process",
   },
   {
     label: "出庫処理",
     key: "/configout_process",
-    url: "/out_process",
   },
   {
     label: "在庫管理",
     key: "/inventory_control",
-    url: "/inventory_control",
   },
   {
     label: "入金処理",
     key: "/deposit_process",
-    url: "/deposit_process",
   },
   {
     label: "請求処理",
-    key: "/billing_process",
-    url: "/billing_process",
+    key: "/billing",
+    children: [
+      {
+        label: "請求処理",
+        key: "/billing_process",
+      },
+      {
+        label: "請求一覧",
+        key: "/billing_list",
+      }
+    ],
   },
   {
     label: "マスタ保守",
-    key: "",
-    url: "",
+    key: "/maintenance",
     children: [
       {
         label: "品名一覧",
         key: "/product",
-        url: "/product",
       },
       {
         label: "荷主一覧",
         key: "/shipper",
-        url: "/shipper",
       },
       {
         label: "単価区分マスタ",
         key: "/warehouse_fee",
-        url: "/warehouse_fee",
       },
     ],
   },
