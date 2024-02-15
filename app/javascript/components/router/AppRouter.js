@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import LoginPage from "../../pages/LoginPage";
-import TopPage from "../../pages/TopPage";
 import SignupPage from "../../pages/SignupPage";
+import NotFonud from "../../pages/404";
+
+import TopPage from "../../pages/TopPage";
 import IncomePage from "../../pages/IncomePage";
 import ProductPage from "../../pages/ProductPage";
 import ShipperPage from "../../pages/ShipperPage";
 import WarehouseFee from "../../pages/WarehouseFee";
-import AuthContextProvider from "../../contexts/AuthContextProvider";
 import OutputPage from "../../pages/OutputPage";
-// import InventoryPage from "../../pages/InventoryPage"
+import BillingProcess from "../../pages/BillingProcess";
+import AuthContextProvider from "../../contexts/AuthContextProvider";
+
+import InventoryPage from "../../pages/InventoryPage";
 import { getAuthUserToken } from "../../utils/helper";
 import PrivateRoute from "./PrivateRoute";
 import NavbarSection from "../layouts/Header/Navbar";
@@ -24,6 +29,10 @@ export const AppRouter = () => {
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={<PrivateRoute Component={TopPage} />} />
+          <Route
+            path="/billing_process"
+            element={<PrivateRoute Component={BillingProcess} />}
+          />
           <Route
             path="/in_process"
             element={<PrivateRoute Component={IncomePage} />}
@@ -44,8 +53,12 @@ export const AppRouter = () => {
             path="/warehouse_fee"
             element={<PrivateRoute Component={WarehouseFee} />}
           />
+          <Route
+            path="/inventory_control"
+            element={<PrivateRoute Component={InventoryPage} />}
+          />
+          <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />
-          {/* <Route path="/inventory_process" element={<InventoryPage />} /> */}
         </Routes>
         <FooterSection />
       </BrowserRouter>

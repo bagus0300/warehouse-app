@@ -9,7 +9,7 @@ const SectionCard = ({ span, title }) => (
         margin: 20,
       }}
     >
-      <Card bordered={false}>{title}</Card>
+      
     </Col>
   </>
 );

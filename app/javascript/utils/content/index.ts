@@ -13,7 +13,7 @@ export const loginFileds: LoginItemType = {
   rememberme: "remember me",
 };
 
-export const cardTopics: string[] = [
+export const cardTopics = [
   "１．入庫処理",
   "４．入金処理",
   "２．出庫処理",
@@ -21,6 +21,37 @@ export const cardTopics: string[] = [
   "３．倉庫管理",
   "６．マスタ保守",
   " 7 . 荷主一覧",
+];
+
+export const cardTopic = [
+  {
+    label:  "１．入庫処理",
+    key: "/in_process",
+  },
+  {
+    label: "４．入金処理",
+    key: "/deposit_process",
+  },
+  {
+    label: "２．出庫処理",
+    key: "/configout_process",
+  },
+  {
+    label: "５．請求処理",
+    key: "/billing_process",
+  },
+  {
+    label: "３．倉庫管理",
+    key: "/inventory_control",
+  },
+  {
+    label: "６．マスタ保守",
+    key: "/product",
+  },
+  {
+    label: " 7 . 荷主一覧",
+    key: "/shipper",
+  },
 ];
 
 export const navigations = [
