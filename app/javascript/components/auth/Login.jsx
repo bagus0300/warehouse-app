@@ -4,7 +4,6 @@ import { Button, Checkbox, Form, Input, Card, Typography } from "antd";
 const { Title } = Typography;
 import { useAuth } from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import messages from "../../utils/content/jp.json";
 import { openNotificationWithIcon } from "../common/notification";
 // import AlertComponent from "../common/alert";

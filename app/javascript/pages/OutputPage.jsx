@@ -6,7 +6,7 @@ import FooterSection from "../components/layouts/Footer/Index";
 import IncomeTable from "../components/Income/IncomeTable";
 import localeJP from "antd/es/date-picker/locale/ja_JP";
 import messages from "../utils/content/jp.json";
-import { useState,  useEffect } from "react";
+import { useState, useEffect } from "react";
 
 
 const { Search } = Input;
@@ -17,17 +17,17 @@ const OutputPage = () => {
   // backend data start
 
   const storeOptions = [
-    {value: 0, label: "一般倉庫"},
-    {value: 1, label: "編集"},
-    {value: 2, label: "削除"},
-    {value: 3, label: "代替テキスト"}
+    { value: 0, label: "一般倉庫" },
+    { value: 1, label: "編集" },
+    { value: 2, label: "削除" },
+    { value: 3, label: "代替テキスト" }
   ];
 
   const shipperOptions = [
-    {value: 0, label: "株式会社XXXXXX（○○倉庫製品）"},
-    {value: 1, label: "編集"},
-    {value: 2, label: "削除"},
-    {value: 2, label: "代替テキスト"},
+    { value: 0, label: "株式会社XXXXXX（○○倉庫製品）" },
+    { value: 1, label: "編集" },
+    { value: 2, label: "削除" },
+    { value: 2, label: "代替テキスト" },
   ];
 
   const products = [
@@ -103,12 +103,12 @@ const OutputPage = () => {
   const [searchResult, setSearchResult] = useState({});
 
   const handleSubmit = (e) => {
-    
+
   };
 
 
   // useEffect(() => {
-    
+
   // }, []);
 
 
@@ -144,9 +144,9 @@ const OutputPage = () => {
     const delData = newData.filter((data) => data.product_id == id)[0];
     console.log(delData);
     const index = newData.indexOf(delData);
-    console.log('========',index);
+    console.log('========', index);
     newData.splice(index, 1);
-    console.log('========',newData);
+    console.log('========', newData);
     setData(newData);
   }
 
@@ -159,9 +159,8 @@ const OutputPage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
-        style={{ width: 1024,  }}
+        style={{ width: 1024, }}
         className="mx-auto flex flex-col justify-content content-h"
       >
         <div
@@ -170,7 +169,7 @@ const OutputPage = () => {
           autoComplete="off"
           style={{ margin: "50px 0 0px 0" }}
         >
-          <Space style={{ display:"flex", flexDirection: "column", alignItems:"flex-start", }}>
+          <Space style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", }}>
             <Form.Item
               label={messages.IncomePageJp.warehouse}
               name="username"
@@ -190,7 +189,7 @@ const OutputPage = () => {
             >
               <Select
                 defaultValue={shipperVal.label}
-                style={{ width: 300, marginLeft: 14  }}
+                style={{ width: 300, marginLeft: 14 }}
                 onChange={selShipperChange}
                 options={shipperOptions}
               />
@@ -223,7 +222,7 @@ const OutputPage = () => {
                 <Select
                   placeholder={messages.IncomePageJp.productNumber}
                   allowClear
-                  style={{marginLeft: 15, width: 200}}
+                  style={{ marginLeft: 15, width: 200 }}
                   enterButton="検索"
                   value={searchResult.product_id}
                 />
@@ -242,10 +241,10 @@ const OutputPage = () => {
                 }}
               >
                 <Space.Compact>
-                  <Input 
+                  <Input
                     placeholder={messages.IncomePageJp.productName}
-                    style={{marginLeft: 15, width: 250}}
-                    value={searchResult.product_name}/>
+                    style={{ marginLeft: 15, width: 250 }}
+                    value={searchResult.product_name} />
                 </Space.Compact>
               </Form.Item>
               <Form.Item
@@ -259,7 +258,7 @@ const OutputPage = () => {
                 }}
               >
                 <Space.Compact>
-                  <Input placeholder={messages.IncomePageJp.packing} value={searchResult.product_type}/>
+                  <Input placeholder={messages.IncomePageJp.packing} value={searchResult.product_type} />
                 </Space.Compact>
               </Form.Item>
               <Form.Item
@@ -273,19 +272,19 @@ const OutputPage = () => {
                 }}
               >
                 <Space.Compact>
-                  <Input 
-                    style={{width: 100,}} 
-                    placeholder={messages.IncomePageJp.cargoPrice} 
-                    value={searchResult.cargoPrice}/>
-                  <Input style={{width: 80}}/>
-                  <Input style={{width: 100}} placeholder={messages.IncomePageJp.storagePrice} value={searchResult.storagePrice}/>
+                  <Input
+                    style={{ width: 100, }}
+                    placeholder={messages.IncomePageJp.cargoPrice}
+                    value={searchResult.cargoPrice} />
+                  <Input style={{ width: 80 }} />
+                  <Input style={{ width: 100 }} placeholder={messages.IncomePageJp.storagePrice} value={searchResult.storagePrice} />
                 </Space.Compact>
               </Form.Item>
             </Space>
             <Space>
               <Form.Item
-                  // label="messages.IncomePageJp.packing"
-                  // name="username"
+                // label="messages.IncomePageJp.packing"
+                // name="username"
                 style={{
                   display: "flexs",
                   width: 700,
@@ -296,22 +295,23 @@ const OutputPage = () => {
                 <DatePicker value={receiptDate} onChange={onChangeDate} locale={localeJP} />
                 <Select
                   // defaultValue={shipperVal.label}
-                  style={{ width: 200  }}
+                  style={{ width: 200 }}
                   placeholder={messages.IncomePageJp.lotNumber}
-                  // onChange={selShipperChange}
-                  // options={shipperOptions}
+                // onChange={selShipperChange}
+                // options={shipperOptions}
                 />
-                <Input 
-                  style={{ width: 100, marginLeft: 20, marginBottom: 0,
-                  }} 
-                  placeholder={messages.OutputPage.libraryNumber} 
-                  value={searchResult.weight}/>
-                <Input 
-                  style={{ width: 100, marginBottom: 0, }} 
-                  placeholder={messages.OutputPage.shipmentNumber} 
-                  value={searchResult.stock}/>
+                <Input
+                  style={{
+                    width: 100, marginLeft: 20, marginBottom: 0,
+                  }}
+                  placeholder={messages.OutputPage.libraryNumber}
+                  value={searchResult.weight} />
+                <Input
+                  style={{ width: 100, marginBottom: 0, }}
+                  placeholder={messages.OutputPage.shipmentNumber}
+                  value={searchResult.stock} />
               </Form.Item>
-              <Button onClick={ insertData } style={{fontWeight: "bold", width: "100px", fontSize: "15px"}}>
+              <Button onClick={insertData} style={{ fontWeight: "bold", width: "100px", fontSize: "15px" }}>
                 {messages.IncomePageJp.addition}
               </Button>
             </Space>
@@ -324,14 +324,13 @@ const OutputPage = () => {
           deleteRow={deleteRow}
           pagination={false}
         />
-        <div style={{height:15}}></div>
-        <div style={{justifyContent: "flex-end", display: "flex"}}>
-          <Button style={{width: 150,}}>{messages.buttons.csvExchange}</Button>
-          <div style={{width: 40}}></div>
-          <Button style={{width: 150,}} >{messages.buttons.confirmDeparture}</Button>
-      </div>
+        <div style={{ height: 15 }}></div>
+        <div style={{ justifyContent: "flex-end", display: "flex" }}>
+          <Button style={{ width: 150, }}>{messages.buttons.csvExchange}</Button>
+          <div style={{ width: 40 }}></div>
+          <Button style={{ width: 150, }} >{messages.buttons.confirmDeparture}</Button>
+        </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { shipperUrl } from "../../utils/contants";
-import CTable from '../CTable'
+import { shipperUrl } from "../utils/contants";
+import CTable from '../components/CTable'
 import {
   Form,
   Input,
@@ -214,7 +214,6 @@ const ShipperList = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h"
@@ -349,7 +348,6 @@ const ShipperList = () => {
           </div>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

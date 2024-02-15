@@ -23,7 +23,6 @@ const Top = () => {
   console.log("----------------", authState.token);
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1024 }}
         className="mx-auto flex flex-col justify-content content-h"
@@ -40,7 +39,6 @@ const Top = () => {
           ))}
         </Row>
       </Content>
-      <FooterSection />
     </div>
   );
 };

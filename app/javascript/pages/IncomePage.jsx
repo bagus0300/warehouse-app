@@ -284,7 +284,6 @@ const IncomePage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1280 }}
         className="mx-auto flex flex-col justify-content content-h"
@@ -480,7 +479,6 @@ const IncomePage = () => {
           </Button>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

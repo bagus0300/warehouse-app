@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { feeUrl, productUrl } from "../../utils/contants";
-import CTable from '../CTable'
+import { feeUrl, productUrl } from "../utils/contants";
+import CTable from '../components/CTable'
 // import moment from "moment";
 import {
   Form,
@@ -302,7 +302,6 @@ const ProductPage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content style={{ width: 1024 }} className="mx-auto content-h">
         <div>
           <div className="mt-5">
@@ -448,7 +447,6 @@ const ProductPage = () => {
           </div>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import CTable from '../CTable'
-import { feeUrl } from "../../utils/contants";
+import CTable from '../components/CTable'
+import { feeUrl } from "../utils/contants";
 
 import {
   Form,
@@ -225,7 +225,6 @@ const WarehouseFee = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h"
@@ -348,7 +347,6 @@ const WarehouseFee = () => {
           </div>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };
