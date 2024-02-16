@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import CTable from '../components/CTable'
+import CTable from "../components/CTable";
+import { feeUrl } from "../utils/contants";
 import { warehouseFeeURL } from "../utils/contants";
 
 import {
@@ -14,16 +15,16 @@ import {
   Button,
   Modal,
   notification,
+  Card,
 } from "antd";
 
-// import {
-//   TrashIcon,
-//   PencilSquareIcon,
-//   CalendarDaysIcon,
-// } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 
-
-import message from "../utils/content/jp.json";
+import $lang from "../utils/content/jp.json";
 
 let plan_color, star_color, plan_text;
 
@@ -61,16 +62,16 @@ const WarehouseFee = () => {
     try {
       let fee = await form.validateFields();
       if (updateData) {
-        await axios.put(`${warehouseFeeURL}`, {
-          id: updateData.id, ...fee
-        }
-        );
-        notification.success({ message: 'Update Success' });
+        await axios.put(`${feeUrl}`, {
+          id: updateData.id,
+          ...fee,
+        });
+        notification.success({ message: "Update Success" });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post(`${warehouseFeeURL}`, fee);
-        notification.success({ message: 'Create Success', duration: 1 })
+        await axios.post(`${feeUrl}`, fee);
+        notification.success({ message: "Create Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -84,7 +85,9 @@ const WarehouseFee = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete(`${warehouseFeeURL}`, { data: { id: item.id } });
+      const response = await axios.delete(`${feeUrl}`, {
+        data: { id: item.id },
+      });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
       //getAllShipper();
@@ -129,7 +132,7 @@ const WarehouseFee = () => {
       width: "5%",
     },
     {
-      title: `${message.Maintenance.packing}`,
+      title: `${$lang.Maintenance.packing}`,
       key: "packaging",
       dataIndex: "packaging",
       align: "center",
@@ -143,7 +146,7 @@ const WarehouseFee = () => {
       },
     },
     {
-      title: `${message.Maintenance.handlingFeeUnitPrice}`,
+      title: `${$lang.Maintenance.handlingFeeUnitPrice}`,
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
@@ -157,7 +160,7 @@ const WarehouseFee = () => {
       // },
     },
     {
-      title: `${message.Maintenance.storageFeeUnitPrice}`,
+      title: `${$lang.Maintenance.storageFeeUnitPrice}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
@@ -171,7 +174,7 @@ const WarehouseFee = () => {
       // },
     },
     {
-      title: `${message.Maintenance.billingClass}`,
+      title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       key: "fee_category",
       align: "center",
@@ -186,7 +189,7 @@ const WarehouseFee = () => {
     },
 
     {
-      title: `${message.buttons.change}`,
+      title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
         return (
@@ -227,123 +230,131 @@ const WarehouseFee = () => {
         style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h"
       >
-        <div>
-          <div className="mt-5" style={{ marginLeft: "880px" }}>
-            <Button
-              onClick={() => {
-                onAction();
-                setUpdateStatus("Create");
-              }}
-            >
-              {message?.Maintenance?.addNew}
-            </Button>
-            <Modal
-              title={message.Maintenance.shipperMaster}
-              open={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="ok" onClick={onSubmit}>
-                  {message.Maintenance.register}
-                </Button>,
-                <Button key="cancel" onClick={handleCancel}>
-                  {message.buttons.cancel}
-                </Button>,
-              ]}
-            >
-              <div>
-                <Form
-                  form={form}
-                  size="middle"
-                  scrollToFirstError
-                  labelCol={{ span: 7 }}
-                  labelAlign="left"
-                >
-                  <Form.Item
-                    label={message.Maintenance.packing}
-                    name={"packaging"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
+        >
+          <div>
+            <div className="mt-2" style={{ marginLeft: "880px" }}>
+              <Button
+                onClick={() => {
+                  onAction();
+                  setUpdateStatus("Create");
+                }}
+                className="px-5 btn-bg-black"
+              >
+                {$lang?.Maintenance?.addNew}
+              </Button>
+
+              <Modal
+                title={$lang.Maintenance.shipperMaster}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                  <Button key="ok" onClick={onSubmit}>
+                    {$lang.Maintenance.register}
+                  </Button>,
+                  <Button key="cancel" onClick={handleCancel}>
+                    {$lang.buttons.cancel}
+                  </Button>,
+                ]}
+              >
+                <div>
+                  <Form
+                    form={form}
+                    size="middle"
+                    scrollToFirstError
+                    labelCol={{ span: 7 }}
+                    labelAlign="left"
                   >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.code}
-                    name={"code"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.handlingFeeUnitPrice}
-                    name={"handling_fee_rate"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.storageFeeUnitPrice}
-                    name={"storage_fee_rate"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.billingClass}
-                    name={"fee_category"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Select
-                      defaultValue={message.Maintenance.fullTimeRequest}
-                      options={[
+                    <Form.Item
+                      label={$lang.Maintenance.packing}
+                      name={"packaging"}
+                      rules={[
                         {
-                          value: "0",
-                          label: `${message.Maintenance.fullTimeRequest}`,
-                        },
-                        {
-                          value: "1",
-                          label: `${message.Maintenance.firstBilling}`,
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
-                    />
-                  </Form.Item>
-                </Form>
-              </div>
-            </Modal>
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.shipper.code}
+                      name={"code"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.handlingFeeUnitPrice}
+                      name={"handling_fee_rate"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.storageFeeUnitPrice}
+                      name={"storage_fee_rate"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.billingClass}
+                      name={"fee_category"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Select
+                        defaultValue={$lang.Maintenance.fullTimeRequest}
+                        options={[
+                          {
+                            value: "0",
+                            label: `${$lang.Maintenance.fullTimeRequest}`,
+                          },
+                          {
+                            value: "1",
+                            label: `${$lang.Maintenance.firstBilling}`,
+                          },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Form>
+                </div>
+              </Modal>
+            </div>
+            <div className="mt-5">
+              <CTable
+                rowKey={(node) => node.id}
+                dataSource={allData}
+                columns={feeListColumns}
+                pagination={true}
+              />
+            </div>
           </div>
-          <div className="mt-5">
-            <CTable
-              rowKey={(node) => node.id}
-              dataSource={allData}
-              columns={feeListColumns}
-              pagination={true}
-            />
-          </div>
-        </div>
+        </Card>
       </Content>
     </div>
   );

@@ -934,3 +934,14 @@ div:focus,
 div:active {
   border-color: #000 !important;
 }
+
+.ant-menu-item:hover {
+  color: #fff !important;
+}
+.ant-menu-item:hover:after {
+  border-color: #fff !important;
+}
+
+.ant-menu-submenu:hover:after {
+  border-color: #fff !important;
+}

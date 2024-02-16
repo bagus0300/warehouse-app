@@ -32,5 +32,7 @@ module App
     # config.middleware.swap(ActionDispatch::Cookies, AppName::ConditionalCSRF) unless Rails.application.config.csrf_disabled
     # config.csrf_disabled = true
     #############################################
+
+    
   end
 end

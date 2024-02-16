@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Row,
-  Layout,
-  Card,
-  Col
-} from "antd";
+import { Row, Layout, Card, Col } from "antd";
 
 import SectionCard from "../components/Top/SectionCard";
 import { cardTopic } from "../utils/content";
@@ -26,19 +21,19 @@ const Top = () => {
           className="my-8"
           style={{
             margin: 20,
-            marginTop: 100,
+            marginTop: 50,
           }}
         >
           {cardTopic.map((item, i) => (
-
             <Col key={i} span={8} style={{ margin: 20 }}>
-              <Link to={item.key} key={i}><Card bordered={false}>{item.label}</Card></Link>
+              <Link to={item.key} key={i}>
+                <Card bordered={false}>{item.label}</Card>
+              </Link>
             </Col>
-
           ))}
         </Row>
       </Content>
-    </div >
+    </div>
   );
 };
 

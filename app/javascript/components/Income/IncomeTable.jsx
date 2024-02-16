@@ -47,8 +47,8 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
     },
     {
       title: "ロット番号",
-      dataIndex: "lotNumber",
-      key: "lotNumber",
+      dataIndex: "lot_number",
+      key: "lot_number",
     },
     {
       title: "重量",
@@ -57,8 +57,8 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
     },
     {
       title: "数量",
-      dataIndex: "stock",
-      key: "stock",
+      dataIndex: "amount",
+      key: "amount",
     },
     {
       title: "Action",

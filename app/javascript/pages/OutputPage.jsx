@@ -1,336 +1,552 @@
-import React from "react";
-import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button } from "antd";
+import React, { useState, useEffect } from "react";
+import moment from "moment";
+import dayjs from "dayjs";
+import {
+  Form,
+  Layout,
+  Select,
+  Space,
+  Input,
+  DatePicker,
+  Divider,
+  Card,
+  Row,
+  Col,
+  Popconfirm,
+  Button,
+} from "antd";
 
 import IncomeTable from "../components/Income/IncomeTable";
-import localeJP from "antd/es/date-picker/locale/ja_JP";
-import messages from "../utils/content/jp.json";
-import { useState, useEffect } from "react";
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { openNotificationWithIcon } from "../components/common/notification";
 
+import {
+  warehouseURL,
+  shipperURL,
+  warehouseFeeURL,
+  productURL,
+  productDetailURL,
+  saveStockInoutUrl,
+} from "../utils/contants";
 
-const { Search } = Input;
+import CustomButton from "../components/common/CustomButton";
+import $lang from "../utils/content/jp.json";
+
 const { Content } = Layout;
+const dateFormat = "YYYY/MM/DD";
 
-const OutputPage = () => {
+const IncomePage = () => {
+  const [isVisibleAddButton, setAddButtonVisability] = useState(false);
+  const [prepareProducts, setPrepareProducts] = useState([]);
+  const [isDisabledProduct, setDiabledProduct] = useState(false);
 
-  // backend data start
+  // ---------Warehouse--------
+  const [selectedWarehouse, setSelectedWarehouse] = useState({
+    value: "",
+    label: "",
+  });
+  const [warehouseOptions, setWarehouseOptions] = useState([]);
 
-  const storeOptions = [
-    { value: 0, label: "一般倉庫" },
-    { value: 1, label: "編集" },
-    { value: 2, label: "削除" },
-    { value: 3, label: "代替テキスト" }
-  ];
+  // ------------Shipper-----------
+  const [seletedShipper, setSeletedShipper] = useState({
+    value: "",
+    label: "",
+  });
+  const [shipperOptions, setShipperOptions] = useState();
 
-  const shipperOptions = [
-    { value: 0, label: "株式会社XXXXXX（○○倉庫製品）" },
-    { value: 1, label: "編集" },
-    { value: 2, label: "削除" },
-    { value: 2, label: "代替テキスト" },
-  ];
+  // ----------------Openday--------------
+  // const [receiptDate, setInoutOn] = useState(moment("2024-02-16"));
+  const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
 
-  const products = [
-    {
-      product_id: "1",
-      product_name: "product name 1",
-      product_type: "project type 1",
-      cargoPrice: "100",
-      storagePrice: "200",
-      lotNumber: "123123123",
-      weight: "100",
-      stock: "200",
-      action: ["messages.buttons.change", "messages.buttons.delete"],
-      key: "1"
-    },
-    {
-      product_id: "2",
-      product_name: "product name 2",
-      product_type: "project type 2",
-      cargoPrice: "100",
-      storagePrice: "200",
-      lotNumber: "123123123",
-      weight: "100",
-      stock: "200",
-      action: ["messages.buttons.change", "messages.buttons.delete"],
-      key: "2"
-    },
-    {
-      product_id: "3",
-      product_name: "product name 3",
-      product_type: "project type 3",
-      cargoPrice: "100",
-      storagePrice: "200",
-      lotNumber: "123123123",
-      weight: "100",
-      stock: "200",
-      action: ["messages.buttons.change", "messages.buttons.delete"],
-      key: "3"
-    },
-    {
-      product_id: "4",
-      product_name: "product name 4",
-      product_type: "project type 4",
-      cargoPrice: "100",
-      storagePrice: "200",
-      lotNumber: "123123123",
-      weight: "100",
-      stock: "200",
-      action: ["messages.buttons.change", "messages.buttons.delete"],
-      key: "4"
-    },
-    {
-      product_id: "5",
-      product_name: "product name 5",
-      product_type: "project type 5",
-      cargoPrice: "100",
-      storagePrice: "200",
-      lotNumber: "123123123",
-      weight: "100",
-      stock: "200",
-      action: ["messages.buttons.change", "messages.buttons.delete"],
-      key: "5"
+  // ---------product----------
+  const [selectedProduct, setSelectedProduct] = useState({
+    value: "",
+    label: "",
+  });
+
+  const [productOptions, setProductOptions] = useState("");
+
+  // -----------packing---------
+  const [packaging, setPackaging] = useState("");
+
+  // --------storagePrice-------
+  const [storagePrice, setStoragePrice] = useState("");
+
+  // ----------handlePrice------------
+  const [handlePrice, setHandlePrice] = useState("");
+
+  // -------------lotNumber-----------
+  const [lotNumber, setLotNumber] = useState("");
+
+  // ---------------weight---------------
+  const [weight, setWeight] = useState("");
+
+  // -------------amount--------------
+  const [amount, setStock] = useState("");
+
+  const [editMode, setEditMode] = useState("new");
+  //  -------init prepareProductItem--------
+  const initPrepareProductItem = () => {
+    setLotNumber("");
+    setStock("");
+    setWeight("");
+  };
+
+  const setPrepareProductItem = (editData) => {
+    setLotNumber(editData.lot_number);
+    setStock(editData.amount);
+    setWeight(editData.weight);
+    setPackaging(editData.product_type);
+    setHandlePrice(editData.handling_fee_rate);
+    setStoragePrice(editData.storage_fee_rate);
+    setSelectedWarehouse({
+      value: editData.warehouse_id,
+      name: editData.warehouse_name,
+    });
+    setSeletedShipper({
+      value: editData.shipper_id,
+      name: editData.shipper_name,
+    });
+    setSelectedProduct({
+      value: editData.product_id,
+      label: editData.product_name,
+    });
+    setInoutOn(dayjs(editData.inout_on, dateFormat));
+  };
+
+  const onChangeWarehouse = (value, option) => {
+    setSelectedWarehouse({ value: value, label: option.label });
+  };
+
+  const onChangeShipper = (value, option) => {
+    setSeletedShipper({ value: value, label: option.label });
+  };
+
+  const onChangeProduct = (value, option) => {
+    setSelectedProduct({ value: value, label: option.label });
+
+    makeHttpReq(makeHttpOptions({}, "get", productDetailURL(value))).then(
+      (res) => {
+        const warehouseFee = res.data.data.data.attributes.warehouse_fee;
+
+        setPackaging(warehouseFee.packaging);
+        setStoragePrice(warehouseFee.storage_fee_rate);
+        setHandlePrice(warehouseFee.handling_fee_rate);
+      }
+    );
+  };
+
+  //  -------Get warehouse names--------
+  const getWarehouses = () => {
+    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+      const warehouses = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+
+      setWarehouseOptions(warehouses);
+
+      if (warehouses.length > 0)
+        setSelectedWarehouse({
+          value: warehouses[0].value,
+          label: warehouses[0].label,
+        });
+    });
+  };
+
+  // --------Get shipper data--------
+  const getShippers = () => {
+    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+      const shippers = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+
+      setShipperOptions(shippers);
+
+      if (shippers.length > 0)
+        setSeletedShipper({
+          value: shippers[0].value,
+          label: shippers[0].label,
+        });
+    });
+  };
+
+  // ----------Get product data-----------
+  const getProducts = () => {
+    makeHttpReq(makeHttpOptions({}, "get", productURL)).then((res) => {
+      const products = res.data.data.map((item) => {
+        return {
+          value: item.data.attributes.id,
+          label: item.data.attributes.name,
+        };
+      });
+
+      setProductOptions(products);
+
+      if (products.length > 0)
+        setSelectedProduct({
+          value: products[0].value,
+          label: products[0].label,
+        });
+      onChangeProduct(products[0].value, {
+        value: products[0].value,
+        label: products[0].label,
+      });
+    });
+  };
+
+  const savePrepareProducts = () => {
+    makeHttpReq(
+      makeHttpOptions(
+        { stock_inout: prepareProducts },
+        "post",
+        saveStockInoutUrl
+      )
+    )
+      .then((res) => {
+        setPrepareProducts([]);
+        openNotificationWithIcon("success", "", $lang.messages.success);
+      })
+      .catch((err) => {
+        openNotificationWithIcon("error", "error", err.messages);
+      });
+  };
+
+  const isReadyPrepareProducts = () => {
+    if (receiptDate == "") {
+      openNotificationWithIcon(
+        "warning",
+        "",
+        $lang.messages.input_in_stock_date
+      );
+      return false;
+    } else if (lotNumber == "") {
+      openNotificationWithIcon("warning", $lang.messages.input_lotNumber);
+      return false;
+    } else if (amount == "") {
+      openNotificationWithIcon("warning", "", $lang.messages.input_stock);
+      return false;
+    } else if (weight == "") {
+      openNotificationWithIcon("warning", "", $lang.messages.input_weight);
+      return false;
     }
-  ];
 
-  // backend data end
-
-  const [data, setData] = useState([]);
-
-  const [storeVal, setStoreVal] = useState(storeOptions[0]);
-  const [shipperVal, setShipperVal] = useState(shipperOptions[0]);
-  const [receiptDate, setReceiptDate] = useState();
-  const [searchResult, setSearchResult] = useState({});
-
-  const handleSubmit = (e) => {
-
+    return true;
   };
 
+  const doPrepareProducts = () => {
+    if (!isReadyPrepareProducts()) return;
 
-  // useEffect(() => {
+    let index = 0;
+    let selectedProductArr = prepareProducts.slice();
 
-  // }, []);
+    const newData = {
+      handling_fee_rate: handlePrice,
+      storage_fee_rate: storagePrice,
+      product_id: selectedProduct.value,
+      product_name: selectedProduct.label,
+      product_type: packaging,
+      catagory: 0,
+      lot_number: lotNumber,
+      weight: weight,
+      amount: amount,
+      warehouse_id: selectedWarehouse.value,
+      warehouse_name: selectedWarehouse.label,
+      shipper_id: seletedShipper.value,
+      shipper_name: seletedShipper.label,
+      inout_on: receiptDate,
+      idx: index++,
+      category: 0,
+    };
 
+    selectedProductArr.push(newData);
 
-  // const handleSubmit = (e) = {
+    setPrepareProducts(selectedProductArr);
+    initPrepareProductItem();
 
-  // };
-
-  const selStoreChange = (value) => {
-    setStoreVal(storeOptions[value]);
+    // setAddButtonVisability(true);
   };
 
-  const selShipperChange = (value) => {
-    setShipperVal(shipperOptions[value]);
-  }
+  const editRow = (productId) => {
+    setEditMode("edit");
+    const oldData = prepareProducts.slice();
+    const editData = oldData.filter((data) => data.product_id == productId)[0];
 
-  const onChangeDate = (date, dateString) => {
-    setReceiptDate(dateString);
+    setPrepareProductItem(editData);
+    setDiabledProduct(true);
   };
-
-  const onSearch = (value, _e, info) => {
-    const result = products.filter(product => product.product_id == value)[0];
-    console.log(result);
-    setSearchResult(result);
-  }
-
-  const editRow = (id) => {
-    console.log('edit', id);
-  }
 
   const deleteRow = (id) => {
-    const newData = data.slice();
-    console.log('delete', id);
+    const newData = prepareProducts.slice();
     const delData = newData.filter((data) => data.product_id == id)[0];
-    console.log(delData);
     const index = newData.indexOf(delData);
-    console.log('========', index);
     newData.splice(index, 1);
-    console.log('========', newData);
-    setData(newData);
-  }
-
-  const insertData = () => {
-    const newData = data.slice();
-    newData.push(searchResult);
-    setData(newData);
-    console.log(data);
+    setPrepareProducts(newData);
   };
+
+  const cancelEditProduct = () => {
+    setAddButtonVisability(false);
+    initPrepareProductItem();
+    setDiabledProduct(false);
+  };
+
+  const confirmInitPrepareProducts = () => {
+    if (prepareProducts.length > 0) setPrepareProducts([]);
+    else openNotificationWithIcon("warning", "", "no data");
+  };
+
+  const updatePrepareProduct = () => {
+    let oldData = prepareProducts.slice();
+    const updateData = oldData.filter(
+      (item) => item.product_id == selectedProduct.value
+    )[0];
+
+    updateData.warehouse_id = selectedWarehouse.value;
+    updateData.warehouse_name = selectedWarehouse.label;
+    updateData.shipper_id = seletedShipper.value;
+    updateData.shipper_name = seletedShipper.label;
+    updateData.inout_on = receiptDate;
+
+    updateData.lot_number = lotNumber;
+    updateData.weight = weight;
+    updateData.amount = amount;
+
+    //
+    setPrepareProducts(oldData);
+
+    setDiabledProduct(false);
+    setAddButtonVisability(false);
+  };
+
+  // ----------When rerender, get all data------
+  useEffect(() => {
+    getWarehouses();
+    getShippers();
+    getProducts();
+  }, []);
 
   return (
     <div>
       <Content
-        style={{ width: 1024, }}
+        style={{ width: 1280, marginTop: 20 }}
         className="mx-auto flex flex-col justify-content content-h"
       >
-        <div
-          name="basic"
-          initialValues={{ remember: true }}
-          autoComplete="off"
-          style={{ margin: "50px 0 0px 0" }}
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
         >
-          <Space style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", }}>
-            <Form.Item
-              label={messages.IncomePageJp.warehouse}
-              name="username"
-              style={{ display: "inline-block", width: 200, marginBottom: 0 }}
-            >
-              <Select
-                defaultValue={storeVal.label}
-                onChange={selStoreChange}
-                style={{ width: 140, marginLeft: 14 }}
-                options={storeOptions}
-              />
-            </Form.Item>
-            <Form.Item
-              label={messages.IncomePageJp.shipper}
-              name="username"
-              style={{ display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }}
-            >
-              <Select
-                defaultValue={shipperVal.label}
-                style={{ width: 300, marginLeft: 14 }}
-                onChange={selShipperChange}
-                options={shipperOptions}
-              />
-            </Form.Item>
-            <Form.Item
-              label={messages.IncomePageJp.receiptDate}
-              name="username"
-              style={{
-                display: "inline-block",
-                width: 250,
-                marginLeft: 0,
-                marginBottom: 0,
-              }}
-            >
-              <DatePicker value={receiptDate} onChange={onChangeDate} locale={localeJP} />
-            </Form.Item>
-          </Space>
-          <Divider />
-          <div>
-            <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
-              <Form.Item
-                label={messages.IncomePageJp.productNumber}
-                name="username"
-                style={{
-                  display: "inline-block",
-                  width: 350,
-                  marginBottom: 0,
-                }}
-              >
+          <Form
+            name="basic"
+            autoComplete="off"
+            initialValues={{
+              warehouse: "",
+              shipper: "",
+              receipDate: "",
+              product: "",
+              packaging: "",
+              storagePrice: "",
+              handlePrice: "",
+              lotNumber: "",
+              weight: "",
+              amount: "",
+            }}
+          >
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.warehouse}: </label>
+              </Col>
+              <Col span={6}>
                 <Select
-                  placeholder={messages.IncomePageJp.productNumber}
-                  allowClear
-                  style={{ marginLeft: 15, width: 200 }}
-                  enterButton="検索"
-                  value={searchResult.product_id}
+                  placeholder={$lang.IncomePageJp.warehouse}
+                  style={{ width: 150, marginLeft: 14 }}
+                  value={selectedWarehouse}
+                  options={warehouseOptions}
+                  onChange={onChangeWarehouse}
                 />
-              </Form.Item>
-            </Space>
-          </div>
-          <div>
-            <Space direction="horizontal" style={{ margin: "0 0 20px 0" }}>
-              <Form.Item
-                label={messages.IncomePageJp.productName}
-                name="username"
-                style={{
-                  display: "inline-block",
-                  width: 350,
-                  marginBottom: 0,
-                }}
-              >
-                <Space.Compact>
-                  <Input
-                    placeholder={messages.IncomePageJp.productName}
-                    style={{ marginLeft: 15, width: 250 }}
-                    value={searchResult.product_name} />
-                </Space.Compact>
-              </Form.Item>
-              <Form.Item
-                label={messages.IncomePageJp.packing}
-                name="username"
-                style={{
-                  display: "inline-block",
-                  width: 250,
-                  marginLeft: 30,
-                  marginBottom: 0,
-                }}
-              >
-                <Space.Compact>
-                  <Input placeholder={messages.IncomePageJp.packing} value={searchResult.product_type} />
-                </Space.Compact>
-              </Form.Item>
-              <Form.Item
-                label={messages.IncomePageJp.packing}
-                name="username"
-                style={{
-                  display: "inline-block",
-                  width: 450,
-                  marginLeft: 30,
-                  marginBottom: 0,
-                }}
-              >
-                <Space.Compact>
-                  <Input
-                    style={{ width: 100, }}
-                    placeholder={messages.IncomePageJp.cargoPrice}
-                    value={searchResult.cargoPrice} />
-                  <Input style={{ width: 80 }} />
-                  <Input style={{ width: 100 }} placeholder={messages.IncomePageJp.storagePrice} value={searchResult.storagePrice} />
-                </Space.Compact>
-              </Form.Item>
-            </Space>
-            <Space>
-              <Form.Item
-                // label="messages.IncomePageJp.packing"
-                // name="username"
-                style={{
-                  display: "flexs",
-                  width: 700,
-                  marginLeft: 55,
-                  marginBottom: 0,
-                }}
-              >
-                <DatePicker value={receiptDate} onChange={onChangeDate} locale={localeJP} />
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.shipper}:</label>
+              </Col>
+              <Col span={6}>
                 <Select
-                  // defaultValue={shipperVal.label}
-                  style={{ width: 200 }}
-                  placeholder={messages.IncomePageJp.lotNumber}
-                // onChange={selShipperChange}
-                // options={shipperOptions}
+                  style={{ width: 300, marginLeft: 14 }}
+                  onChange={onChangeShipper}
+                  options={shipperOptions}
+                  value={seletedShipper.value}
+                  defaultValue={""}
+                  placeholder={$lang.IncomePageJp.shipper}
                 />
-                <Input
-                  style={{
-                    width: 100, marginLeft: 20, marginBottom: 0,
-                  }}
-                  placeholder={messages.OutputPage.libraryNumber}
-                  value={searchResult.weight} />
-                <Input
-                  style={{ width: 100, marginBottom: 0, }}
-                  placeholder={messages.OutputPage.shipmentNumber}
-                  value={searchResult.stock} />
-              </Form.Item>
-              <Button onClick={insertData} style={{ fontWeight: "bold", width: "100px", fontSize: "15px" }}>
-                {messages.IncomePageJp.addition}
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.receiptDate}:</label>
+              </Col>
+              <Col span={6}>
+                <div className="ml-2">
+                  <DatePicker
+                    style={{ width: 150 }}
+                    value={receiptDate}
+                    onChange={(date, dateStr) => {
+                      if (dateStr == "") {
+                        setInoutOn(dayjs("2024/02/20", dateFormat));
+                      } else setInoutOn(dayjs(dateStr, dateFormat));
+                    }}
+                    placeholder={$lang.IncomePageJp.receiptDate}
+                    className="ml-1"
+                    format={dateFormat}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.productName}:</label>
+              </Col>
+              <Col span={10}>
+                <Space.Compact block className="ml-3">
+                  <Select
+                    placeholder={$lang.IncomePageJp.productName}
+                    style={{ width: 200 }}
+                    value={selectedProduct.value}
+                    options={productOptions}
+                    onChange={onChangeProduct}
+                    disabled={isDisabledProduct}
+                    defaultValue={{
+                      value: "",
+                      label: "",
+                    }}
+                  />
+                  <Input
+                    style={{ width: 150 }}
+                    placeholder={$lang.IncomePageJp.packing}
+                    value={packaging}
+                    readOnly
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.cargoPrice}
+                    value={storagePrice}
+                    readOnly
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.storagePrice}
+                    value={handlePrice}
+                    readOnly
+                  />
+                </Space.Compact>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={1}></Col>
+              <Col span={8}>
+                <Space.Compact block className="ml-3">
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.lotNumber}
+                    value={lotNumber}
+                    onChange={(e) => {
+                      setLotNumber(e.target.value);
+                    }}
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.weight + "(kg)"}
+                    value={weight}
+                    onChange={(e) => {
+                      setWeight(e.target.value);
+                    }}
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.itemNumber}
+                    value={amount}
+                    onChange={(e) => {
+                      setStock(e.target.value);
+                    }}
+                  />
+                </Space.Compact>
+              </Col>
+            </Row>
+            <Divider />
+            <Row>
+              <Col span={1}></Col>
+              <Col span={6}>
+                <CustomButton
+                  onClick={doPrepareProducts}
+                  className="px-5 ml-2 btn-bg-black"
+                  title={$lang.buttons.add}
+                  htmlType="submit"
+                  visability={!isVisibleAddButton}
+                />
+                <CustomButton
+                  onClick={updatePrepareProduct}
+                  className="px-5 ml-2 btn-bg-black"
+                  title={$lang.buttons.change}
+                  visability={isVisibleAddButton}
+                />
+                <CustomButton
+                  onClick={cancelEditProduct}
+                  className="px-5 ml-2 default"
+                  title={$lang.buttons.cancel}
+                  visability={isVisibleAddButton}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-4 my-2"
+          bordered={false}
+        >
+          <IncomeTable
+            data={prepareProducts}
+            editRow={(key) => editRow(key)}
+            deleteRow={deleteRow}
+            pagination={false}
+          />
+          <div style={{ height: 15 }}></div>
+          <div style={{ justifyContent: "flex-end", display: "flex" }}>
+            <CustomButton
+              title={$lang.buttons.csvExchange}
+              className="mr-2 btn-bg-black"
+              visability={true}
+              onClick={() =>
+                openNotificationWithIcon("warning", "", "on working")
+              }
+            ></CustomButton>
+            <CustomButton
+              onClick={savePrepareProducts}
+              title={$lang.buttons.confirmDeparture}
+              visability={true}
+            ></CustomButton>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={confirmInitPrepareProducts}
+              okText="Yes"
+              cancelText="No"
+              className=" ml-2"
+            >
+              <Button type="primary" danger>
+                {$lang.buttons.init}
               </Button>
-            </Space>
+            </Popconfirm>
           </div>
-          <Divider />
-        </div>
-        <IncomeTable
-          data={data}
-          editRow={editRow}
-          deleteRow={deleteRow}
-          pagination={false}
-        />
-        <div style={{ height: 15 }}></div>
-        <div style={{ justifyContent: "flex-end", display: "flex" }}>
-          <Button style={{ width: 150, }}>{messages.buttons.csvExchange}</Button>
-          <div style={{ width: 40 }}></div>
-          <Button style={{ width: 150, }} >{messages.buttons.confirmDeparture}</Button>
-        </div>
+        </Card>
       </Content>
     </div>
   );
 };
 
-export default OutputPage;
+export default IncomePage;

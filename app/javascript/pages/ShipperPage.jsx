@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import { shipperURL } from "../utils/contants";
-import CTable from '../components/CTable'
+import CTable from "../components/CTable";
 import {
   Form,
   Input,
@@ -11,6 +11,8 @@ import {
   Button,
   Modal,
   notification,
+  Flex,
+  Card,
 } from "antd";
 
 import {
@@ -53,15 +55,15 @@ const ShipperList = () => {
       let shipper = await form.validateFields();
       if (updateData) {
         await axios.put(`${shipperURL}`, {
-          id: updateData.id, ...shipper
-        }
-        );
-        notification.success({ message: 'Update Success', duration: 1 });
+          id: updateData.id,
+          ...shipper,
+        });
+        notification.success({ message: "Update Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
         await axios.post(`${shipperURL}`, shipper);
-        notification.success({ message: 'Create Success', duration: 1 })
+        notification.success({ message: "Create Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -98,7 +100,9 @@ const ShipperList = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete(`${shipperURL}`, { data: { id: item.id } });
+      const response = await axios.delete(`${shipperURL}`, {
+        data: { id: item.id },
+      });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
     } catch (error) {
@@ -117,9 +121,8 @@ const ShipperList = () => {
     {
       title: "No",
       dataIndex: "key",
-      sorter: true,
       align: "center",
-      width: "5%",
+      width: "8%",
     },
     {
       title: `${message.shipper.name}`,
@@ -215,135 +218,142 @@ const ShipperList = () => {
         style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h"
       >
-        <div>
-          <div className="mt-5" style={{ marginLeft: "880px" }}>
-            <Button
-              onClick={() => {
-                onAction();
-                setUpdateStatus("Create");
-              }}
-            >
-              {message?.Maintenance?.addNew}
-            </Button>
-            <Modal
-              title={message.Maintenance.shipperMaster}
-              open={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="ok" onClick={onSubmit}>
-                  {message.Maintenance.register}
-                </Button>,
-                <Button key="cancel" onClick={handleCancel}>
-                  {message.buttons.cancel}
-                </Button>,
-              ]}
-            >
-              <div>
-                <Form
-                  form={form}
-                  size="middle"
-                  scrollToFirstError
-                  labelCol={{ span: 7 }}
-                  labelAlign="left"
-                >
-                  <Form.Item
-                    label={message.Maintenance.shipperName}
-                    name={"name"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
+        >
+          <div>
+            <div className="mt-5" style={{ marginLeft: "880px" }}>
+              <Button
+                onClick={() => {
+                  onAction();
+                  setUpdateStatus("Create");
+                }}
+                className="btn-bg-black"
+              >
+                {message?.Maintenance?.addNew}
+              </Button>
+              <Modal
+                title={message.Maintenance.shipperMaster}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                  <Button key="ok" onClick={onSubmit}>
+                    {message.Maintenance.register}
+                  </Button>,
+                  <Button key="cancel" onClick={handleCancel}>
+                    {message.buttons.cancel}
+                  </Button>,
+                ]}
+              >
+                <div>
+                  <Form
+                    form={form}
+                    size="middle"
+                    scrollToFirstError
+                    labelCol={{ span: 7 }}
+                    labelAlign="left"
                   >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.code}
-                    name={"code"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.postCode}
-                    name={"post_code"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.main_address}
-                    name={"main_address"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.sub_address}
-                    name={"sub_address"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.tel_number}
-                    name={"tel"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.closing_date}
-                    name={"closing_date"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input type="date" />
-                  </Form.Item>
-                </Form>
-              </div>
-            </Modal>
+                    <Form.Item
+                      label={message.Maintenance.shipperName}
+                      name={"name"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.shipper.code}
+                      name={"code"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.Maintenance.postCode}
+                      name={"post_code"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.shipper.main_address}
+                      name={"main_address"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.shipper.sub_address}
+                      name={"sub_address"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.shipper.tel_number}
+                      name={"tel"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={message.shipper.closing_date}
+                      name={"closing_date"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${message.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input type="date" />
+                    </Form.Item>
+                  </Form>
+                </div>
+              </Modal>
+            </div>
+            <div className="mt-5">
+              <CTable
+                rowKey={(node) => node.id}
+                dataSource={allData}
+                columns={shipperListColumns}
+                pagination={true}
+              />
+            </div>
           </div>
-          <div className="mt-5">
-            <CTable
-              rowKey={(node) => node.id}
-              dataSource={allData}
-              columns={shipperListColumns}
-              pagination={true}
-            />
-          </div>
-        </div>
+        </Card>
       </Content>
     </div>
   );

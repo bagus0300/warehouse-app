@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { warehouseURL, productURL } from "../utils/contants";
-import CTable from '../components/CTable'
+import { feeUrl, productURL, warehouseURL } from "../utils/contants";
+import CTable from "../components/CTable";
 // import moment from "moment";
 import {
   Form,
@@ -16,16 +16,19 @@ import {
   Button,
   Modal,
   notification,
-  Pagination
+  Pagination,
+  Card,
+  Flex,
 } from "antd";
 
-// import {
-//   TrashIcon,
-//   PencilSquareIcon,
-//   CalendarDaysIcon,
-// } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 
-import message from "../utils/content/jp.json";
+import $lang from "../utils/content/jp.json";
+import { right } from "@popperjs/core";
 
 let plan_color, star_color, plan_text;
 
@@ -33,7 +36,6 @@ const { Content } = Layout;
 
 const ProductPage = () => {
   const [form] = Form.useForm();
-
 
   const [searchText, setSearchText] = useState("");
   const [updateData, setUpdateData] = useState({});
@@ -53,11 +55,6 @@ const ProductPage = () => {
   const [feeCategory, setFeeCategory] = useState("");
   const [storageFeeRate, setStorageFeeRate] = useState("");
 
-
-
-
-
-
   const getAllProduct = () => {
     axios.get(`${productURL}`).then((res) => {
       let index = 1;
@@ -76,13 +73,12 @@ const ProductPage = () => {
       setAllData(products);
       setShowData(products);
       //setPaginatedData(products.slice(1, 10));
-
     });
   };
 
   const getAllFeeData = () => {
-    axios.get(`${warehouseURL}`).then((res) => {
-      let index = 1
+    axios.get(`${feeUrl}`).then((res) => {
+      let index = 1;
       const priceData = res.data.data.map((item) => {
         return {
           ...item,
@@ -100,16 +96,19 @@ const ProductPage = () => {
       let product = await form.validateFields();
       if (updateData) {
         await axios.put(`${productURL}`, {
-          id: updateData.id, ...product
-        }
-        );
-        notification.success({ message: 'Update Success', duration: 1 });
+          id: updateData.id,
+          ...product,
+        });
+        notification.success({ message: "Update Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        const postProduct = { ...product, warehouse_fee_id: feeID }
-        await axios.post(`${productURL}`, { ...product, warehouse_fee_id: feeID });
-        notification.success({ message: 'Create Success', duration: 1 })
+        const postProduct = { ...product, warehouse_fee_id: feeID };
+        await axios.post(`${productURL}`, {
+          ...product,
+          warehouse_fee_id: feeID,
+        });
+        notification.success({ message: "Create Success", duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -139,9 +138,6 @@ const ProductPage = () => {
       setStorageFeeRate("");
     }
   };
-
-
-
 
   const getBySearch = (data) => {
     if (searchText) {
@@ -208,7 +204,6 @@ const ProductPage = () => {
     setIsModalOpen(false);
   };
 
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemPerPage] = useState(10);
   const [startIndex, setStartIndex] = useState(1);
@@ -216,13 +211,11 @@ const ProductPage = () => {
   const [paginatedData, setPaginatedData] = useState(allData.slice(1, 10));
 
   const handlePageChange = (page, pageSize) => {
-
     setCurrentPage(page);
     setItemPerPage(pageSize);
     setStartIndex((currentPage - 1) * itemsPerPage);
-    setEndIndex(startIndex + itemsPerPage)
-    setShowData(showData.slice(startIndex, endIndex))
-
+    setEndIndex(startIndex + itemsPerPage);
+    setShowData(showData.slice(startIndex, endIndex));
   };
 
   const productListColumns = [
@@ -234,7 +227,7 @@ const ProductPage = () => {
       width: "5%",
     },
     {
-      title: `${message.Maintenance.productName}`,
+      title: `${$lang.Maintenance.productName}`,
       key: "name",
       width: "20%",
       dataIndex: "name",
@@ -249,7 +242,7 @@ const ProductPage = () => {
       // },
     },
     {
-      title: `${message.Maintenance.handlingFee}`,
+      title: `${$lang.Maintenance.handlingFee}`,
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
@@ -263,7 +256,7 @@ const ProductPage = () => {
       // },
     },
     {
-      title: `${message.Maintenance.storageFee}`,
+      title: `${$lang.Maintenance.storageFee}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
@@ -277,7 +270,7 @@ const ProductPage = () => {
       // },
     },
     {
-      title: `${message.Maintenance.billingClass}`,
+      title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       align: "center",
       key: "fee_category",
@@ -291,7 +284,7 @@ const ProductPage = () => {
       // },
     },
     {
-      title: `${message.buttons.change}`,
+      title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
         return (
@@ -329,158 +322,173 @@ const ProductPage = () => {
   return (
     <div>
       <Content style={{ width: 1024 }} className="mx-auto content-h">
-        <div>
-          <div className="mt-5">
-            <div className="flex flex-row items-center">
-              {/* <label style={{ width: '50px' }} >{message.Maintenance.productName}</label> */}
-              <Input.Search
-                value={searchText}
-                className="w-190"
-                placeholder={"Search"}
-                onChange={handleSearchText}
-              />
-              <Button
-                style={{ marginLeft: "640px" }}
-                onClick={() => {
-                  onAction();
-                  setUpdateStatus("Create");
-                }}
-              >
-                {message?.Maintenance?.addNew}
-              </Button>
-            </div>
-            <Modal
-              title={message.Maintenance.productMaster}
-              open={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="ok" onClick={onSubmit}>
-                  {message.Maintenance.register}
-                </Button>,
-                <Button key="cancel" onClick={handleCancel}>
-                  {message.buttons.cancel}
-                </Button>,
-              ]}
-            >
-              <div>
-                <Form
-                  form={form}
-                  size="middle"
-                  scrollToFirstError
-                  labelCol={{ span: 7 }}
-                  labelAlign="left"
-                >
-                  <Form.Item
-                    label={message.Maintenance.productName}
-                    name={"name"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
+        >
+          <div>
+            <div className="mt-5">
+              <div className="">
+                <Flex gap="middle" align="start">
+                  <Flex
+                    style={{
+                      width: "100%",
+                    }}
+                    justify="space-between"
                   >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.shipper.code}
-                    name={"code"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.productPacking}
-                    name={"specification"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.packing}
-                    name={"packaging"}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Select
-                      options={[...feePackaging].map((item) => ({
-                        key: item,
-                        value: item,
-                        label: item,
-                      }))}
-                      onChange={handleSelect}
+                    <Input.Search
+                      value={searchText}
+                      className="w-190"
+                      placeholder={"Search"}
+                      onChange={handleSearchText}
                     />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.handlingFee}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input value={handlingFeeRate} />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.storageFee}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input value={storageFeeRate} />
-                  </Form.Item>
-                  <Form.Item
-                    label={message.Maintenance.billingClass}
-                    rules={[
-                      {
-                        required: true,
-                        message: `${message.tableCommon.warning}`,
-                      },
-                    ]}
-                  >
-                    <Input value={feeCategory} />
-                  </Form.Item>
-                </Form>
+                    <Button
+                      // style={{ marginLeft: "640px" }}
+                      onClick={() => {
+                        onAction();
+                        setUpdateStatus("Create");
+                      }}
+                      className="btn-bg-black"
+                    >
+                      {$lang?.Maintenance?.addNew}
+                    </Button>
+                  </Flex>
+                </Flex>
               </div>
-            </Modal>
+              <Modal
+                title={$lang.Maintenance.productMaster}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                  <Button key="ok" onClick={onSubmit}>
+                    {$lang.Maintenance.register}
+                  </Button>,
+                  <Button key="cancel" onClick={handleCancel}>
+                    {$lang.buttons.cancel}
+                  </Button>,
+                ]}
+              >
+                <div>
+                  <Form
+                    form={form}
+                    size="middle"
+                    scrollToFirstError
+                    labelCol={{ span: 7 }}
+                    labelAlign="left"
+                  >
+                    <Form.Item
+                      label={$lang.Maintenance.productName}
+                      name={"name"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.shipper.code}
+                      name={"code"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.productPacking}
+                      name={"specification"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.packing}
+                      name={"packaging"}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Select
+                        options={[...feePackaging].map((item) => ({
+                          key: item,
+                          value: item,
+                          label: item,
+                        }))}
+                        onChange={handleSelect}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.handlingFee}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input value={handlingFeeRate} />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.storageFee}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input value={storageFeeRate} />
+                    </Form.Item>
+                    <Form.Item
+                      label={$lang.Maintenance.billingClass}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${$lang.tableCommon.warning}`,
+                        },
+                      ]}
+                    >
+                      <Input value={feeCategory} />
+                    </Form.Item>
+                  </Form>
+                </div>
+              </Modal>
+            </div>
+            <div className="mt-5">
+              <CTable
+                rowKey={(node) => node.key}
+                dataSource={showData}
+                columns={productListColumns}
+              />
+              <Pagination
+                current={currentPage}
+                pageSize={itemsPerPage}
+                total={showData.length}
+                onChange={handlePageChange}
+                pageSizeOptions={[10, 20, 50, 100]}
+                showSizeChanger
+                className="p-1"
+                style={{ float: "right", marginTop: "20px" }}
+              />
+            </div>
           </div>
-          <div className="mt-5">
-            <CTable
-              rowKey={(node) => node.key}
-              dataSource={showData}
-              columns={productListColumns}
-            />
-            <Pagination
-              current={currentPage}
-              pageSize={itemsPerPage}
-              total={showData.length}
-              onChange={handlePageChange}
-              pageSizeOptions={[10, 20, 50, 100]}
-              showSizeChanger
-              className="p-1"
-
-            />
-          </div>
-        </div>
+        </Card>
       </Content>
     </div>
   );

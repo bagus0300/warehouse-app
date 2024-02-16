@@ -35,7 +35,7 @@ const CTable = (props) => {
         pagination={false}
         className="h-full overflow-auto pr-1"
       />
-      <div className="flex justify-center w-full bg-base-200 rounded-md mt-5">
+      {/* <div className="flex justify-center w-full bg-base-200 rounded-md mt-5">
         <Pagination
           pageSizeOptions={[10, 20, 50, 100]}
           current={pn}
@@ -47,7 +47,7 @@ const CTable = (props) => {
           // hideOnSinglePage
           total={props.dataSource?.length}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
