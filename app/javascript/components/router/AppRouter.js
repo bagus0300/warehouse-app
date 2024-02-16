@@ -10,9 +10,9 @@ import ProductPage from "../../pages/ProductPage";
 import ShipperPage from "../../pages/ShipperPage";
 import WarehouseFee from "../../pages/WarehouseFee";
 import OutputPage from "../../pages/OutputPage";
-
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
+import DepositPage from "../../pages/DepositPage";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
@@ -21,7 +21,6 @@ import PrivateRoute from "./PrivateRoute";
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
 
-import DepositPage from "../../pages/DepositPage";
 import BillingPage from "../../pages/BillingPage";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -65,6 +64,10 @@ export const AppRouter = () => {
           <Route
             path="/stock"
             element={<PrivateRoute Component={InventoryPage} />}
+          />
+          <Route
+            path="/deposit_process"
+            element={<PrivateRoute Component={DepositPage} />}
           />
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />

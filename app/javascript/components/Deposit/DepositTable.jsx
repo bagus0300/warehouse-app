@@ -1,12 +1,12 @@
 import React from "react";
-import { Table,  Space, Button, Pagination } from "antd";
+import { Table, Space, Button, Pagination } from "antd";
 import messages from "../../utils/content/jp.json";
 import {
   TrashIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 
-const DepositTable = ({data, editRow, deleteRow}) => {
+const DepositTable = ({ data, editRow, deleteRow }) => {
   const columns = [
     {
       title: "入金日",
@@ -40,15 +40,15 @@ const DepositTable = ({data, editRow, deleteRow}) => {
       key: "processing_on",
     },
     {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-          <div style={{display: "flex"}}>
-            <PencilSquareIcon style={{width: 30, cursor: "pointer"}} onClick={() => editRow(record)}>{ messages.buttons.change }</PencilSquareIcon>
-            <TrashIcon style={{width: 30, cursor: "pointer"}} onClick={() => deleteRow(record.id)}>{ messages.buttons.delete }</TrashIcon>
-          </div>
-        ),
-      }
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <div style={{ display: "flex" }}>
+          <PencilSquareIcon style={{ width: 30, cursor: "pointer" }} onClick={() => editRow(record)}>{messages.buttons.change}</PencilSquareIcon>
+          <TrashIcon style={{ width: 30, cursor: "pointer" }} onClick={() => deleteRow(record.id)}>{messages.buttons.delete}</TrashIcon>
+        </div>
+      ),
+    }
   ];
   return (
     <Table columns={columns} dataSource={data} pagination={true} />

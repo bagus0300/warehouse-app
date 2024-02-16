@@ -3,6 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import CTable from "../components/CTable";
 import { feeUrl } from "../utils/contants";
+import { warehouseFeeURL } from "../utils/contants";
 
 import {
   Form,
@@ -45,7 +46,7 @@ const WarehouseFee = () => {
   const [allData, setAllData] = useState([]);
 
   const getAllUnitPrice = () => {
-    axios.get(`${feeUrl}`).then((res) => {
+    axios.get(`${warehouseFeeURL}`).then((res) => {
       let index = 1;
       const feeData = res.data.data.map((item) => {
         return {

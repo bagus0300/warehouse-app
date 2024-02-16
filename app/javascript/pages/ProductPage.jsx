@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { feeUrl, productUrl } from "../utils/contants";
+import { feeUrl, productURL, warehouseURL } from "../utils/contants";
 import CTable from "../components/CTable";
 // import moment from "moment";
 import {
@@ -56,7 +56,7 @@ const ProductPage = () => {
   const [storageFeeRate, setStorageFeeRate] = useState("");
 
   const getAllProduct = () => {
-    axios.get(`${productUrl}`).then((res) => {
+    axios.get(`${productURL}`).then((res) => {
       let index = 1;
 
       let products = res.data.data.map((item) => {
@@ -95,7 +95,7 @@ const ProductPage = () => {
     try {
       let product = await form.validateFields();
       if (updateData) {
-        await axios.put(`${productUrl}`, {
+        await axios.put(`${productURL}`, {
           id: updateData.id,
           ...product,
         });
@@ -104,7 +104,7 @@ const ProductPage = () => {
         setIsPosted(!isposted);
       } else {
         const postProduct = { ...product, warehouse_fee_id: feeID };
-        await axios.post(`${productUrl}`, {
+        await axios.post(`${productURL}`, {
           ...product,
           warehouse_fee_id: feeID,
         });
@@ -484,7 +484,7 @@ const ProductPage = () => {
                 pageSizeOptions={[10, 20, 50, 100]}
                 showSizeChanger
                 className="p-1"
-                style={{ float: "right" }}
+                style={{ float: "right", marginTop: "20px" }}
               />
             </div>
           </div>

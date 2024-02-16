@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import message from "../utils/content/jp.json";
-import CTable from '../components/CTable'
+import CTable from "../components/CTable";
 
 import {
   Form,
@@ -15,7 +15,7 @@ import {
   Button,
   Modal,
   notification,
-  DatePicker
+  DatePicker,
 } from "antd";
 const { Content } = Layout;
 
@@ -125,7 +125,7 @@ const BillingList = () => {
 
   return (
     <Content style={{ width: 1024 }} className="mx-auto content-h">
-      <div>
+      {/* <div>
         <div className="mt-5">
           <Button>{message.billing.new}</Button>
           <div className="mt-5">
@@ -138,9 +138,10 @@ const BillingList = () => {
             <DatePicker />
           </div>
         </div>
-      </div>
+      </div> */}
+      billing list
     </Content>
-  )
-}
+  );
+};
 
 export default BillingList;

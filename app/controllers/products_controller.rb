@@ -1,11 +1,5 @@
 
 class ProductsController < ApplicationController
-
-
-  
-  # def index
-  #  products = Product.includes(:warehouse_fee).all
-
   # protect_from_forgery 
   def index
     products = Product.includes(:warehouse_fee).all

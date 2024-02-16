@@ -10,7 +10,9 @@ import { Typography, Breadcrumb, Button } from "antd";
 import { Layout, Menu, theme } from "antd";
 import { siteInfo, navigations } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
+
 import $lang from "../../../utils/content/jp.json";
+
 const NavbarSection = () => {
   const { logoutAction, authUserName } = useAuth();
 
@@ -23,17 +25,7 @@ const NavbarSection = () => {
   const { id } = useParams();
   let flattenNavigations = [];
 
-  useEffect(() => {
-    flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    );
-  }, []);
   const onMenuClick = (e) => {
-    // const flattenNavigations = navigations.reduce(
-    //   (a, b) => a.concat(b.children ? b.children : b),
-    //   []
-    // );
     const { label } =
       flattenNavigations.find((item) => item.key === e.key) || {};
     setTitle(label);
@@ -41,14 +33,15 @@ const NavbarSection = () => {
     navigate(e.key);
   };
 
-  // useEffect(() => {
-  //   const currentUrl = window.location.pathname;
-  //   const id = currentUrl.split("/").pop();
-  //   const { label } =
-  //     flattenNavigations.find((item) => item.key === "/" + id) || {};
-  //   setTitle(label);
-  //   setCurrent(id);
-  // }, []);
+  useEffect(() => {
+    const flattenNavigations = navigations.reduce(
+      (a, b) => a.concat(b.children ? b.children : b),
+      []
+    );
+    const { label } =
+      flattenNavigations.find((item) => item.key === current) || {};
+    setTitle(label);
+  }, [current]);
 
   return (
     <Layout>
