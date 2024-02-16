@@ -1,13 +1,29 @@
 
+
 class ProductsController < ApplicationController
   # protect_from_forgery 
   def index
-    products = Product.includes(:warehouse_fee).all
+    keyword = params[:keyword]
+    offset = params[:offset]
+    limit = params[:limit]
+    puts '-----------------------'
+  puts offset
+    products = Product.includes(:warehouse_fee)
+  
+    if keyword.present?
+      products = products.where("name LIKE ?", "%#{keyword}%")
+    end
+    count = products.count
+    filtered_products = products.offset(offset).limit(limit)
+    
+   
+      
+  
     render json: {
-      data: products.map { |product| ProductSerializer.new(product).as_json },
+      data: filtered_products.map { |product| ProductSerializer.new(product).as_json },
+      count: count,
       status: :accepted
     }
-
   end
   def create
     product = Product.find_or_create_by(
@@ -39,7 +55,7 @@ class ProductsController < ApplicationController
   def show_by_id
     puts "-----------------"
     puts params[:id]
-    product = Product.includes(:warehouse_fee).find (params[:id])
+    product = Product.includes(:warehouse_fee).find(params[:id])
     render :json => {
       data: ProductSerializer.new(product).as_json ,
       status: :accepted

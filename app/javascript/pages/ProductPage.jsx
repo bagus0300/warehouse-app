@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment";
+import moment, { lang } from "moment";
 import { feeUrl, productURL, warehouseURL } from "../utils/contants";
-import CTable from "../components/CTable";
+import CTable from "../components/CTable/CCTable";
 // import moment from "moment";
 import {
   Form,
@@ -12,8 +12,8 @@ import {
   Popconfirm,
   DatePicker,
   Table,
-  Select,
   Button,
+  Select,
   Modal,
   notification,
   Pagination,
@@ -28,7 +28,6 @@ import {
 } from "@heroicons/react/24/outline";
 
 import $lang from "../utils/content/jp.json";
-import { right } from "@popperjs/core";
 
 let plan_color, star_color, plan_text;
 
@@ -55,10 +54,23 @@ const ProductPage = () => {
   const [feeCategory, setFeeCategory] = useState("");
   const [storageFeeRate, setStorageFeeRate] = useState("");
 
-  const getAllProduct = () => {
-    axios.get(`${productURL}`).then((res) => {
-      let index = 1;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemPerPage] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [searchBtn, setSearchBtn] = useState(false);
 
+  const handlePageChange = (page, pageSize) => {
+    console.log(page, "page")
+    console.log(pageSize, "pageSize")
+    setCurrentPage((page - 1) * pageSize);
+    setItemPerPage(pageSize);
+  };
+
+  const getAllProduct = () => {
+
+    const urlParam = `${productURL}?offset=${currentPage}&limit=${itemsPerPage}&keyword=${searchText}`
+    axios.get(urlParam).then((res) => {
+      let index = 1;
       let products = res.data.data.map((item) => {
         let feeData = item.data.attributes.warehouse_fee;
         return {
@@ -70,9 +82,11 @@ const ProductPage = () => {
           fee_category: feeData.fee_category,
         };
       });
+      console.log(products, 'filterdata');
+      console.log(res.data.count, 'res.data.count');
+      setTotal(res.data.count);
+      console.log('============');
       setAllData(products);
-      setShowData(products);
-      //setPaginatedData(products.slice(1, 10));
     });
   };
 
@@ -138,31 +152,15 @@ const ProductPage = () => {
       setStorageFeeRate("");
     }
   };
-
-  const getBySearch = (data) => {
-    if (searchText) {
-      return data.filter((item) => item.name.includes(searchText));
-    } else {
-      return data;
-    }
-  };
-  const getShowData = () => {
-    const res = getBySearch(allData);
-    setShowData(res);
-  };
+  useEffect(() => {
+    getAllProduct();
+    getAllFeeData();
+  }, []);
 
   useEffect(() => {
     getAllProduct();
-  }, [isposted]);
 
-  useEffect(() => {
-    getShowData();
-  }, [searchText]);
-
-  useEffect(() => {
-    getAllFeeData();
-    getShowData();
-  }, []);
+  }, [searchText, currentPage, itemsPerPage, isposted]);
 
   const onAction = async (item) => {
     if (item) {
@@ -204,19 +202,7 @@ const ProductPage = () => {
     setIsModalOpen(false);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemPerPage] = useState(10);
-  const [startIndex, setStartIndex] = useState(1);
-  const [endIndex, setEndIndex] = useState(10);
-  const [paginatedData, setPaginatedData] = useState(allData.slice(1, 10));
 
-  const handlePageChange = (page, pageSize) => {
-    setCurrentPage(page);
-    setItemPerPage(pageSize);
-    setStartIndex((currentPage - 1) * itemsPerPage);
-    setEndIndex(startIndex + itemsPerPage);
-    setShowData(showData.slice(startIndex, endIndex));
-  };
 
   const productListColumns = [
     {
@@ -343,6 +329,13 @@ const ProductPage = () => {
                       placeholder={"Search"}
                       onChange={handleSearchText}
                     />
+                    {/* <Button
+                      onClick={() => setSearchBtn(true)}
+                      style={{ width: 120, marginLeft: 60 }}
+                      className="btn-bg-black"
+                    >
+                      {$lang?.buttons?.search}
+                    </Button> */}
                     <Button
                       // style={{ marginLeft: "640px" }}
                       onClick={() => {
@@ -473,24 +466,26 @@ const ProductPage = () => {
             <div className="mt-5">
               <CTable
                 rowKey={(node) => node.key}
-                dataSource={showData}
+                dataSource={allData}
                 columns={productListColumns}
               />
-              <Pagination
-                current={currentPage}
-                pageSize={itemsPerPage}
-                total={showData.length}
-                onChange={handlePageChange}
-                pageSizeOptions={[10, 20, 50, 100]}
-                showSizeChanger
-                className="p-1"
-                style={{ float: "right", marginTop: "20px" }}
-              />
+              <div className="flex justify-center w-full bg-base-200 rounded-md mt-5">
+                <Pagination
+                  current={currentPage}
+                  pageSize={itemsPerPage}
+                  total={total}
+                  onChange={handlePageChange}
+                  pageSizeOptions={[10, 20, 50, 100]}
+                  showSizeChanger
+                  className="p-1"
+                  style={{ float: "right" }}
+                />
+              </div>
             </div>
           </div>
         </Card>
       </Content>
-    </div>
+    </div >
   );
 };
 export default ProductPage;

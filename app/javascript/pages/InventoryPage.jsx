@@ -13,9 +13,9 @@ import {
   Row,
   Col,
   Button,
+  Table
 } from "antd";
 
-import CTable from "../components/CTable";
 
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
@@ -248,7 +248,7 @@ const InventoryPage = () => {
           className="py-4 my-2"
           bordered={false}
         >
-          <CTable
+          <Table
             columns={stockColumns}
             dataSource={[]}
             rowKey={(node) => node.key}
