@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment/moment";
-import CTable from "../components/CTable";
-
+import moment from "moment";
+import { warehouseURL, productURL } from "../utils/contants";
+import CTable from '../components/CTable'
 // import moment from "moment";
 import {
   Form,
@@ -16,6 +16,7 @@ import {
   Button,
   Modal,
   notification,
+  Pagination
 } from "antd";
 
 // import {
@@ -23,9 +24,6 @@ import {
 //   PencilSquareIcon,
 //   CalendarDaysIcon,
 // } from "@heroicons/react/24/outline";
-
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 
 import message from "../utils/content/jp.json";
 
@@ -35,6 +33,7 @@ const { Content } = Layout;
 
 const ProductPage = () => {
   const [form] = Form.useForm();
+
 
   const [searchText, setSearchText] = useState("");
   const [updateData, setUpdateData] = useState({});
@@ -54,9 +53,15 @@ const ProductPage = () => {
   const [feeCategory, setFeeCategory] = useState("");
   const [storageFeeRate, setStorageFeeRate] = useState("");
 
+
+
+
+
+
   const getAllProduct = () => {
-    axios.get("http://127.0.0.1:3000/api/product").then((res) => {
+    axios.get(`${productURL}`).then((res) => {
       let index = 1;
+
       let products = res.data.data.map((item) => {
         let feeData = item.data.attributes.warehouse_fee;
         return {
@@ -70,12 +75,14 @@ const ProductPage = () => {
       });
       setAllData(products);
       setShowData(products);
+      //setPaginatedData(products.slice(1, 10));
+
     });
   };
 
   const getAllFeeData = () => {
-    axios.get("http://127.0.0.1:3000/api/warehouse_fee").then((res) => {
-      let index = 1;
+    axios.get(`${warehouseURL}`).then((res) => {
+      let index = 1
       const priceData = res.data.data.map((item) => {
         return {
           ...item,
@@ -92,20 +99,17 @@ const ProductPage = () => {
     try {
       let product = await form.validateFields();
       if (updateData) {
-        await axios.put("http://127.0.0.1:3000/api/product", {
-          id: updateData.id,
-          ...product,
-        });
-        notification.success({ message: "Update Success", duration: 1 });
+        await axios.put(`${productURL}`, {
+          id: updateData.id, ...product
+        }
+        );
+        notification.success({ message: 'Update Success', duration: 1 });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        const postProduct = { ...product, warehouse_fee_id: feeID };
-        await axios.post("http://127.0.0.1:3000/api/product", {
-          ...product,
-          warehouse_fee_id: feeID,
-        });
-        notification.success({ message: "Create Success", duration: 1 });
+        const postProduct = { ...product, warehouse_fee_id: feeID }
+        await axios.post(`${productURL}`, { ...product, warehouse_fee_id: feeID });
+        notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -136,6 +140,9 @@ const ProductPage = () => {
     }
   };
 
+
+
+
   const getBySearch = (data) => {
     if (searchText) {
       return data.filter((item) => item.name.includes(searchText));
@@ -154,8 +161,6 @@ const ProductPage = () => {
 
   useEffect(() => {
     getShowData();
-    console.log(searchText);
-    console.log("first", showData);
   }, [searchText]);
 
   useEffect(() => {
@@ -201,6 +206,23 @@ const ProductPage = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemPerPage] = useState(10);
+  const [startIndex, setStartIndex] = useState(1);
+  const [endIndex, setEndIndex] = useState(10);
+  const [paginatedData, setPaginatedData] = useState(allData.slice(1, 10));
+
+  const handlePageChange = (page, pageSize) => {
+
+    setCurrentPage(page);
+    setItemPerPage(pageSize);
+    setStartIndex((currentPage - 1) * itemsPerPage);
+    setEndIndex(startIndex + itemsPerPage)
+    setShowData(showData.slice(startIndex, endIndex))
+
   };
 
   const productListColumns = [
@@ -306,7 +328,6 @@ const ProductPage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content style={{ width: 1024 }} className="mx-auto content-h">
         <div>
           <div className="mt-5">
@@ -447,12 +468,20 @@ const ProductPage = () => {
               rowKey={(node) => node.key}
               dataSource={showData}
               columns={productListColumns}
-              pagination={true}
+            />
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={showData.length}
+              onChange={handlePageChange}
+              pageSizeOptions={[10, 20, 50, 100]}
+              showSizeChanger
+              className="p-1"
+
             />
           </div>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

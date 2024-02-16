@@ -1,54 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation, useMatch } from "react-router-dom";
-// import {
-//   LaptopOutlined,
-//   NotificationOutlined,
-//   UserOutlined,
-// } from "@ant-design/icons";
-import { Typography, Breadcrumb } from "antd";
-
+import { useNavigate, useLocation, useMatch, Link } from "react-router-dom";
+import { Typography, Breadcrumb, Button } from "antd";
 import { Layout, Menu, theme } from "antd";
-import { navigations, siteInfo } from "../../../utils/content";
+import { siteInfo, navigations } from "../../../utils/content";
+import { useAuth } from "../../../hooks/useAuth";
 
 const NavbarSection = () => {
-  const [currentMenu, setCurrentMenu] = useState({});
-  const [selectedKeys, setSelectedKeys] = useState([]);
-  const [title, setTitle] = useState("");
-  const { Header } = Layout;
+  const { logoutAction } = useAuth();
   const { Title } = Typography;
+  const { Header } = Layout;
+
   const navigate = useNavigate();
-  let flattenNavigations = [];
-  // const urlSlice = useLocation().pathname;
-  // const { label, url } =
-  //   navigations.find((item) => item.key === useLocation().pathname) || {};
+  const [current, setCurrent] = useState("");
+  const [title, setTitle] = useState("");
 
-  // const breadcrumbTitle = label;
-
-  const location = useLocation();
   useEffect(() => {
-    flattenNavigations = navigations.reduce(
+    const flattenNavigations = navigations.reduce(
       (a, b) => a.concat(b.children ? b.children : b),
       []
     );
-  }, []);
-
-  const handleMenuClick = ({ key }) => {
-    flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    );
-    const { url } = flattenNavigations.find((item) => item.key === key) || {};
-    const { label } = flattenNavigations.find((item) => item.key === key) || {};
-    console.log(label);
+    const { label } = flattenNavigations.find((item) => item.key === current) || {};
     setTitle(label);
+  }, [current]);
 
-    if (url) {
-      navigate(url);
-    }
-
-    setSelectedKeys([key]);
-    setCurrentMenu({ key, label });
+  const onMenuClick = (e) => {
+    setCurrent(e.key);
+    navigate(e.key);
   };
+
+  useEffect(() => {
+    const flattenNavigations = navigations.reduce(
+      (a, b) => a.concat(b.children ? b.children : b),
+      []
+    );
+    const { label } = flattenNavigations.find((item) => item.key === current) || {};
+    setTitle(label);
+  }, [current]);
 
   return (
     <Layout>
@@ -63,14 +50,14 @@ const NavbarSection = () => {
         }}
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
-          <Title level={4} style={{ marginTop: 15, color: "#fff" }}>
-            {siteInfo.title}
+          <Title level={4} style={{ marginTop: 15 }}>
+            <Link to="home">{siteInfo.title}</Link>
           </Title>
         </div>
         <Menu
-          theme="light"
+          onClick={onMenuClick}
+          selectedKeys={[current]}
           mode="horizontal"
-          selectedKeys={selectedKeys}
           items={navigations}
           style={{
             flex: 1,
@@ -78,16 +65,16 @@ const NavbarSection = () => {
             backgroundColor: "#000",
             color: "#fff",
           }}
-          onClick={handleMenuClick}
         />
+        <Button onClick={logoutAction} style={{ marginLeft: "300px", marginTop: "15px" }}>
+          <Link to="/signin">LogOut</Link>
+        </Button>
       </Header>
       <Breadcrumb
         items={[
-          {
-            title: `${title}`,
-          },
+          { title },
         ]}
-        style={{ padding: "10px 50px ", backgroundColor: "#fff" }}
+        style={{ padding: "10px 50px ", backgroundColor: "grey", marginTop: "55px" }}
       />
     </Layout>
   );

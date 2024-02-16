@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import moment from "moment/moment";
-import CTable from "../components/CTable";
-// import moment from "moment";
+import moment from "moment";
+import CTable from '../components/CTable'
+import { warehouseFeeURL } from "../utils/contants";
+
 import {
   Form,
   Input,
@@ -21,8 +22,6 @@ import {
 //   CalendarDaysIcon,
 // } from "@heroicons/react/24/outline";
 
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 
 import message from "../utils/content/jp.json";
 
@@ -46,7 +45,7 @@ const WarehouseFee = () => {
   const [allData, setAllData] = useState([]);
 
   const getAllUnitPrice = () => {
-    axios.get("http://127.0.0.1:3000/api/warehouse_fee").then((res) => {
+    axios.get(`${warehouseFeeURL}`).then((res) => {
       let index = 1;
       const feeData = res.data.data.map((item) => {
         return {
@@ -62,16 +61,16 @@ const WarehouseFee = () => {
     try {
       let fee = await form.validateFields();
       if (updateData) {
-        await axios.put("http://127.0.0.1:3000/api/warehouse_fee", {
-          id: updateData.id,
-          ...fee,
-        });
-        notification.success({ message: "Update Success" });
+        await axios.put(`${warehouseFeeURL}`, {
+          id: updateData.id, ...fee
+        }
+        );
+        notification.success({ message: 'Update Success' });
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post("http://127.0.0.1:3000/api/warehouse_fee", fee);
-        notification.success({ message: "Create Success", duration: 1 });
+        await axios.post(`${warehouseFeeURL}`, fee);
+        notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -85,10 +84,7 @@ const WarehouseFee = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete(
-        "http://127.0.0.1:3000/api/warehouse_fee",
-        { data: { id: item.id } }
-      );
+      const response = await axios.delete(`${warehouseFeeURL}`, { data: { id: item.id } });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
       //getAllShipper();
@@ -227,7 +223,6 @@ const WarehouseFee = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1024 }}
         className="mx-auto flex flex-col content-h"
@@ -350,7 +345,6 @@ const WarehouseFee = () => {
           </div>
         </div>
       </Content>
-      <FooterSection />
     </div>
   );
 };

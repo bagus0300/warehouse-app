@@ -1,29 +1,23 @@
 import React from "react";
 import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Card,
-  Typography,
   Row,
   Layout,
+  Card,
+  Col
 } from "antd";
-const { Title, Paragraph, Text, Link } = Typography;
 
-import NavbarSection from "../components/layouts/Header/Navbar";
-import FooterSection from "../components/layouts/Footer/Index";
 import SectionCard from "../components/Top/SectionCard";
-import { cardTopics } from "../utils/content";
+import { cardTopic } from "../utils/content";
 const { Header, Content, Footer } = Layout;
 import { useAuth } from "../hooks/useAuth.js";
+import { Link } from "react-router-dom";
+import { margin } from "@mui/system";
 
 const Top = () => {
   const authState = useAuth();
   console.log("----------------", authState.token);
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1024 }}
         className="mx-auto flex flex-col justify-content content-h"
@@ -35,13 +29,16 @@ const Top = () => {
             marginTop: 100,
           }}
         >
-          {cardTopics.map((item, i) => (
-            <SectionCard title={item} span={8} key={i}></SectionCard>
+          {cardTopic.map((item, i) => (
+
+            <Col key={i} span={8} style={{ margin: 20 }}>
+              <Link to={item.key} key={i}><Card bordered={false}>{item.label}</Card></Link>
+            </Col>
+
           ))}
         </Row>
       </Content>
-      <FooterSection />
-    </div>
+    </div >
   );
 };
 

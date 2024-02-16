@@ -1,5 +1,6 @@
 
 class ProductsController < ApplicationController
+<<<<<<< HEAD
 
 
   
@@ -7,6 +8,9 @@ class ProductsController < ApplicationController
   #  products = Product.includes(:warehouse_fee).all
 
   # protect_from_forgery 
+=======
+  #protect_from_forgery 
+>>>>>>> beast
   def index
     products = Product.includes(:warehouse_fee).all
     render json: {

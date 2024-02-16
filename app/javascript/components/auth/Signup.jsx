@@ -150,7 +150,7 @@ const Signup = () => {
                 {messages.signupFields.signup}
               </Button>
               <small style={{ marginLeft: 20 }}>
-                <Link to="/">{messages.signupFields.to_login}</Link>
+                {messages.signupFields.to_login}
               </small>
             </Form.Item>
           </Form>

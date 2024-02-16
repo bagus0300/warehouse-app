@@ -1,22 +1,22 @@
-// import React, { useState, useEffect } from "react";
-// import axios from "axios";
-// import {
-//   Form,
-//   Layout,
-//   Select,
-//   Space,
-//   Input,
-//   DatePicker,
-//   Divider,
-//   Button,
-// } from "antd";
-// import NavbarSection from "../components/layouts/Header/Navbar";
-// import FooterSection from "../components/layouts/Footer/Index";
-// import IncomeTable from "../components/Income/IncomeTable";
-// import messages from "../utils/content/jp.json";
-// import moment from "moment";
-// import { makeHttpReq, makeHttpOptions } from "../utils/helper";
-// import { openNotificationWithIcon } from "../components/common/notification";
+import React, { useState, useEffect } from "react";
+import moment from "moment";
+import dayjs from "dayjs";
+import {
+  Form,
+  Layout,
+  Select,
+  Space,
+  Input,
+  DatePicker,
+  Divider,
+  Card,
+  Row,
+  Col,
+} from "antd";
+
+import IncomeTable from "../components/Income/IncomeTable";
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { openNotificationWithIcon } from "../components/common/notification";
 
 // import {
 //   warehouseURL,
@@ -485,4 +485,241 @@
 //   );
 // };
 
-// // export default IncomePage;
+  const updatePrepareProduct = () => {
+    let oldData = prepareProducts.slice();
+    const updateData = oldData.filter(
+      (item) => item.product_id == selectedProduct.value
+    )[0];
+
+    updateData.warehouse_id = selectedWarehouse.value;
+    updateData.warehouse_name = selectedWarehouse.label;
+    updateData.shipper_id = seletedShipper.value;
+    updateData.shipper_name = seletedShipper.label;
+    updateData.inout_on = receiptDate;
+
+    updateData.lotNumber = lotNumber;
+    updateData.weight = weight;
+    updateData.stock = stock;
+
+    //
+    setPrepareProducts(oldData);
+
+    setDiabledProduct(false);
+    setAddButtonVisability(false);
+  };
+
+  // ----------When rerender, get all data------
+  useEffect(() => {
+    getWarehouses();
+    getShippers();
+    getProducts();
+  }, [weight]);
+
+  return (
+    <div>
+      <Content
+        style={{ width: 1280, marginTop: 100 }}
+        className="mx-auto flex flex-col justify-content content-h"
+      >
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
+        >
+          <Form
+            name="basic"
+            autoComplete="off"
+            initialValues={{
+              warehouse: "",
+              shipper: "",
+              receipDate: "",
+              product: "",
+              packaging: "",
+              storagePrice: "",
+              handlePrice: "",
+              lotNumber: "",
+              weight: "",
+              stock: "",
+            }}
+          >
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.warehouse}: </label>
+              </Col>
+              <Col span={6}>
+                <Select
+                  placeholder={$lang.IncomePageJp.warehouse}
+                  style={{ width: 150, marginLeft: 14 }}
+                  value={selectedWarehouse}
+                  options={warehouseOptions}
+                  onChange={onChangeWarehouse}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.shipper}:</label>
+              </Col>
+              <Col span={6}>
+                <Select
+                  style={{ width: 300, marginLeft: 14 }}
+                  onChange={onChangeShipper}
+                  options={shipperOptions}
+                  value={seletedShipper.value}
+                  defaultValue={""}
+                  placeholder={$lang.IncomePageJp.shipper}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.receiptDate}:</label>
+              </Col>
+              <Col span={6}>
+                <div className="ml-2">
+                  <DatePicker
+                    style={{ width: 150 }}
+                    value={receiptDate}
+                    onChange={(date, dateStr) => {
+                      if (dateStr == "") {
+                        setInoutOn(dayjs("2024/02/20", dateFormat));
+                      } else setInoutOn(dayjs(dateStr, dateFormat));
+                    }}
+                    placeholder={$lang.IncomePageJp.receiptDate}
+                    className="ml-1"
+                    format={dateFormat}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.productName}:</label>
+              </Col>
+              <Col span={10}>
+                <Space.Compact block className="ml-3">
+                  <Select
+                    placeholder={$lang.IncomePageJp.productName}
+                    style={{ width: 200 }}
+                    value={selectedProduct.value}
+                    options={productOptions}
+                    onChange={onChangeProduct}
+                    disabled={isDisabledProduct}
+                    defaultValue={{
+                      value: "",
+                      label: "",
+                    }}
+                  />
+                  <Input
+                    style={{ width: 150 }}
+                    placeholder={$lang.IncomePageJp.packing}
+                    value={packaging}
+                    readOnly
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.cargoPrice}
+                    value={storagePrice}
+                    readOnly
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.storagePrice}
+                    value={handlePrice}
+                    readOnly
+                  />
+                </Space.Compact>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={1}></Col>
+              <Col span={8}>
+                <Space.Compact block className="ml-3">
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.lotNumber}
+                    value={lotNumber}
+                    onChange={(e) => {
+                      setLotNumber(e.target.value);
+                    }}
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.weight + "(kg)"}
+                    value={weight}
+                    onChange={(e) => {
+                      setWeight(e.target.value);
+                    }}
+                  />
+                  <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.itemNumber}
+                    value={stock}
+                    onChange={(e) => {
+                      setStock(e.target.value);
+                    }}
+                  />
+                </Space.Compact>
+              </Col>
+            </Row>
+            <Divider />
+            <Row>
+              <Col span={1}></Col>
+              <Col span={6}>
+                <CustomButton
+                  onClick={doPrepareProducts}
+                  className="px-5 ml-2 btn-bg-black"
+                  title={$lang.buttons.add}
+                  htmlType="submit"
+                  visability={!isVisibleAddButton}
+                />
+                <CustomButton
+                  onClick={updatePrepareProduct}
+                  className="px-5 ml-2 btn-bg-black"
+                  title={$lang.buttons.change}
+                  visability={isVisibleAddButton}
+                />
+                <CustomButton
+                  onClick={cancelEditProduct}
+                  className="px-5 ml-2 default"
+                  title={$lang.buttons.cancel}
+                  visability={isVisibleAddButton}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-4 my-2"
+          bordered={false}
+        >
+          <IncomeTable
+            data={prepareProducts}
+            editRow={(key) => editRow(key)}
+            deleteRow={deleteRow}
+            pagination={false}
+          />
+          <div style={{ height: 15 }}></div>
+          <div style={{ justifyContent: "flex-end", display: "flex" }}>
+            <CustomButton
+              title={$lang.buttons.csvExchange}
+              className="mr-2 btn-bg-black"
+              visability={true}
+              onClick={() =>
+                openNotificationWithIcon("warning", "", "on working")
+              }
+            ></CustomButton>
+            <CustomButton
+              onClick={savePrepareProducts}
+              title={$lang.buttons.confirmDeparture}
+              visability={true}
+            ></CustomButton>
+          </div>
+        </Card>
+      </Content>
+    </div >
+  );
+};
+
+export default IncomePage;

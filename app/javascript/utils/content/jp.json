@@ -43,8 +43,8 @@
   "Navigations": [
     {
       "label": "TOP",
-      "key": "/",
-      "url": "/"
+      "key": "/home",
+      "url": "/home"
     },
     {
       "label": "入庫処理",
@@ -84,6 +84,18 @@
     "closing_date": "締日",
     "code": "コード",
     "mainAddress": "住所"
+  },
+  "billing" : {
+    "new" : "請求一覧",
+    "YM" : "年月",
+    "day" : "締日",
+    "yymm" : "年/月",
+    "closing_date": "締日",
+    "period" : "対象期間",
+    "processDate" : "処理日時",
+    "list" : "一覧",
+    "productList" : "明細",
+    "next" : "次へ"
   },
   "Maintenance": {
     "addNew": "新規登録",
@@ -154,8 +166,8 @@
     "processing_onDate" : "処理日時",
     "description" : "摘要",
     "received" : "入金"
-
   },
+
   "messages": {
     "type_username": "ユーザー名を入力してください!",
     "type_loginId": "ログインIDを入力してください！",
