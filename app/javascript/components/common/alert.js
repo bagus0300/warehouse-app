@@ -1,9 +1,7 @@
 import { Alert } from "antd";
 import React from "react";
 
-const onClose = (e) => {
-  console.log(e, "I was closed.");
-};
+const onClose = (e) => {};
 const AlertComponent = ({ type, message }) => (
   <>
     <Alert

@@ -19,7 +19,6 @@ const LoginForm = ({ token }) => {
 
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   const onFormSubmit = ({ login_id, password }) => {

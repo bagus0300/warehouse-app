@@ -34,7 +34,7 @@ export const cardTopic = [
   },
   {
     label: "２．出庫処理",
-    key: "/configout_process",
+    key: "/out_process",
   },
   {
     label: "５．請求処理",
@@ -65,7 +65,7 @@ export const navigations = [
   },
   {
     label: "出庫処理",
-    key: "/configout_process",
+    key: "/out_process",
   },
   {
     label: "在庫管理",

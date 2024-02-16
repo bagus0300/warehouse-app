@@ -30,7 +30,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+
   };
 
   const onFormSubmit = ({ user_name, email, login_id, password }) => {

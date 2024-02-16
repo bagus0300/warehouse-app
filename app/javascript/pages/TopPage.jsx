@@ -15,7 +15,6 @@ import { margin } from "@mui/system";
 
 const Top = () => {
   const authState = useAuth();
-  console.log("----------------", authState.token);
   return (
     <div>
       <Content

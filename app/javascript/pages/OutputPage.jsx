@@ -128,23 +128,17 @@ const OutputPage = () => {
 
   const onSearch = (value, _e, info) => {
     const result = products.filter(product => product.product_id == value)[0];
-    console.log(result);
     setSearchResult(result);
   }
 
   const editRow = (id) => {
-    console.log('edit', id);
   }
 
   const deleteRow = (id) => {
     const newData = data.slice();
-    console.log('delete', id);
     const delData = newData.filter((data) => data.product_id == id)[0];
-    console.log(delData);
     const index = newData.indexOf(delData);
-    console.log('========', index);
     newData.splice(index, 1);
-    console.log('========', newData);
     setData(newData);
   }
 
@@ -152,7 +146,6 @@ const OutputPage = () => {
     const newData = data.slice();
     newData.push(searchResult);
     setData(newData);
-    console.log(data);
   };
 
   return (
