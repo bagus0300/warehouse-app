@@ -21,11 +21,11 @@ import {
   Flex,
 } from "antd";
 
-// import {
-//   TrashIcon,
-//   PencilSquareIcon,
-//   CalendarDaysIcon,
-// } from "@heroicons/react/24/outline";
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 
 import $lang from "../utils/content/jp.json";
 import { right } from "@popperjs/core";
@@ -330,7 +330,7 @@ const ProductPage = () => {
           <div>
             <div className="mt-5">
               <div className="">
-                <Flex gap="middle" align="start" horizontal>
+                <Flex gap="middle" align="start">
                   <Flex
                     style={{
                       width: "100%",

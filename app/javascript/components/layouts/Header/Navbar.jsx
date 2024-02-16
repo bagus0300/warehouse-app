@@ -12,7 +12,7 @@ import { siteInfo, navigations } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
 import $lang from "../../../utils/content/jp.json";
 const NavbarSection = () => {
-  const { logoutAction } = useAuth();
+  const { logoutAction, authUserName } = useAuth();
 
   const { Title } = Typography;
   const { Header } = Layout;
@@ -81,15 +81,17 @@ const NavbarSection = () => {
             color: "#fff",
           }}
         />
-        <Button
-          onClick={logoutAction}
-          className="btn-bg-black"
-          style={{ marginLeft: "300px", marginTop: "15px" }}
-        >
-          <Link to="/signin" style={{ color: "#fff" }}>
-            {$lang.buttons.logout}
-          </Link>
-        </Button>
+        {authUserName && (
+          <Button
+            onClick={logoutAction}
+            className="btn-bg-black"
+            style={{ marginLeft: "300px", marginTop: "15px" }}
+          >
+            <Link to="/signin" style={{ color: "#fff" }}>
+              {$lang.buttons.logout}
+            </Link>
+          </Button>
+        )}
       </Header>
       <Breadcrumb
         items={""}

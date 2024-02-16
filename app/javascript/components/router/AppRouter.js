@@ -21,16 +21,15 @@ import PrivateRoute from "./PrivateRoute";
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
 
-import InventoryPage from "../../pages/InventoryPage";
 import DepositPage from "../../pages/DepositPage";
 import BillingPage from "../../pages/BillingPage";
+import { useAuth } from "../../hooks/useAuth";
 
 export const AppRouter = () => {
   const user = useAuth();
   return (
     <AuthContextProvider>
       <BrowserRouter>
-        <NavbarSection />
         <Routes>
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -70,7 +69,7 @@ export const AppRouter = () => {
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />
         </Routes>
-        <FooterSection />
+        {/* <FooterSection /> */}
       </BrowserRouter>
     </AuthContextProvider>
   );
