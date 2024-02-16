@@ -1,9 +1,36 @@
 class StockInoutsController < ApplicationController
   protect_from_forgery 
+  # def index
+  
+  #   if StockInout.where(category: 0).exists?
+  #     stock_inout = StockInout.all
+  #   end
+  
+  #   render json: {
+  #     data: stock_inout,
+  #     status: :accepted
+  #   }
+  # end
+  def index
+    if StockInout.where(category: 0).exists?
+      stock_inouts = StockInout.includes(:stocks).all
+    end
+  
+    render json: {
+      data: stock_inouts.map { |stock_inout| StockInoutSerializer.new(stock_inout).as_json },
+      status: :accepted
+    }
+  end
+  def show_by_id
+    stock_inout = StockInout.includes(:stocks).find(params[:stock_id])
+  
+    render json: {
+      data: StockInoutSerializer.new(stock_inout).as_json,
+      status: :accepted
+    }
+  end
+   
   def create
-    # puts "-----------------------current user------------------"
-    # puts current_user.inspect
-    # puts "--------------------------------------"
     request_params.each do |record|
       # stock_inout_params = record.permit(:warehouse_id, :shipper_id, :product_id, :category, :amount, :inout_on, :handling_fee_rate, :storage_fee_rate, :lot_number, :weight)
 

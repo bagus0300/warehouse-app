@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
 
   post "/api/stock_inout"  , to: 'stock_inouts#create'
+  get "/api/stock_inout"  , to: 'stock_inouts#index'
 
   get "/api/received_payment", to: 'received_payments#index'
   post "/api/received_payment", to: 'received_payments#create'
