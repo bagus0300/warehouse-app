@@ -60,13 +60,13 @@
     },
     {
       "label": "入庫処理",
-      "key": "/in_process",
-      "url": "/in_process"
+      "key": "/in_stock",
+      "url": "/in_stock"
     },
     {
       "label": "出庫処理",
-      "key": "/out_process",
-      "url": "/out_process"
+      "key": "/out_stock",
+      "url": "/out_stock"
     },
     {
       "label": "在庫管理",
