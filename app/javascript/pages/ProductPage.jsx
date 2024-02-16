@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { feeUrl, productUrl } from "../utils/contants";
+import { warehouseURL, productURL } from "../utils/contants";
 import CTable from '../components/CTable'
 // import moment from "moment";
 import {
@@ -59,7 +59,7 @@ const ProductPage = () => {
 
 
   const getAllProduct = () => {
-    axios.get(`${productUrl}`).then((res) => {
+    axios.get(`${productURL}`).then((res) => {
       let index = 1;
 
       let products = res.data.data.map((item) => {
@@ -81,7 +81,7 @@ const ProductPage = () => {
   };
 
   const getAllFeeData = () => {
-    axios.get(`${feeUrl}`).then((res) => {
+    axios.get(`${warehouseURL}`).then((res) => {
       let index = 1
       const priceData = res.data.data.map((item) => {
         return {
@@ -99,7 +99,7 @@ const ProductPage = () => {
     try {
       let product = await form.validateFields();
       if (updateData) {
-        await axios.put(`${productUrl}`, {
+        await axios.put(`${productURL}`, {
           id: updateData.id, ...product
         }
         );
@@ -108,7 +108,7 @@ const ProductPage = () => {
         setIsPosted(!isposted);
       } else {
         const postProduct = { ...product, warehouse_fee_id: feeID }
-        await axios.post(`${productUrl}`, { ...product, warehouse_fee_id: feeID });
+        await axios.post(`${productURL}`, { ...product, warehouse_fee_id: feeID });
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);

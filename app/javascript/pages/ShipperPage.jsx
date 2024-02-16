@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import { shipperUrl } from "../utils/contants";
+import { shipperURL } from "../utils/contants";
 import CTable from '../components/CTable'
 import {
   Form,
@@ -36,7 +36,7 @@ const ShipperList = () => {
   const [allData, setAllData] = useState([]);
 
   const getAllShipper = () => {
-    axios.get(`${shipperUrl}`).then((res) => {
+    axios.get(`${shipperURL}`).then((res) => {
       let index = 1;
       const shipperData = res.data.data.map((item) => {
         return {
@@ -52,7 +52,7 @@ const ShipperList = () => {
     try {
       let shipper = await form.validateFields();
       if (updateData) {
-        await axios.put(`${shipperUrl}`, {
+        await axios.put(`${shipperURL}`, {
           id: updateData.id, ...shipper
         }
         );
@@ -60,7 +60,7 @@ const ShipperList = () => {
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post(`${shipperUrl}`, shipper);
+        await axios.post(`${shipperURL}`, shipper);
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
@@ -98,7 +98,7 @@ const ShipperList = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete(`${shipperUrl}`, { data: { id: item.id } });
+      const response = await axios.delete(`${shipperURL}`, { data: { id: item.id } });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
     } catch (error) {

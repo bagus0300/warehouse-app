@@ -13,6 +13,7 @@ import WarehouseFee from "../../pages/WarehouseFee";
 import OutputPage from "../../pages/OutputPage";
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
+import DepositPage from "../../pages/DepositPage";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
@@ -61,6 +62,10 @@ export const AppRouter = () => {
           <Route
             path="/inventory_control"
             element={<PrivateRoute Component={InventoryPage} />}
+          />
+          <Route
+            path="/deposit_process"
+            element={<PrivateRoute Component={DepositPage} />}
           />
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />

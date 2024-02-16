@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import CTable from '../components/CTable'
-import { feeUrl } from "../utils/contants";
+import { warehouseFeeURL } from "../utils/contants";
 
 import {
   Form,
@@ -45,7 +45,7 @@ const WarehouseFee = () => {
   const [allData, setAllData] = useState([]);
 
   const getAllUnitPrice = () => {
-    axios.get(`${feeUrl}`).then((res) => {
+    axios.get(`${warehouseFeeURL}`).then((res) => {
       let index = 1;
       const feeData = res.data.data.map((item) => {
         return {
@@ -61,7 +61,7 @@ const WarehouseFee = () => {
     try {
       let fee = await form.validateFields();
       if (updateData) {
-        await axios.put(`${feeUrl}`, {
+        await axios.put(`${warehouseFeeURL}`, {
           id: updateData.id, ...fee
         }
         );
@@ -69,7 +69,7 @@ const WarehouseFee = () => {
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
-        await axios.post(`${feeUrl}`, fee);
+        await axios.post(`${warehouseFeeURL}`, fee);
         notification.success({ message: 'Create Success', duration: 1 })
         setIsModalOpen(false);
         setIsPosted(!isposted);
@@ -84,7 +84,7 @@ const WarehouseFee = () => {
 
   const onDelete = async (item) => {
     try {
-      const response = await axios.delete(`${feeUrl}`, { data: { id: item.id } });
+      const response = await axios.delete(`${warehouseFeeURL}`, { data: { id: item.id } });
       setIsPosted(!isposted);
       notification.success({ message: "Delete Success.", duration: 1 });
       //getAllShipper();
