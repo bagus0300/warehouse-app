@@ -7,8 +7,8 @@ import {
   Input, DatePicker,
   Divider, Button,
   Modal, notification
-}
-  from "antd";
+} from "antd";
+import moment from 'moment'
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import DepositTable from "../components/Deposit/DepositTable";
 import localeJP from "antd/es/date-picker/locale/ja_JP";
@@ -32,8 +32,16 @@ const DepositPage = () => {
   const [updateData, setUpdateData] = useState({});
   const [isDelete, setIsDelelte] = useState('true');
 
+  // variables for filter
+  const [receivedDateRange, setReceivedDateRange] = useState([]);
+  const [processedDateRange, setProcessedDateRange] = useState([]);
+  const [showData, setShowData] = useState([]);
+  const [searchBtn, setSearchBtn] = useState(false);
+  const [searchShipperName, setSearchShipperName] = useState('')
+
   // -----------Table Data--------------
   const [prepareProducts, setPrepareProducts] = useState([]);
+
 
   // ----------Modal---------
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,8 +134,8 @@ const DepositPage = () => {
           id: item.id,
         };
       });
-      console.log(receivedPayment, 'dddddddddddddddddddddddddddddddddddddddddddd')
       setPrepareProducts(receivedPayment);
+      setShowData(receivedPayment);
     })
   };
 
@@ -172,30 +180,81 @@ const DepositPage = () => {
   };
 
 
+  // search data for filtering
+  const handleSearchSelect = (value) => {
+    setSearchShipperName(value)
+  }
+  const getByReceivedDate = (data) => {
 
-  const handleReceivedDates = async (paramDate) => {
-    console.log(paramDate, 'ddddd')
-    params = {
-      getStartDate: paramDate?.startDate,
-      getEndDate: paramDate?.endDate,
-    };
+    if (receivedDateRange) {
+      return data.filter((item) => {
+        const itemDate = item.received_on; // Assuming the date property is in a valid format
+        const startDate = moment(receivedDateRange[0]?.toDate()).format("YYYY-MM-DD");;
+        const endDate = moment(receivedDateRange[1]?.toDate()).format("YYYY-MM-DD");;
+        if (startDate && endDate) {
+          return itemDate >= startDate && itemDate <= endDate;
+        }
+        else if (startDate) {
+          return itemDate >= startDate;
+        } else if (endDate) {
+          return itemDate <= endDate;
+        }
+        return true;
+      });
+    } else {
+      return data;
+    }
+  }
+  const getByShipperName = (data) => {
+    if (searchShipperName) {
+      return data.filter((item) => item.shipper_id == searchShipperName)
+    } else {
+      return data
+    }
+  }
+  const getByProcessedDate = (data) => {
+    if (processedDateRange) {
+      return data.filter((item) => {
+        const itemDate = item.processing_on; // Assuming the date property is in a valid format
+        const startDate = moment(processedDateRange[0]?.toDate()).format("YYYY-MM-DD");;
+        const endDate = moment(processedDateRange[1]?.toDate()).format("YYYY-MM-DD");;
+        if (startDate && endDate) {
+          return itemDate >= startDate && itemDate <= endDate;
+        }
+        else if (startDate) {
+          return itemDate >= startDate;
+        } else if (endDate) {
+          return itemDate <= endDate;
+        }
+        return true;
+      });
+    } else {
+      return data;
+    }
+  }
 
-  };
+  const getShowData = () => {
+    setSearchBtn(true);
+    const res0 = getByReceivedDate(prepareProducts);
+    const res1 = getByShipperName(res0);
+    //const res2 = getByProcessedDate(res1);
+    console.log("resgetshowdata", res1)
+    setShowData(res1);
+  }
 
-  const handleProcessDates = async (paramDate) => {
-    params = {
-      getStartDate: paramDate?.startDate,
-      getEndDate: paramDate?.endDate,
-    };
-  };
+  useEffect(() => {
+    getShowData();
+  }, [searchBtn])
 
-
+  useEffect(() => {
+    getShowData();
+    getAllReceivedValue();
+  }, [])
 
   useEffect(() => {
     getAllShipper();
     getAllReceivedValue();
     setIsDelelte('false');
-    console.log("ddddddddd", depositDate)
   }, [modalOpen, isModalOpen, isDelete, depositDate])
 
 
@@ -286,15 +345,7 @@ const DepositPage = () => {
             <RangePicker
               style={{ marginLeft: 11 }}
               placeholder={[`${messages.DepositPage.received_onFrom}`, `${messages.DepositPage.received_onTo}`]}
-              onChange={(dates, dateStrings) => {
-                if (dates) {
-                  const date = {
-                    startDate: dateStrings[0],
-                    endDate: dateStrings[1]
-                  };
-                  handleReceivedDates(date)
-                }
-              }}
+              onChange={setReceivedDateRange}
               allowClear={false}
             />
             <div style={{ height: 15 }}></div>
@@ -302,31 +353,25 @@ const DepositPage = () => {
             <Select
               style={{ width: 200, marginLeft: 24 }}
               placeholder={messages.Maintenance.shipperName}
+              value={searchShipperName}
+              onChange={handleSearchSelect}
               options={shipperOptions}
             />
             <div style={{ height: 15 }}></div>
-            <label >{messages.DepositPage.received_on}:</label>
+            <label >{messages.DepositPage.processing_on}:</label>
             <RangePicker
               style={{ marginLeft: 11 }}
               placeholder={[`${messages.DepositPage.processing_onFrom}`, `${messages.DepositPage.processing_onTo}`]}
-              onChange={(dates, dateStrings) => {
-                if (dates) {
-                  const date = {
-                    startDate: dateStrings[0],
-                    endDate: dateStrings[1]
-                  };
-                  handleProcessDates(date)
-                }
-              }}
+              onChange={setProcessedDateRange}
               allowClear={false}
             />
-            <Button style={{ width: 120, marginLeft: 60 }}>{messages.IncomePageJp.search}</Button>
+            <Button onClick={getShowData} style={{ width: 120, marginLeft: 60 }}>{messages.IncomePageJp.search}</Button>
             <Button style={{ width: 150, marginLeft: 60 }}>{messages.buttons.csvExchange}</Button>
           </div>
         </div>
         <Divider />
         <DepositTable
-          data={prepareProducts}
+          data={showData}
           editRow={(key) => editRow(key)}
           deleteRow={deleteRow}
           pagination={true}
