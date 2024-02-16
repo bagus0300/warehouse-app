@@ -218,7 +218,7 @@ const DepositPage = () => {
               onOk={handleOK}
               onCancel={handleCancel}
               footer={[
-                <Button onClick={handleOK} key='ok'>
+                <Button onClick={handleOK} key="ok">
                   {messages.buttons.save}
                 </Button>,
                 <Button key="cancel" onClick={handleCancel}>

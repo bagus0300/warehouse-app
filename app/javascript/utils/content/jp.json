@@ -29,7 +29,8 @@
     "cancel": "キャンセル",
     "csvExchange": "CSVダウンロード",
     "confirmDeparture": "出庫確定",
-    "add": "追加"
+    "add": "追加",
+    "save" : "保管"
   },
   "CardTopics": [
     "１．入庫処理",
