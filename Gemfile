@@ -84,4 +84,4 @@ gem "warden"
 
 # gem "sidekiq"
 
-gem 'transactional'
+# gem 'transactional'

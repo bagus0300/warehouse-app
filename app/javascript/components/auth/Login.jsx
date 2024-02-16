@@ -17,7 +17,6 @@ const LoginForm = ({ token }) => {
     setBeforeRequestAction,
   } = useAuth();
 
-
   const onFinishFailed = (errorInfo) => {
   };
 
@@ -45,7 +44,7 @@ const LoginForm = ({ token }) => {
         >
           {messages.SiteInfo.title}
         </Title>
-        <Card style={{ width: 450 }} className="py-4">
+        <Card style={{ width: 450, borderColor: "#000" }} className="py-4">
           <Title
             level={5}
             className="text-center"
@@ -82,15 +81,15 @@ const LoginForm = ({ token }) => {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               valuePropName="checked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox>Remember me</Checkbox>
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
+              <Button htmlType="submit" className="btn-bg-black">
                 {messages.buttons.login}
               </Button>
               <small style={{ marginLeft: 20 }}>

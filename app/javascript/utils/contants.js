@@ -22,6 +22,14 @@ export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
+//unit_price urls
+
+export const feeUrl = baseUrl + "api/warehouse_fee";
+export const postReceivedPaymentUrl = baseUrl + "api/received_payment";
+
+export const getReceivedPaymentUrl = baseUrl + "api/received_payment";
+//unit_price urls
+
 export const postReceivedPaymentURL = baseUrl + "api/received_payment";
 
 export const getReceivedPaymentURL = baseUrl + "api/received_payment";

@@ -74,8 +74,12 @@ next-env.d.ts
 # ignore package-lock if generated (project uses yarn, not npm)
 package-lock.json
 
+<<<<<<< HEAD
+/app/assets/builds/
+=======
 /app/assets/builds/*
 
 /config/credentials/development.key
 
 /config/credentials/production.key
+>>>>>>> main

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
 import NotFonud from "../../pages/404";
@@ -22,11 +21,14 @@ import PrivateRoute from "./PrivateRoute";
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
 
+import BillingPage from "../../pages/BillingPage";
+import { useAuth } from "../../hooks/useAuth";
+
 export const AppRouter = () => {
+  const user = useAuth();
   return (
     <AuthContextProvider>
       <BrowserRouter>
-        <NavbarSection />
         <Routes>
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -40,7 +42,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={BillingList} />}
           />
           <Route
-            path="/in_process"
+            path="/in_stock"
             element={<PrivateRoute Component={IncomePage} />}
           />
           <Route
@@ -52,7 +54,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={ShipperPage} />}
           />
           <Route
-            path="/out_process"
+            path="/out_stock"
             element={<PrivateRoute Component={OutputPage} />}
           />
           <Route
@@ -60,7 +62,7 @@ export const AppRouter = () => {
             element={<PrivateRoute Component={WarehouseFee} />}
           />
           <Route
-            path="/inventory_control"
+            path="/stock"
             element={<PrivateRoute Component={InventoryPage} />}
           />
           <Route
@@ -70,7 +72,7 @@ export const AppRouter = () => {
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />
         </Routes>
-        <FooterSection />
+        {/* <FooterSection /> */}
       </BrowserRouter>
     </AuthContextProvider>
   );

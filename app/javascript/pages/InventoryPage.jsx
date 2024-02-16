@@ -1,110 +1,262 @@
-// import React from "react";
-// import { Form, Layout, Select, Space, Input, DatePicker, Divider, Button } from "antd";
+import React, { useState, useEffect } from "react";
+import moment from "moment";
+import dayjs from "dayjs";
+import {
+  Form,
+  Layout,
+  Select,
+  Space,
+  Input,
+  DatePicker,
+  Divider,
+  Card,
+  Row,
+  Col,
+  Button,
+} from "antd";
 
-// import NavbarSection from "../components/layouts/Header/Navbar";
-// // import FooterSection from "../components/layouts/Footer/Index";
-// // import IncomeTable from "../components/Income/IncomeTable";
-// import localeJP from "antd/es/date-picker/locale/ja_JP";
-// import messages from "../utils/content/jp.json";
-// import { useState,  useEffect } from "react";
+import CTable from "../components/CTable";
 
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { openNotificationWithIcon } from "../components/common/notification";
 
-// const InventoryPage = () => {
+import { warehouseURL, shipperURL, warehouseFeeURL } from "../utils/contants";
 
+import CustomButton from "../components/common/CustomButton";
+import $lang from "../utils/content/jp.json";
 
-//     const [data, setData] = useState([]);
+const { Content } = Layout;
+const dateFormat = "YYYY/MM/DD";
 
-//     const [storeVal, setStoreVal] = useState(storeOptions[0]);
-//     const [shipperVal, setShipperVal] = useState(shipperOptions[0]);
-//     const [receiptDate, setReceiptDate] = useState();
-//     // const [searchResult, setSearchResult] = useState({});
+const InventoryPage = () => {
+  // ---------Warehouse--------
+  const [selectedWarehouse, setSelectedWarehouse] = useState({
+    value: "",
+    label: "",
+  });
+  const [warehouseOptions, setWarehouseOptions] = useState([]);
 
-//     // const handleSubmit = (e) = {
+  // ------------Shipper-----------
+  const [seletedShipper, setSeletedShipper] = useState({
+    value: "",
+    label: "",
+  });
 
-//     // };
+  const [shipperOptions, setShipperOptions] = useState();
 
-//     const selStoreChange = (value) => {
-//         setStoreVal(storeOptions[value]);
-//     };
+  // ----------------Openday--------------
+  const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
 
-//     const selShipperChange = (value) => {
-//         setShipperVal(shipperOptions[value]);
-//     }
+  const onChangeWarehouse = (value, option) => {
+    setSelectedWarehouse({ value: value, label: option.label });
+  };
 
-//     const onChangeDate = (date, dateString) => {
-//         setReceiptDate(dateString);
-//     };
+  const onChangeShipper = (value, option) => {
+    setSeletedShipper({ value: value, label: option.label });
+  };
 
-//     // const onSearch = (value, _e, info) => {
-//     //     const result = products.filter(product => product.product_id == value)[0];
-//     //     console.log(result);
-//     //     setSearchResult(result);
-//     // }
+  //  -------Get warehouse names--------
+  const getWarehouses = () => {
+    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+      const warehouses = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
 
+      setWarehouseOptions(warehouses);
 
-//     return( 
-//     <div>
-//       <NavbarSection />
-//         <Content
-//             style={{ width: 1024 }}
-//             className="mx-auto flex flex-col justify-content content-h"
-//             >
-//             <div
-//             name="basic"
-//             initialValues={{ remember: true }}
-//             autoComplete="off"
-//             style={{ margin: "50px 0 0px 0" }}
-//             >
-//             <Space style={{ display:"flex", flexDirection: "column", alignItems:"flex-start", }}>
-//                 <Form.Item
-//                 label={messages.IncomePageJp.warehouse}
-//                 name="username"
-//                 style={{ display: "inline-block", width: 200, marginBottom: 0 }}
-//                 >
-//                 <Select
-//                     defaultValue={storeVal.label}
-//                     onChange={selStoreChange}
-//                     style={{ width: 140, marginLeft: 14 }}
-//                     options={storeOptions}
-//                 />
-//                 </Form.Item>
-//                 <Form.Item
-//                 label={messages.IncomePageJp.shipper}
-//                 name="username"
-//                 style={{ display: "", width: 500, marginBottom: 0, flexFlow: "nowrap" }}
-//                 >
-//                 <Select
-//                     defaultValue={shipperVal.label}
-//                     style={{ width: 300, marginLeft: 14  }}
-//                     onChange={selShipperChange}
-//                     options={shipperOptions}
-//                 />
-//                 </Form.Item>
-//                 <Form.Item
-//                 label={messages.IncomePageJp.receiptDate}
-//                 name="username"
-//                 style={{
-//                     display: "inline-block",
-//                     width: 250,
-//                     marginLeft: 0,
-//                     marginBottom: 0,
-//                 }}
-//                 >
-//                 <DatePicker value={receiptDate} onChange={onChangeDate} locale={localeJP} />
-//                 </Form.Item>
-//             </Space>
-//             </div>
-//         </Content>
-//     </div>
-//     )
-// };
+      if (warehouses.length > 0)
+        setSelectedWarehouse({
+          value: warehouses[0].value,
+          label: warehouses[0].label,
+        });
+    });
+  };
 
-// export default InventoryPagePage;
+  // --------Get shipper data--------
+  const getShippers = () => {
+    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+      const shippers = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
 
-import React from 'react'
+      setShipperOptions(shippers);
 
-export default function InventoryPage() {
+      if (shippers.length > 0)
+        setSeletedShipper({
+          value: shippers[0].value,
+          label: shippers[0].label,
+        });
+    });
+  };
+
+  const stockColumns = [
+    {
+      title: "No",
+      dataIndex: "key",
+      sorter: true,
+      align: "center",
+      width: "5%",
+    },
+    {
+      title: `${$lang.stock.productName}`,
+      key: "product_name",
+      width: "20%",
+      dataIndex: "product_name",
+      align: "center",
+    },
+    {
+      title: `${$lang.stock.packaging}`,
+      dataIndex: "packaging",
+      key: "packaging",
+      align: "center",
+    },
+    {
+      title: `${$lang.stock.lotoNumber}`,
+      dataIndex: "lot_number",
+      key: "lot_number",
+      align: "center",
+    },
+    {
+      title: `${$lang.stock.amount}`,
+      dataIndex: "amount",
+      key: "amount",
+      align: "center",
+    },
+    {
+      title: `${$lang.stock.inStockDate}`,
+      dataIndex: "inout_on",
+      key: "amount",
+      align: "center",
+    },
+  ];
+
+  // ----------When rerender, get all data------
+  useEffect(() => {
+    getWarehouses();
+    getShippers();
+  }, []);
+
   return (
-    <div>InventoryPage</div>
-  )
-}
+    <div>
+      <Content
+        style={{ width: 1280, marginTop: 20 }}
+        className="mx-auto flex flex-col justify-content content-h"
+      >
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-2 my-2"
+          bordered={false}
+        >
+          <Form
+            name="basic"
+            autoComplete="off"
+            initialValues={{
+              warehouse: "",
+              shipper: "",
+              receipDate: "",
+            }}
+          >
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.warehouse}: </label>
+              </Col>
+              <Col span={6}>
+                <Select
+                  placeholder={$lang.IncomePageJp.warehouse}
+                  style={{ width: 150, marginLeft: 14 }}
+                  value={selectedWarehouse}
+                  options={warehouseOptions}
+                  onChange={onChangeWarehouse}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.shipper}:</label>
+              </Col>
+              <Col span={6}>
+                <Select
+                  style={{ width: 300, marginLeft: 14 }}
+                  onChange={onChangeShipper}
+                  options={shipperOptions}
+                  value={seletedShipper.value}
+                  defaultValue={""}
+                  placeholder={$lang.IncomePageJp.shipper}
+                />
+              </Col>
+            </Row>
+            <Row className="my-2">
+              <Col span={1}>
+                <label>{$lang.IncomePageJp.receiptDate}:</label>
+              </Col>
+              <Col span={10}>
+                <div className="ml-2">
+                  <DatePicker
+                    style={{ width: 150 }}
+                    value={receiptDate}
+                    onChange={(date, dateStr) => {
+                      if (dateStr == "") {
+                        setInoutOn(dayjs("2024/02/20", dateFormat));
+                      } else setInoutOn(dayjs(dateStr, dateFormat));
+                    }}
+                    placeholder={$lang.IncomePageJp.receiptDate}
+                    className="ml-1"
+                    format={dateFormat}
+                  />
+                  <CustomButton
+                    onClick={() => {
+                      openNotificationWithIcon(
+                        "success",
+                        "",
+                        "currently on developing."
+                      );
+                    }}
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.search}
+                    htmlType="submit"
+                    visability={true}
+                  />
+                </div>
+              </Col>
+              <Col span={13}>
+                <CustomButton
+                  onClick={() => {
+                    openNotificationWithIcon(
+                      "success",
+                      "",
+                      "currently on developing."
+                    );
+                  }}
+                  className="px-5 ml-2 btn-bg-black"
+                  title={$lang.stock.inventory_report}
+                  visability={true}
+                  style={{ float: "right" }}
+                />
+              </Col>
+            </Row>
+            <Divider />
+          </Form>
+        </Card>
+        <Card
+          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          className="py-4 my-2"
+          bordered={false}
+        >
+          <CTable
+            columns={stockColumns}
+            dataSource={[]}
+            rowKey={(node) => node.key}
+          />
+        </Card>
+      </Content>
+    </div>
+  );
+};
+
+export default InventoryPage;

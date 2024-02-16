@@ -25,8 +25,8 @@ export const cardTopics = [
 
 export const cardTopic = [
   {
-    label:  "１．入庫処理",
-    key: "/in_process",
+    label: "１．入庫処理",
+    key: "/in_stock",
   },
   {
     label: "４．入金処理",
@@ -34,7 +34,7 @@ export const cardTopic = [
   },
   {
     label: "２．出庫処理",
-    key: "/out_process",
+    key: "/out_stock",
   },
   {
     label: "５．請求処理",
@@ -42,7 +42,7 @@ export const cardTopic = [
   },
   {
     label: "３．倉庫管理",
-    key: "/inventory_control",
+    key: "/stock",
   },
   {
     label: "６．マスタ保守",
@@ -56,20 +56,20 @@ export const cardTopic = [
 
 export const navigations = [
   {
-    label: "TOP",
+    label: "トップ",
     key: "/home",
   },
   {
     label: "入庫処理",
-    key: "/in_process",
+    key: "/in_stock",
   },
   {
     label: "出庫処理",
-    key: "/out_process",
+    key: "/out_stock",
   },
   {
     label: "在庫管理",
-    key: "/inventory_control",
+    key: "/stock",
   },
   {
     label: "入金処理",
@@ -86,7 +86,7 @@ export const navigations = [
       {
         label: "請求一覧",
         key: "/billing_list",
-      }
+      },
     ],
   },
   {
