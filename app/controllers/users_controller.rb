@@ -7,16 +7,16 @@ class UserController < ApplicationController
       status:     :accepted
     }
   end
-  def update
-    if User.where(id: params[:id]).update_all(
-      user_name:                params[:user_name],
-      login_id:                 params[:login_id],
-      email:                    params[:email],
-      authority:                params[:authority],
-      )
-    render :json => {
-        status: :accepted
-      }
-    end
-  end
+  # def update
+  #   if User.where(id: params[:id]).update_all(
+  #     user_name:                params[:user_name],
+  #     login_id:                 params[:login_id],
+  #     email:                    params[:email],
+  #     authority:                params[:authority],
+  #     )
+  #   render :json => {
+  #       status: :accepted
+  #     }
+  #   end
+  # end
 end
