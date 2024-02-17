@@ -13,6 +13,7 @@ import OutputPage from "../../pages/OutputPage";
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
 import DepositPage from "../../pages/DepositPage";
+import UserPage from "../../pages/UserPage";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
@@ -71,6 +72,10 @@ export const AppRouter = () => {
           />
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/user_process"
+            element={<PrivateRoute Component={UserPage} />}
+          />
         </Routes>
         {/* <FooterSection /> */}
       </BrowserRouter>

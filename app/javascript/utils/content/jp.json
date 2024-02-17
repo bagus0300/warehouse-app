@@ -179,6 +179,13 @@
     "description": "摘要",
     "received": "入金"
   },
+  "UserPage": {
+    "loginNumber":"番号",
+    "user_name":"ユーザー名",
+    "login_id":"ログインID",
+    "email":"電子メール",
+    "authority":"権限"
+  },
 
   "messages": {
     "type_username": "ユーザー名を入力してください!",

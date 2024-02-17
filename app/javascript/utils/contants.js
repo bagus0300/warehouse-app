@@ -33,6 +33,11 @@ export const getReceivedPaymentUrl = baseUrl + "api/received_payment";
 export const postReceivedPaymentURL = baseUrl + "api/received_payment";
 
 export const getReceivedPaymentURL = baseUrl + "api/received_payment";
+
+export const getUserURL = baseUrl + "api/users";
+
+export const getUserAuthURL = baseUrl + "api/authorities";
+
 //unit_price urls
 
 export const httpErrors = {

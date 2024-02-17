@@ -107,4 +107,8 @@ export const navigations = [
       },
     ],
   },
+  {
+    label: "ユーザー",
+    key: "/user_process",
+  },
 ];
