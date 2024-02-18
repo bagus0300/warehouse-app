@@ -47,10 +47,12 @@ Rails.application.routes.draw do
   put "/api/received_payment", to: 'received_payments#update'
   delete "/api/received_payment", to: 'received_payments#destroy'
   
-  get "/api/user", to: 'user#index'
-  put "/api/user", to: 'user#update'
+  get "/api/user", to: 'users#index'
+  put "/api/user", to: 'users#update'
 
   get "/api/authorities", to: 'authorities#index'
+
+  get "/api/client_page", to: 'client_pages#index'
 
 
   get '/*path', to: 'component#index'

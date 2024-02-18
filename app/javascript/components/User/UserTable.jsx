@@ -15,31 +15,6 @@ import {
 
 const UserTable = ({ data, editRow }) => {
 
-  // const [userAuth, setUserAuth] = useState();
-  // const [userAuthOptions, setUserAuthOptions] = useState();
-  // const onChangeUserAuth = (value) => {
-  //   setUserAuth(value);
-  //   console.log("value", value)
-  // }
-
-  // const getUserAuth = () => {
-  //   makeHttpReq(makeHttpOptions({}, "get", getUserAuthURL)).then((res) => {
-  //     let index=0;
-  //     const users = res.data.data.map((item) => {
-  //       return {
-  //         value: item.auth_num,
-  //         label: item.name,
-  //         key: index++
-  //       };
-  //     });
-  //     setUserAuthOptions(users);
-  //   }
-  // )};
-
-  // useEffect(() => {
-  //   getUserAuth();
-  // },[])
-
   const columns = [
     {
       title: "NO",
@@ -64,8 +39,8 @@ const UserTable = ({ data, editRow }) => {
     },
     {
       title: "権限",
-      dataIndex: "authrority",
-      key: "authrority",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Action",

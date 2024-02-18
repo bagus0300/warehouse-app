@@ -24,6 +24,7 @@ import FooterSection from "../layouts/Footer/Index";
 
 import BillingPage from "../../pages/BillingPage";
 import { useAuth } from "../../hooks/useAuth";
+import ClientPage from "../../pages/ClientPage";
 
 export const AppRouter = () => {
   const user = useAuth();
@@ -75,6 +76,10 @@ export const AppRouter = () => {
           <Route
             path="/user_process"
             element={<PrivateRoute Component={UserPage} />}
+          />
+          <Route
+            path="/clientPage_process"
+            element={<PrivateRoute Component={ClientPage} />}
           />
         </Routes>
         {/* <FooterSection /> */}

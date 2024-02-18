@@ -13,11 +13,14 @@ import {
   Form,
   Modal,
   Button,
-  Input
+  Input,
+  notification,
+  Select
 } from "antd";
 
 import {
-  getUserURL
+  getUserURL,
+  getUserAuthURL
 } from "../utils/contants";
 
 const { Content } = Layout;
@@ -27,10 +30,18 @@ const { Content } = Layout;
 const UserPage = () => {
 
   const [form] = Form.useForm();
+
   const [userData, setUserData] = useState();
   const [updateData, setUpdateData] = useState();
-
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  
+  const [authority, setAuthority] = useState();
+  const [authNameOptions, setAuthNameOptions] = useState();
+  const selAuthName = (value) => {
+    setAuthority(value);
+  }
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -42,13 +53,13 @@ const UserPage = () => {
 
   const handleEdit = async () => {
     setIsModalOpen(false);
+    setIsEdit(true);
     let data = await form.validateFields();
     console.log("updatedata", data)
-    if (updateData) {
+    if (data) {
       makeHttpReq(
         makeHttpOptions(
           {
-            id: updateData.id,
             ...data,
           },
           "put",
@@ -63,12 +74,13 @@ const UserPage = () => {
   const editRow = (key) => {
     setIsModalOpen(true);
     form.setFieldsValue({
-      user_name: userData[key].user_name,
-      login_id:userData[key].login_id,
-      email:userData[key].email,
-      authority:userData[key].authority,
+      user_name: userData[key-1].user_name,
+      login_id:userData[key-1].login_id,
+      email:userData[key-1].email,
+      name:userData[key-1].name,
+      authority:userData[key-1].authority
     });
-    const data = userData[key];
+    const data = userData[key-1];
     setUpdateData({
       data
     });
@@ -78,7 +90,6 @@ const UserPage = () => {
   const getAllUser = () => {
     makeHttpReq(makeHttpOptions({}, "get", getUserURL)).then((res) => {
       let index=1;
-      console.log("res", res.data.data)
       const users = res.data.data.map((item) => {
         return {
           ...item,
@@ -89,9 +100,26 @@ const UserPage = () => {
     }
   )};
 
+  const getAllAuth = () => {
+    makeHttpReq(makeHttpOptions({}, "get", getUserAuthURL)).then((res) => {
+      let index = 1;
+      const auth = res.data.data.map((item) => {
+        return {
+          key: index++,
+          value: item.auth_num,
+          label: item.name
+        };
+      });
+      console.log("auth", auth);
+      setAuthNameOptions(auth);
+    })
+  }
+
   useEffect(() => {
     getAllUser();
-  },[])
+    getAllAuth();
+    setIsEdit(false)
+  },[isEdit])
 
   return (
     <>
@@ -141,6 +169,7 @@ const UserPage = () => {
             name={"login_id"}
           >
             <Input 
+              disabled
               style={{ width: 200, marginLeft: 17 }}
               placeholder={messages.UserPage.login_id} 
             />
@@ -159,6 +188,7 @@ const UserPage = () => {
             <Input
               style={{ width: 200, marginLeft: 17 }}
               placeholder={messages.UserPage.email}
+              
             />
           </Form.Item>
           <div style={{ height: 20 }}></div>
@@ -171,9 +201,12 @@ const UserPage = () => {
             }}
             name={"authority"}
           >
-            <Input
+            <Select
               placeholder={messages.UserPage.authority}
               style={{ marginLeft: 58, width: 200 }}
+              value={authority}
+              options={authNameOptions}
+              onChange={selAuthName}
             />
           </Form.Item>
         </Form>
