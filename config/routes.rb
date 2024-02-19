@@ -40,14 +40,22 @@ Rails.application.routes.draw do
   get "/api/processing_data/export_csv", to: 'processing_datas#export_csv'
 
   post "/api/stock_inout"  , to: 'stock_inouts#create'
+  get "/api/stock_inout"  , to: 'stock_inouts#index'
 
   get "/api/received_payment", to: 'received_payments#index'
   post "/api/received_payment", to: 'received_payments#create'
   put "/api/received_payment", to: 'received_payments#update'
   delete "/api/received_payment", to: 'received_payments#destroy'
   
-  get '/*path', to: 'component#index'
+  get "/api/user", to: 'users#index'
+  put "/api/user", to: 'users#update'
 
+  get "/api/authorities", to: 'authorities#index'
+
+  get "/api/client_page", to: 'client_pages#index'
+
+
+  get '/*path', to: 'component#index'
 
 
   # get "/api/warehouse", to: 'warehouses#index'

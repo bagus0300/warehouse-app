@@ -13,6 +13,7 @@ import OutputPage from "../../pages/OutputPage";
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
 import DepositPage from "../../pages/DepositPage";
+import UserPage from "../../pages/UserPage";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
@@ -23,6 +24,7 @@ import FooterSection from "../layouts/Footer/Index";
 
 import BillingPage from "../../pages/BillingPage";
 import { useAuth } from "../../hooks/useAuth";
+import ClientPage from "../../pages/ClientPage";
 
 export const AppRouter = () => {
   const user = useAuth();
@@ -71,6 +73,14 @@ export const AppRouter = () => {
           />
           <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
           <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/user_process"
+            element={<PrivateRoute Component={UserPage} />}
+          />
+          <Route
+            path="/clientPage_process"
+            element={<PrivateRoute Component={ClientPage} />}
+          />
         </Routes>
         {/* <FooterSection /> */}
       </BrowserRouter>

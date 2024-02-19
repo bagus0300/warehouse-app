@@ -28,10 +28,10 @@ export const cardTopic = [
     label: "１．入庫処理",
     key: "/in_stock",
   },
-  {
-    label: "４．入金処理",
-    key: "/deposit_process",
-  },
+  // {
+  //   label: "４．入金処理",
+  //   key: "/deposit_process",
+  // },
   {
     label: "２．出庫処理",
     key: "/out_stock",
@@ -106,5 +106,13 @@ export const navigations = [
         key: "/warehouse_fee",
       },
     ],
+  },
+  {
+    label: "ユーザー",
+    key: "/user_process",
+  },
+  {
+    label: "権限",
+    key: "/clientPage_process",
   },
 ];

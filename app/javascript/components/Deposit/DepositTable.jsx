@@ -44,8 +44,8 @@ const DepositTable = ({ data, editRow, deleteRow }) => {
       key: 'action',
       render: (_, record) => (
         <div style={{ display: "flex" }}>
-          <PencilSquareIcon style={{ width: 30, cursor: "pointer" }} onClick={() => editRow(record)}>{messages.buttons.change}</PencilSquareIcon>
-          <TrashIcon style={{ width: 30, cursor: "pointer" }} onClick={() => deleteRow(record.id)}>{messages.buttons.delete}</TrashIcon>
+          <PencilSquareIcon style={{ width: 20, cursor: "pointer" }} onClick={() => editRow(record)}>{messages.buttons.change}</PencilSquareIcon>
+          <TrashIcon style={{ width: 20, cursor: "pointer" }} onClick={() => deleteRow(record.id)}>{messages.buttons.delete}</TrashIcon>
         </div>
       ),
     }

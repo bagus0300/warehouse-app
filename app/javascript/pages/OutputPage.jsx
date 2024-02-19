@@ -16,7 +16,7 @@ import {
   Button,
 } from "antd";
 
-import IncomeTable from "../components/Income/IncomeTable";
+import OutputTable from "../components/Output/OutputTable";
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
 
@@ -55,8 +55,10 @@ const IncomePage = () => {
   const [shipperOptions, setShipperOptions] = useState();
 
   // ----------------Openday--------------
-  // const [receiptDate, setInoutOn] = useState(moment("2024-02-16"));
-  const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
+  // const [departureDate, setInoutOn] = useState(moment("2024-02-16"));
+  const [departureDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
+
+  const [receiptDate, setReceiptDate] = useState(dayjs("", dateFormat));
 
   // ---------product----------
   const [selectedProduct, setSelectedProduct] = useState({
@@ -78,8 +80,8 @@ const IncomePage = () => {
   // -------------lotNumber-----------
   const [lotNumber, setLotNumber] = useState("");
 
-  // ---------------weight---------------
-  const [weight, setWeight] = useState("");
+  // ---------------libraryNumber---------------
+  const [libraryNumber, setLibraryNumber] = useState("");
 
   // -------------amount--------------
   const [amount, setStock] = useState("");
@@ -89,13 +91,13 @@ const IncomePage = () => {
   const initPrepareProductItem = () => {
     setLotNumber("");
     setStock("");
-    setWeight("");
+    setLibraryNumber("");
   };
 
   const setPrepareProductItem = (editData) => {
     setLotNumber(editData.lot_number);
     setStock(editData.amount);
-    setWeight(editData.weight);
+    setLibraryNumber(editData.libraryNumber, readOnly);
     setPackaging(editData.product_type);
     setHandlePrice(editData.handling_fee_rate);
     setStoragePrice(editData.storage_fee_rate);
@@ -218,7 +220,7 @@ const IncomePage = () => {
   };
 
   const isReadyPrepareProducts = () => {
-    if (receiptDate == "") {
+    if (departureDate == "") {
       openNotificationWithIcon(
         "warning",
         "",
@@ -231,8 +233,8 @@ const IncomePage = () => {
     } else if (amount == "") {
       openNotificationWithIcon("warning", "", $lang.messages.input_stock);
       return false;
-    } else if (weight == "") {
-      openNotificationWithIcon("warning", "", $lang.messages.input_weight);
+    } else if (libraryNumber == "") {
+      openNotificationWithIcon("warning", "", $lang.messages.input_libraryNumber);
       return false;
     }
 
@@ -253,13 +255,13 @@ const IncomePage = () => {
       product_type: packaging,
       catagory: 0,
       lot_number: lotNumber,
-      weight: weight,
+      libraryNumber: libraryNumber,
       amount: amount,
       warehouse_id: selectedWarehouse.value,
       warehouse_name: selectedWarehouse.label,
       shipper_id: seletedShipper.value,
       shipper_name: seletedShipper.label,
-      inout_on: receiptDate,
+      inout_on: departureDate,
       idx: index++,
       category: 0,
     };
@@ -271,6 +273,29 @@ const IncomePage = () => {
 
     // setAddButtonVisability(true);
   };
+
+  const getLotNumber = () => {
+    makeHttpReq(
+      makeHttpOptions(
+        {},
+        "get",
+        saveStockInoutUrl
+      )
+    )
+      .then((res) => {
+        console.log("res", res.data.data)
+        let index = 0;
+        const productData = res.data.data.map((item) => {
+          return {
+            value: item.lot_number,
+            // label: item.
+          };
+        });
+      })
+      .catch((err) => {
+        openNotificationWithIcon("error", "error", err.messages);
+      });
+  }
 
   const editRow = (productId) => {
     setEditMode("edit");
@@ -324,10 +349,10 @@ const IncomePage = () => {
     updateData.warehouse_name = selectedWarehouse.label;
     updateData.shipper_id = seletedShipper.value;
     updateData.shipper_name = seletedShipper.label;
-    updateData.inout_on = receiptDate;
+    updateData.inout_on = departureDate;
 
     updateData.lot_number = lotNumber;
-    updateData.weight = weight;
+    updateData.libraryNumber = libraryNumber;
     updateData.amount = amount;
 
     //
@@ -342,6 +367,7 @@ const IncomePage = () => {
     getWarehouses();
     getShippers();
     getProducts();
+    getLotNumber();
   }, []);
 
   return (
@@ -367,7 +393,7 @@ const IncomePage = () => {
               storagePrice: "",
               handlePrice: "",
               lotNumber: "",
-              weight: "",
+              libraryNumber: "",
               amount: "",
             }}
           >
@@ -402,19 +428,19 @@ const IncomePage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.receiptDate}:</label>
+                <label>{$lang.OutputPage.departureDate}:</label>
               </Col>
               <Col span={6}>
                 <div className="ml-2">
                   <DatePicker
                     style={{ width: 150 }}
-                    value={receiptDate}
+                    value={departureDate}
                     onChange={(date, dateStr) => {
                       if (dateStr == "") {
                         setInoutOn(dayjs("2024/02/20", dateFormat));
                       } else setInoutOn(dayjs(dateStr, dateFormat));
                     }}
-                    placeholder={$lang.IncomePageJp.receiptDate}
+                    placeholder={$lang.OutputPage.departureDate}
                     className="ml-1"
                     format={dateFormat}
                   />
@@ -462,9 +488,18 @@ const IncomePage = () => {
             </Row>
             <Row>
               <Col span={1}></Col>
-              <Col span={8}>
+              <Col span={8} style={{display: "flex"}}>
                 <Space.Compact block className="ml-3">
                   <Input
+                    style={{ width: 100 }}
+                    placeholder={$lang.IncomePageJp.receiptDate}
+                    value={receiptDate}
+                    onChange={(e) => {
+                      setReceiptDate(e.target.value);
+                    }}
+                    readOnly
+                  />
+                  <Select
                     style={{ width: 100 }}
                     placeholder={$lang.IncomePageJp.lotNumber}
                     value={lotNumber}
@@ -472,17 +507,20 @@ const IncomePage = () => {
                       setLotNumber(e.target.value);
                     }}
                   />
+                </Space.Compact>
+                <Space.Compact className="ml-3">
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.weight + "(kg)"}
-                    value={weight}
+                    placeholder={$lang.OutputPage.libraryNumber}
+                    value={libraryNumber}
                     onChange={(e) => {
-                      setWeight(e.target.value);
+                      setLibraryNumber(e.target.value);
                     }}
+                    readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.itemNumber}
+                    placeholder={$lang.OutputPage.shipmentNumber}
                     value={amount}
                     onChange={(e) => {
                       setStock(e.target.value);
@@ -523,7 +561,7 @@ const IncomePage = () => {
           className="py-4 my-2"
           bordered={false}
         >
-          <IncomeTable
+          <OutputTable
             data={prepareProducts}
             editRow={(key) => editRow(key)}
             deleteRow={deleteRow}
