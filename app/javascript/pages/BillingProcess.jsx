@@ -191,7 +191,6 @@ const BillingProcess = () => {
     <Content style={{ width: 1024 }} className="mx-auto content-h">
       <div>
         <div className="mt-5">
-          <Button>{$lang.billing.new}</Button>
           <div className="mt-5  flex flex-row item-center">
             <label>{$lang.billing.billingDate}:</label>
             <DatePicker
@@ -232,7 +231,7 @@ const BillingProcess = () => {
               className="ml-4"
             />
           </div>
-          <div className="mt-5  flex flex-row item-center">
+          <div className="flex flex-row item-center">
             <label>{$lang.billing.targetShipper}</label>
             <InputNumber className="ml-4" />
             <label className="ml-4" >~</label>
