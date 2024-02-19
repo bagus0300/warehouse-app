@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import message from "../utils/content/jp.json";
+import $lang from "../utils/content/jp.json";
 import CTable from "../components/CTable";
 
 import {
@@ -16,10 +16,12 @@ import {
   Modal,
   notification,
   DatePicker,
+  message,
 } from "antd";
 const { Content } = Layout;
 
 const BillingList = () => {
+
   const billingListColumns = [
     {
       title: "No",
@@ -29,7 +31,7 @@ const BillingList = () => {
       width: "5%",
     },
     {
-      title: `${message.Maintenance.productName}`,
+      title: `${$lang.Maintenance.productName}`,
       key: "name",
       width: "20%",
       dataIndex: "name",
@@ -44,7 +46,7 @@ const BillingList = () => {
       // },
     },
     {
-      title: `${message.Maintenance.handlingFee}`,
+      title: `${$lang.Maintenance.handlingFee}`,
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
@@ -58,7 +60,7 @@ const BillingList = () => {
       // },
     },
     {
-      title: `${message.Maintenance.storageFee}`,
+      title: `${$lang.Maintenance.storageFee}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
@@ -72,7 +74,7 @@ const BillingList = () => {
       // },
     },
     {
-      title: `${message.Maintenance.billingClass}`,
+      title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       align: "center",
       key: "fee_category",
@@ -86,7 +88,7 @@ const BillingList = () => {
       // },
     },
     {
-      title: `${message.buttons.change}`,
+      title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
         return (
@@ -122,24 +124,45 @@ const BillingList = () => {
   ];
 
   const [form] = Form.useForm();
+  const [allData, setAllData] = useState([]);
+  const [showData, setShowData] = useState([]);
 
   return (
     <Content style={{ width: 1024 }} className="mx-auto content-h">
-      {/* <div>
+      <div>
         <div className="mt-5">
-          <Button>{message.billing.new}</Button>
-          <div className="mt-5">
+          <Button>{$lang.billing.new}</Button>
+          <div className="mt-5  flex flex-row item-center">
+            <label>{$lang.billing.YM}</label>
             <DatePicker
               theme={"light"}
               popoverDirection={"down"}
               toggleClassName="invisible"
               showShortcuts={true}
+              picker="month"
+              className="ml-4"
             />
-            <DatePicker />
+            <label className="ml-8">{$lang.billing.day}</label>
+            <DatePicker picker="day" className="ml-4" />
+            <Button
+              className="btn-bg-black ml-16"
+            >
+              {$lang.buttons.search}
+            </Button>
+          </div>
+          <div className="mt-5">
+            <CTable
+              rowKey={(node) => node.key}
+              dataSource={allData}
+              columns={billingListColumns}
+              pagination={false}
+            />
+          </div>
+          <div>
+            <Button className="btn-bg-black ml-64">{$lang.buttons.next}</Button>
           </div>
         </div>
-      </div> */}
-      billing list
+      </div>
     </Content>
   );
 };

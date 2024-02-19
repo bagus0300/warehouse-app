@@ -41,7 +41,13 @@
     "add": "追加",
     "init": "初期化",
     "search": "検索",
-    "save": "保管"
+    "save": "保管",
+    "return":"戻る",
+    "calculation":" 請求計算",
+    "billingListOutput":"請求一覧表出力",
+    "billingConfirmed" : "請求確定",
+    "next": "次へ"
+   
   },
   "CardTopics": [
     "１．入庫処理",
@@ -101,13 +107,23 @@
     "new": "請求一覧",
     "YM": "年月",
     "day": "締日",
+    "month": "月",
+    "year": "年",
     "yymm": "年/月",
     "closing_date": "締日",
     "period": "対象期間",
     "processDate": "処理日時",
     "list": "一覧",
     "productList": "明細",
-    "next": "次へ"
+    "billingDate":"請求年月",
+    "targetPeriod":"対象期間",
+    "targetShipper":"対象荷主",
+    "targetWarehouse":"対象倉庫",
+    "number":"番号",
+    "lastBilledAmount":"前回請求額",
+    "billingAmout":"請求額",
+    "consumptionTax":"消費税",
+    "output":"出力"
   },
   "Maintenance": {
     "addNew": "新規登録",

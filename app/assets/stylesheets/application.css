@@ -203,6 +203,11 @@ table {
   justify-content: center;
   align-items: center;
 }
+.item-center {
+  display: flex;
+  align-items: center;
+}
+
 
 .cursor-pointer {
   cursor: pointer;
@@ -661,6 +666,10 @@ video {
   width: 190px;
 }
 
+.w-100 {
+  width: 100px;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -668,6 +677,9 @@ video {
 
 .mr-2 {
   margin-right: 0.5rem;
+}
+.mr-4 {
+  margin-right: 2rem;
 }
 
 .px-5 {
@@ -699,6 +711,21 @@ video {
 
 .ml-4 {
   margin-left: 1rem;
+}
+
+.ml-8 {
+  margin-left: 2rem;
+}
+
+.ml-16 {
+  margin-left: 8rem;
+}
+
+.ml-32 {
+  margin-left: 16rem;
+}
+.ml-64 {
+  margin-left: 970px;
 }
 
 .mt-10 {
