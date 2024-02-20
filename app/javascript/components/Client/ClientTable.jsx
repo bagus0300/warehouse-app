@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Checkbox } from "antd";
+import { Table, Checkbox } from "antd";
 
-
-const UserTable = ({ data  }) => {
-
+const UserTable = ({ data, onCheckChange }) => {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const columns = [
@@ -19,49 +17,52 @@ const UserTable = ({ data  }) => {
       key: "name",
     },
     {
-      title: "読み込み専用",
-      dataIndex:"readonly",
-      key: "readonly",
+      title: "編集",
+      dataIndex: "is_edit",
+      key: "is_edit",
       render: (_, record) => (
         <Checkbox
-          checked={record.readonly}
-          onChange={(e) => handleCheckboxChange(e, record, 'readonly')}        />
+          checked={record.is_edit}
+          onChange={(e) => handleCheckboxChange(e, record, "is_edit")}
+        />
       ),
     },
     {
-      title: "編集",
-      dataIndex: "edit",
-      key: "edit",
+      title: "読み込み専用",
+      dataIndex: "is_read",
+      key: "is_read",
       render: (_, record) => (
         <Checkbox
-          checked={record.edit}
-          onChange={(e) => handleCheckboxChange(e, record, 'edit')}
-      />
+          checked={record.is_read}
+          onChange={(e) => handleCheckboxChange(e, record, "is_read")}
+        />
       ),
     },
   ];
 
   const handleCheckboxChange = (e, record, checkboxName) => {
     const isChecked = e.target.checked;
-    const updatedRows = [...selectedRows];
-    
+  
+    // Update the status of the clicked checkbox
     record[checkboxName] = isChecked;
+  
+    // If the clicked checkbox is "Edit", also update the "Readonly" checkbox
+    // if (checkboxName === "is_edit" && isChecked === true) {
+    //   record.is_read = isChecked; // Update the "Readonly" checkbox to match the "Edit" checkbox
+    // }
 
-    if (record.readonly && record.edit) {
-      updatedRows.push(record);
-    } else {
-      const index = updatedRows.findIndex((row) => row.key === record.key);
-      if (index !== -1) {
-        updatedRows.splice(index, 1);
-      }
-    }
+    // if (checkboxName === "is_read" && isChecked === false) {
+    //   record.is_edit = isChecked;
+    // }
 
+    const updatedRows = data.map((item) =>
+      item.key === record.key ? { ...item, [checkboxName]: isChecked } : item
+    );
     setSelectedRows(updatedRows);
+    onCheckChange(updatedRows);
   };
 
-  return (
-    <Table columns={columns} dataSource={data} pagination={false} />
-  )
+  return <Table columns={columns} dataSource={data} pagination={false} />;
 };
 
 export default UserTable;

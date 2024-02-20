@@ -40,6 +40,10 @@ export const getUserAuthURL = baseUrl + "api/authorities";
 
 export const getClientPageURL = baseUrl + "api/client_page";
 
+export const getAuthDataURL = baseUrl + "api/get_all_auth_data";
+
+export const setAuthDataURL = baseUrl + "api/set_auth_data";
+
 //unit_price urls
 
 export const httpErrors = {
