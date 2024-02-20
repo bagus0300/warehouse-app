@@ -28,7 +28,6 @@ import {
   saveStockInoutUrl,
 } from "../utils/contants";
 
-import CustomButton from "../components/common/CustomButton";
 import $lang from "../utils/content/jp.json";
 
 const { Content } = Layout;
