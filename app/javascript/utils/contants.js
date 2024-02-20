@@ -22,6 +22,10 @@ export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
+export const exportCSVDataUrl = baseUrl + "/api/export_instock_csv";
+
+export const exportPdfDataUrl = baseUrl + "/api/export_pdf";
+
 //unit_price urls
 
 export const feeUrl = baseUrl + "api/warehouse_fee";

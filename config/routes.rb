@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
   get "/api/product_detail", to:'products#show_by_id'
+  post "/api/product_export", to: 'products#pdf_export'
+  get "/api/product_csv_export", to: 'products#csv_export'
 
   get "/api/warehouse_fee", to: 'warehouse_fees#index'
   post "/api/warehouse_fee" , to: 'warehouse_fees#create'
@@ -41,6 +43,7 @@ Rails.application.routes.draw do
 
   post "/api/stock_inout"  , to: 'stock_inouts#create'
   get "/api/stock_inout"  , to: 'stock_inouts#index'
+  post "/api/export_instock_csv", to: 'stock_inouts#export_csv'
 
   get "/api/received_payment", to: 'received_payments#index'
   post "/api/received_payment", to: 'received_payments#create'

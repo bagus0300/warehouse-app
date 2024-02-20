@@ -13,9 +13,8 @@ import {
   Row,
   Col,
   Button,
-  Table
+  Table,
 } from "antd";
-
 
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
@@ -213,7 +212,7 @@ const InventoryPage = () => {
                     onClick={() => {
                       openNotificationWithIcon(
                         "success",
-                        "",
+                        $lang.popConrimType.success,
                         "currently on developing."
                       );
                     }}
@@ -229,7 +228,7 @@ const InventoryPage = () => {
                   onClick={() => {
                     openNotificationWithIcon(
                       "success",
-                      "",
+                      $lang.popConrimType.success,
                       "currently on developing."
                     );
                   }}

@@ -42,12 +42,13 @@
     "init": "初期化",
     "search": "検索",
     "save": "保管",
-    "return":"戻る",
-    "calculation":" 請求計算",
-    "billingListOutput":"請求一覧表出力",
-    "billingConfirmed" : "請求確定",
-    "next": "次へ"
-   
+    "return": "戻る",
+    "calculation": " 請求計算",
+    "billingListOutput": "請求一覧表出力",
+    "billingConfirmed": "請求確定",
+    "next": "次へ",
+    "yes": "はい",
+    "no": "なり"
   },
   "CardTopics": [
     "１．入庫処理",
@@ -115,15 +116,15 @@
     "processDate": "処理日時",
     "list": "一覧",
     "productList": "明細",
-    "billingDate":"請求年月",
-    "targetPeriod":"対象期間",
-    "targetShipper":"対象荷主",
-    "targetWarehouse":"対象倉庫",
-    "number":"番号",
-    "lastBilledAmount":"前回請求額",
-    "billingAmout":"請求額",
-    "consumptionTax":"消費税",
-    "output":"出力"
+    "billingDate": "請求年月",
+    "targetPeriod": "対象期間",
+    "targetShipper": "対象荷主",
+    "targetWarehouse": "対象倉庫",
+    "number": "番号",
+    "lastBilledAmount": "前回請求額",
+    "billingAmout": "請求額",
+    "consumptionTax": "消費税",
+    "output": "出力"
   },
   "Maintenance": {
     "addNew": "新規登録",
@@ -162,7 +163,7 @@
     "fullTimeRequest": "全期請求",
     "firstBilling": "１期請求 "
   },
-  "IncomePageJp": {
+  "inStock": {
     "lotNumber": "ロット番号",
     "weight": "重量",
     "itemNumber": "入庫数",
@@ -172,7 +173,7 @@
     "productName": "品名",
     "productNumber": "品番",
     "search": "検索",
-    "receiptDate": "入庫日",
+    "recievedDate": "入庫日",
     "shipper": "荷主",
     "warehouse": "倉庫"
   },
@@ -196,11 +197,11 @@
     "received": "入金"
   },
   "UserPage": {
-    "loginNumber":"番号",
-    "user_name":"ユーザー名",
-    "login_id":"ログインID",
-    "email":"電子メール",
-    "authority":"権限"
+    "loginNumber": "番号",
+    "user_name": "ユーザー名",
+    "login_id": "ログインID",
+    "email": "電子メール",
+    "authority": "権限"
   },
 
   "messages": {
@@ -216,6 +217,14 @@
     "input_stock": "入庫数を入力してください!",
     "input_weight": "重量(kg)を入力してください!",
     "input_in_stock_date": "入庫日を入力してください!",
-    "success": "操作に成功しました。"
+    "success": "操作に成功しました。",
+    "confirm": "確認",
+    "confirm_delete": "本当に初期化してもよろしいですか？",
+    "empty_data_to_init": "初期化するデータはありません。"
+  },
+  "popConrimType": {
+    "success": "成功",
+    "warning": "注意",
+    "error": "エラー"
   }
 }

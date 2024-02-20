@@ -76,12 +76,16 @@ gem "devise"
 
 gem 'devise-jwt'
 
-gem 'jsonapi-serializer'
+gem 'fast_jsonapi'
+
+# gem 'jsonapi-serializer'
 
 gem "warden"
 
-# gem "spreadsheet_architect"
-
-# gem "sidekiq"
-
 # gem 'transactional'
+
+# for exporting pdf
+gem "grover"
+
+#for exporting csv
+gem "csv"

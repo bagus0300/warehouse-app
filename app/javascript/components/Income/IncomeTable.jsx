@@ -15,11 +15,10 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
   const columns = [
     {
       title: "No",
-      dataIndex: "product_id",
       // key: "product",
-      key: "",
+      key: "idx",
+      dataIndex: "idx",
       width: 70,
-      render: (text) => <a>{text}</a>,
     },
     {
       title: "品名",
@@ -28,14 +27,15 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
       width: "35%",
       render: (_, record) => (
         <>
-          <p className="my-2">{record.product_name}</p>
+          <p className="text-lg">{record.product_name}</p>
           <p>
-            <Tag bordered={false} className="px-5" color="default">
-              {record.shipper_name}
-            </Tag>
-            <Tag bordered={false} color="default" className="px-5">
-              {record.warehouse_name}
-            </Tag>
+            <span className="text-xs text-blue">{record.shipper_name}</span>{" "}
+            <span className="px-5 text-xs text-blue">|</span>
+            <span className="text-xs text-blue">{record.warehouse_name}</span>
+            <span className="px-5 text-xs text-blue">|</span>
+            <span className="text-xs text-blue">
+              {$lang.inStock.recievedDate}: {record.inout_on}
+            </span>
           </p>
         </>
       ),
@@ -61,7 +61,7 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
       key: "amount",
     },
     {
-      title: "Action",
+      title: "#",
       key: "action",
       render: (_, record) => (
         <Space size="small">

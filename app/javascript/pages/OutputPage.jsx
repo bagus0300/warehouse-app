@@ -234,7 +234,11 @@ const IncomePage = () => {
       openNotificationWithIcon("warning", "", $lang.messages.input_stock);
       return false;
     } else if (libraryNumber == "") {
-      openNotificationWithIcon("warning", "", $lang.messages.input_libraryNumber);
+      openNotificationWithIcon(
+        "warning",
+        "",
+        $lang.messages.input_libraryNumber
+      );
       return false;
     }
 
@@ -275,15 +279,9 @@ const IncomePage = () => {
   };
 
   const getLotNumber = () => {
-    makeHttpReq(
-      makeHttpOptions(
-        {},
-        "get",
-        saveStockInoutUrl
-      )
-    )
+    makeHttpReq(makeHttpOptions({}, "get", saveStockInoutUrl))
       .then((res) => {
-        console.log("res", res.data.data)
+        console.log("res", res.data.data);
         let index = 0;
         const productData = res.data.data.map((item) => {
           return {
@@ -295,7 +293,7 @@ const IncomePage = () => {
       .catch((err) => {
         openNotificationWithIcon("error", "error", err.messages);
       });
-  }
+  };
 
   const editRow = (productId) => {
     setEditMode("edit");
@@ -306,13 +304,10 @@ const IncomePage = () => {
     setDiabledProduct(true);
   };
 
-
   const onSearch = (value, _e, info) => {
-    const result = products.filter(product => product.product_id == value)[0];
+    const result = products.filter((product) => product.product_id == value)[0];
     setSearchResult(result);
-  }
-
-
+  };
 
   const deleteRow = (id) => {
     const newData = prepareProducts.slice();
@@ -320,7 +315,7 @@ const IncomePage = () => {
     const index = newData.indexOf(delData);
     newData.splice(index, 1);
     setPrepareProducts(newData);
-  }
+  };
 
   const insertData = () => {
     const newData = data.slice();
@@ -488,7 +483,7 @@ const IncomePage = () => {
             </Row>
             <Row>
               <Col span={1}></Col>
-              <Col span={8} style={{display: "flex"}}>
+              <Col span={8} style={{ display: "flex" }}>
                 <Space.Compact block className="ml-3">
                   <Input
                     style={{ width: 100 }}

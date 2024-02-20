@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import messages from "../../utils/content/jp.json";
 import AlertComponent from "../common/alert";
 import { openNotificationWithIcon } from "../common/notification";
+import $lang from "../../utils/content/jp.json";
 
 const Signup = () => {
   const {
@@ -29,9 +30,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const onFinishFailed = (errorInfo) => {
-
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   const onFormSubmit = ({ user_name, email, login_id, password }) => {
     signupAction({ user_name, email, login_id, password });
@@ -39,9 +38,17 @@ const Signup = () => {
 
   useEffect(() => {
     if (signupErrors != null) {
-      openNotificationWithIcon("error", "error", signupErrors);
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.error,
+        signupErrors
+      );
     } else if (signupErrors == null && !beforeRequest) {
-      openNotificationWithIcon("success", "success", "success registeration");
+      openNotificationWithIcon(
+        "success",
+        $lang.popConrimType.success,
+        "success registeration"
+      );
 
       setTimeout(() => {
         navigate("/");

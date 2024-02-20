@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import {
   Form,
   Layout,
@@ -16,9 +18,8 @@ import {
 } from "antd";
 
 import IncomeTable from "../components/Income/IncomeTable";
-import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { makeHttpReq, makeHttpOptions, currentDate } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
-
 import {
   warehouseURL,
   shipperURL,
@@ -26,6 +27,7 @@ import {
   productURL,
   productDetailURL,
   saveStockInoutUrl,
+  exportCSVDataUrl,
 } from "../utils/contants";
 
 import CustomButton from "../components/common/CustomButton";
@@ -35,7 +37,6 @@ const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
 const IncomePage = () => {
-  const [isVisibleAddButton, setAddButtonVisability] = useState(false);
   const [prepareProducts, setPrepareProducts] = useState([]);
   const [isDisabledProduct, setDiabledProduct] = useState(false);
 
@@ -51,11 +52,16 @@ const IncomePage = () => {
     value: "",
     label: "",
   });
-  const [shipperOptions, setShipperOptions] = useState();
+  const [shipperOptions, setShipperOptions] = useState([]);
+
+  // const currentDate = dayjs().tz("Asia/Tokyo");
 
   // ----------------Openday--------------
-  // const [receiptDate, setInoutOn] = useState(moment("2024-02-16"));
-  const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
+  // const [recievedDate, setSelectedDate] = useState(moment("2024-02-16"));
+  const [recievedDate, setSelectedDate] = useState(
+    dayjs(currentDate(), dateFormat)
+  );
+  //
 
   // ---------product----------
   const [selectedProduct, setSelectedProduct] = useState({
@@ -110,7 +116,7 @@ const IncomePage = () => {
       value: editData.product_id,
       label: editData.product_name,
     });
-    setInoutOn(dayjs(editData.inout_on, dateFormat));
+    setSelectedDate(dayjs(editData.inout_on, dateFormat));
   };
 
   const onChangeWarehouse = (value, option) => {
@@ -118,7 +124,12 @@ const IncomePage = () => {
   };
 
   const onChangeShipper = (value, option) => {
-    setSeletedShipper({ value: value, label: option.label });
+    setSeletedShipper({
+      value: value,
+      label: option.label,
+      closingDate: option.closingDate,
+      code: option.code,
+    });
   };
 
   const onChangeProduct = (value, option) => {
@@ -162,15 +173,17 @@ const IncomePage = () => {
         return {
           value: item.id,
           label: item.name,
+          code: item.code,
+          closingDate: item.closing_date,
         };
       });
-
       setShipperOptions(shippers);
-
       if (shippers.length > 0)
         setSeletedShipper({
           value: shippers[0].value,
           label: shippers[0].label,
+          code: shippers[0].code,
+          closingDate: shippers[0].closingDate,
         });
     });
   };
@@ -200,6 +213,7 @@ const IncomePage = () => {
   };
 
   const savePrepareProducts = () => {
+    console.log("prepareProducts", prepareProducts);
     makeHttpReq(
       makeHttpOptions(
         { stock_inout: prepareProducts },
@@ -209,29 +223,49 @@ const IncomePage = () => {
     )
       .then((res) => {
         setPrepareProducts([]);
-        openNotificationWithIcon("success", "", $lang.messages.success);
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.success,
+          $lang.messages.success
+        );
       })
       .catch((err) => {
-        openNotificationWithIcon("error", "error", err.messages);
+        openNotificationWithIcon(
+          "error",
+          $lang.popConrimType.error,
+          err.messages
+        );
       });
   };
 
   const isReadyPrepareProducts = () => {
-    if (receiptDate == "") {
+    if (recievedDate == "") {
       openNotificationWithIcon(
         "warning",
-        "",
-        $lang.messages.input_in_stock_date
+        $lang.popConrimType.warning,
+        $lang.messages.input_inStock_date
       );
       return false;
     } else if (lotNumber == "") {
-      openNotificationWithIcon("warning", $lang.messages.input_lotNumber);
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.input_lotNumber
+      );
       return false;
     } else if (amount == "") {
-      openNotificationWithIcon("warning", "", $lang.messages.input_stock);
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.input_stock
+      );
       return false;
     } else if (weight == "") {
-      openNotificationWithIcon("warning", "", $lang.messages.input_weight);
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.input_weight
+      );
       return false;
     }
 
@@ -241,8 +275,11 @@ const IncomePage = () => {
   const doPrepareProducts = () => {
     if (!isReadyPrepareProducts()) return;
 
-    let index = 0;
     let selectedProductArr = prepareProducts.slice();
+    const recievedDateStr = new Date(recievedDate.toString())
+      .toISOString()
+      .substring(0, 10)
+      .replace(/\-/g, "/");
 
     const newData = {
       handling_fee_rate: handlePrice,
@@ -258,17 +295,15 @@ const IncomePage = () => {
       warehouse_name: selectedWarehouse.label,
       shipper_id: seletedShipper.value,
       shipper_name: seletedShipper.label,
-      inout_on: receiptDate,
-      idx: index++,
+      inout_on: recievedDateStr,
+      idx: selectedProductArr.length + 1,
       category: 0,
     };
-
+    console.log(newData);
     selectedProductArr.push(newData);
 
     setPrepareProducts(selectedProductArr);
     initPrepareProductItem();
-
-    // setAddButtonVisability(true);
   };
 
   const editRow = (productId) => {
@@ -289,14 +324,9 @@ const IncomePage = () => {
   };
 
   const cancelEditProduct = () => {
-    setAddButtonVisability(false);
+    setEditMode("new");
     initPrepareProductItem();
     setDiabledProduct(false);
-  };
-
-  const confirmInitPrepareProducts = () => {
-    if (prepareProducts.length > 0) setPrepareProducts([]);
-    else openNotificationWithIcon("warning", "", "no data");
   };
 
   const updatePrepareProduct = () => {
@@ -309,7 +339,7 @@ const IncomePage = () => {
     updateData.warehouse_name = selectedWarehouse.label;
     updateData.shipper_id = seletedShipper.value;
     updateData.shipper_name = seletedShipper.label;
-    updateData.inout_on = receiptDate;
+    updateData.inout_on = recievedDate;
 
     updateData.lot_number = lotNumber;
     updateData.weight = weight;
@@ -319,14 +349,64 @@ const IncomePage = () => {
     setPrepareProducts(oldData);
 
     setDiabledProduct(false);
-    setAddButtonVisability(false);
   };
 
+  const getCSVData = () => {
+    return prepareProducts.map((item) => {
+      return {
+        product_name: item.product_name,
+        product_type: item.product_type,
+        lot_number: item.lot_number,
+        weight: item.weight,
+        amount: item.amount,
+      };
+    });
+  };
+
+  const exportDataAndDownloadCVS = async () => {
+    const csvData = getCSVData();
+    if (csvData.length == 0) {
+      openNotificationWithIcon(
+        "warning",
+        $lang.messages.warning,
+        "empty data to export"
+      );
+      return;
+    }
+
+    makeHttpReq(makeHttpOptions({ data: csvData }, "post", exportCSVDataUrl))
+      .then((response) => {
+        const timestamp = Date.now();
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "入庫" + timestamp + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => {
+          openNotificationWithIcon(
+            "success",
+            $lang.popConrimType.success,
+            $lang.messages.success
+          );
+        }, 1000);
+      })
+      .catch((err) => {
+        openNotificationWithIcon(
+          "error",
+          $lang.popConrimType.error,
+          err.messages
+        );
+      });
+  };
   // ----------When rerender, get all data------
   useEffect(() => {
     getWarehouses();
     getShippers();
     getProducts();
+    // console.log(currentDate());
+    console.log(recievedDate);
   }, []);
 
   return (
@@ -336,7 +416,7 @@ const IncomePage = () => {
         className="mx-auto flex flex-col justify-content content-h"
       >
         <Card
-          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          style={{ width: "100%", marginTop: 10, marginBottom: 10 }}
           className="py-2 my-2"
           bordered={false}
         >
@@ -358,11 +438,11 @@ const IncomePage = () => {
           >
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.warehouse}: </label>
+                <label>{$lang.inStock.warehouse}: </label>
               </Col>
               <Col span={6}>
                 <Select
-                  placeholder={$lang.IncomePageJp.warehouse}
+                  placeholder={$lang.inStock.warehouse}
                   style={{ width: 150, marginLeft: 14 }}
                   value={selectedWarehouse}
                   options={warehouseOptions}
@@ -372,7 +452,7 @@ const IncomePage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.shipper}:</label>
+                <label>{$lang.inStock.shipper}:</label>
               </Col>
               <Col span={6}>
                 <Select
@@ -381,25 +461,34 @@ const IncomePage = () => {
                   options={shipperOptions}
                   value={seletedShipper.value}
                   defaultValue={""}
-                  placeholder={$lang.IncomePageJp.shipper}
+                  placeholder={$lang.inStock.shipper}
                 />
+                {shipperOptions.length > 0 && (
+                  <span className="" style={{ marginLeft: 16 }}>
+                    {$lang.inStock.shipper} :&nbsp;&nbsp;{seletedShipper.code}{" "}
+                    &nbsp;/ &nbsp;{seletedShipper.closingDate}
+                  </span>
+                )}
               </Col>
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.receiptDate}:</label>
+                <label>{$lang.inStock.recievedDate}:</label>
               </Col>
               <Col span={6}>
                 <div className="ml-2">
                   <DatePicker
                     style={{ width: 150 }}
-                    value={receiptDate}
-                    onChange={(date, dateStr) => {
-                      if (dateStr == "") {
-                        setInoutOn(dayjs("2024/02/20", dateFormat));
-                      } else setInoutOn(dayjs(dateStr, dateFormat));
+                    value={recievedDate}
+                    onChange={(date, dt) => {
+                      if (dt == "") {
+                        setSelectedDate(dayjs(currentDate, dateFormat));
+                      } else {
+                        setSelectedDate(dayjs(date, dateFormat));
+                      }
                     }}
-                    placeholder={$lang.IncomePageJp.receiptDate}
+                    defaultValue={dayjs(currentDate, dateFormat)}
+                    placeholder={$lang.inStock.recievedDate}
                     className="ml-1"
                     format={dateFormat}
                   />
@@ -408,12 +497,12 @@ const IncomePage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.productName}:</label>
+                <label>{$lang.inStock.productName}:</label>
               </Col>
               <Col span={10}>
                 <Space.Compact block className="ml-3">
                   <Select
-                    placeholder={$lang.IncomePageJp.productName}
+                    placeholder={$lang.inStock.productName}
                     style={{ width: 200 }}
                     value={selectedProduct.value}
                     options={productOptions}
@@ -426,19 +515,19 @@ const IncomePage = () => {
                   />
                   <Input
                     style={{ width: 150 }}
-                    placeholder={$lang.IncomePageJp.packing}
+                    placeholder={$lang.inStock.packing}
                     value={packaging}
                     readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.cargoPrice}
+                    placeholder={$lang.inStock.cargoPrice}
                     value={storagePrice}
                     readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.storagePrice}
+                    placeholder={$lang.inStock.storagePrice}
                     value={handlePrice}
                     readOnly
                   />
@@ -451,7 +540,7 @@ const IncomePage = () => {
                 <Space.Compact block className="ml-3">
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.lotNumber}
+                    placeholder={$lang.inStock.lotNumber}
                     value={lotNumber}
                     onChange={(e) => {
                       setLotNumber(e.target.value);
@@ -459,7 +548,7 @@ const IncomePage = () => {
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.weight + "(kg)"}
+                    placeholder={$lang.inStock.weight + "(kg)"}
                     value={weight}
                     onChange={(e) => {
                       setWeight(e.target.value);
@@ -467,7 +556,7 @@ const IncomePage = () => {
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.itemNumber}
+                    placeholder={$lang.inStock.itemNumber}
                     value={amount}
                     onChange={(e) => {
                       setStock(e.target.value);
@@ -485,26 +574,26 @@ const IncomePage = () => {
                   className="px-5 ml-2 btn-bg-black"
                   title={$lang.buttons.add}
                   htmlType="submit"
-                  visability={!isVisibleAddButton}
+                  visability={editMode != "edit"}
                 />
                 <CustomButton
                   onClick={updatePrepareProduct}
                   className="px-5 ml-2 btn-bg-black"
                   title={$lang.buttons.change}
-                  visability={isVisibleAddButton}
+                  visability={editMode == "edit"}
                 />
                 <CustomButton
                   onClick={cancelEditProduct}
                   className="px-5 ml-2 default"
                   title={$lang.buttons.cancel}
-                  visability={isVisibleAddButton}
+                  visability={editMode == "edit"}
                 />
               </Col>
             </Row>
           </Form>
         </Card>
         <Card
-          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          style={{ width: "100%", marginTop: 10, marginBottom: 20 }}
           className="py-4 my-2"
           bordered={false}
         >
@@ -520,27 +609,13 @@ const IncomePage = () => {
               title={$lang.buttons.csvExchange}
               className="mr-2 btn-bg-black"
               visability={true}
-              onClick={() =>
-                openNotificationWithIcon("warning", "", "on working")
-              }
+              onClick={exportDataAndDownloadCVS}
             ></CustomButton>
             <CustomButton
               onClick={savePrepareProducts}
               title={$lang.buttons.confirmDeparture}
               visability={true}
             ></CustomButton>
-            <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this task?"
-              onConfirm={confirmInitPrepareProducts}
-              okText="Yes"
-              cancelText="No"
-              className=" ml-2"
-            >
-              <Button type="primary" danger>
-                {$lang.buttons.init}
-              </Button>
-            </Popconfirm>
           </div>
         </Card>
       </Content>

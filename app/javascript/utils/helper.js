@@ -1,4 +1,11 @@
 import axios from "axios";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 class HTTPError extends Error {
   constructor(message, statusCode) {
     super(message);
@@ -46,6 +53,7 @@ export const makeHttpOptions = (
   url: url,
   headers: {
     "content-type": "application/json",
+    Authorization: getAuthUserToken(),
   },
   data: payload,
   timeout: timeout,
@@ -86,3 +94,5 @@ export const saveAuthUser = (username, token) => {
 };
 
 export const clearStorage = () => localStorage.clear();
+
+export const currentDate = () => dayjs().tz("Asia/Tokyo");

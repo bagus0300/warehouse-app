@@ -1,5 +1,5 @@
 class StockInoutSerializer
-  include JSONAPI::Serializer
+  include FastJsonapi::ObjectSerializer
   
   attributes :stock_id, :amount, :inout_on, :handling_fee_rate, :lot_number, :stocks
 

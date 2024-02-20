@@ -1,5 +1,5 @@
 class ProductSerializer
-  include JSONAPI::Serializer
+  include FastJsonapi::ObjectSerializer
   
   attributes :id, :name, :warehouse_fee
 

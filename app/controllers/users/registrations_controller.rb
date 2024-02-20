@@ -8,6 +8,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         resource.save
         render_resource(resource)
     end
+    
 
     private
     

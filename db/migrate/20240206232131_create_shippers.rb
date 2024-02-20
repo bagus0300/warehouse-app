@@ -7,7 +7,7 @@ class CreateShippers < ActiveRecord::Migration[7.1]
       t.string :main_address,     null: false, comment: '住所1'
       t.string :sub_address,      null: false, comment: '住所2'
       t.string :tel,              null: false, comment: '電話番号'
-      t.datetime :closing_date,   null: false, comment: '締日'
+      t.t.integer :closing_date,   null: false, comment: '締日'
 
       t.timestamps
     end

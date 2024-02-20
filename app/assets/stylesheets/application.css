@@ -208,7 +208,6 @@ table {
   align-items: center;
 }
 
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -937,6 +936,37 @@ video {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
+/*********custom style***************/
+
+.text-xs {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1rem; /* 16px */
+}
+
+.text-sm {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+}
+
+.text-base {
+  font-size: 1rem; /* 16px */
+  line-height: 1.5rem; /* 24px */
+}
+
+.text-lg {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+}
+
+.text-blue {
+  color: #448bbf;
+}
+
+.text-xl {
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.75rem; /* 28px */
+}
+
 .btn-bg-black {
   background-color: #000;
   color: #fff;
@@ -952,23 +982,67 @@ video {
   border-color: #000 !important;
 }
 
-input:focus,
-input:hover,
-select:focus,
-select:hover,
-div:hover,
-div:focus,
-div:active {
+:where(.css-dev-only-do-not-override-1b0bdye).ant-select-outlined:not(
+    .ant-select-disabled
+  ):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover
+  .ant-select-selector,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-outlined:hover,
+.ant-picker-focused {
   border-color: #000 !important;
+  box-shadow: none !important;
 }
 
-.ant-menu-item:hover {
-  color: #fff !important;
-}
-.ant-menu-item:hover:after {
-  border-color: #fff !important;
+.ant-select-focused .ant-select-selector {
+  border-color: #000 !important;
+  box-shadow: none !important;
 }
 
-.ant-menu-submenu:hover:after {
-  border-color: #fff !important;
+.ant-select-item-option-selected {
+  background-color: #eee !important;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border-color: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected
+  .ant-picker-cell-inner {
+  background-color: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-today-btn,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-header-view
+  button:hover {
+  color: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-input-outlined:hover,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-input-outlined:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+
+.ant-popconfirm-buttons
+  :where(.css-dev-only-do-not-override-1b0bdye).ant-btn-primary {
+  background-color: #000;
+}
+
+.ant-popconfirm-buttons
+  :where(.css-dev-only-do-not-override-1b0bdye).ant-btn-primary:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  background-color: #000;
+  opacity: 0.8;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-btn-default:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  border-color: #000;
+  color: #000;
 }

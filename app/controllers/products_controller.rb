@@ -1,13 +1,14 @@
 
 
 class ProductsController < ApplicationController
-  # protect_from_forgery 
+  require 'grover'
+  require 'csv'
+  protect_from_forgery 
+  
   def index
     keyword = params[:keyword]
     offset = params[:offset]
     limit = params[:limit]
-    puts '-----------------------'
-  puts offset
     products = Product.includes(:warehouse_fee)
   
     if keyword.present?
@@ -68,5 +69,74 @@ class ProductsController < ApplicationController
         status: :accepted
       }
     end
+  end
+
+  def pdf_export
+    # html = '<h1>Hello, Grover!</h1>'
+    # pdf_options = {} # Optional settings for Grover
+    # pdf_bytes = ::Grover::HtmlConverter.convert_to_pdf(html, pdf_options)
+
+    # # Send the PDF bytes as a response
+    # send_data pdf_bytes, filename: "#{params[:filename].presence || 'generated_pdf'}.pdf", type: 'application/pdf'
+
+    # html_string = render_to_string(template: 'products/show.html.erb', layout: false, formats: [:html])
+    # html_string = render_to_string(:template => 'template.html.erb', :layout => false, :formats => [:html])
+    # html_string = render_to_string(:template => 'pdf/template.html.erb', :layout => false, :formats => [:html])
+    
+
+    # html_string = render_to_string({
+    #   template: 'controller/view',
+    #   layout: 'template',
+    #   # locals: { :@instance_var => ... }
+    # })
+
+    # tempfile = Tempfile.open(['template', '.html'])
+    # tempfile.write(html_string)
+    # tempfile.rewind
+
+    # doc = Grover::HTMLDocument.from_string(html_string)
+    # pdf_io = StringIO.new
+
+    # options = {
+    #   margin: { top: 36, bottom: 36, left: 36, right: 36},
+    #   orientation: :landscape
+    # }
+
+    # doc.render_to_pdf(pdf_io, options)
+    # pdf_data = pdf_io.string
+    # tempfile.close
+
+
+    html = "<h1>Hello, Everyone!</h1>";
+    filename = "template"
+    pdf = Grover.new(html, format: 'A4').to_pdf
+    send_data pdf, filename: filename, type: "application/pdf"
+
+    # send_data pdf_data, filename: "products.pdf", type: "application/pdf", disposition: "attachment"
+  end
+
+  def csv_export
+    # products = User.all
+
+    # csv_data = CSV.generate do |csv|
+    #   csv << ['user_name', 'email', 'login_id']
+    #   products.each do |product|
+    #     csv << [product.user_name, product.email, product.login_id]
+    #   end
+    # end
+
+    # send_data csv_data, filename: "products.csv", type: "text/csv", disposition: "attachment"
+
+
+    users = User.all()
+    csv_data = CSV.generate do |csv|
+      csv << ["user_name", "login_id", "email"]
+      users.each do |user|
+        csv << [user.user_name, user.login_id, user.email]
+      end
+    end
+
+    send_data csv_data, filename: "products.csv", type: "text/csv", disposition: "inline"
+   
   end
 end

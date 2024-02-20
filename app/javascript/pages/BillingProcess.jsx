@@ -3,7 +3,8 @@ import axios from "axios";
 import moment from "moment";
 import $lang from "../utils/content/jp.json";
 import CTable from "../components/CTable";
-
+import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { warehouseURL, shipperURL } from "../utils/contants";
 const { RangePicker } = DatePicker;
 
 import {
@@ -23,7 +24,6 @@ import {
 const { Content } = Layout;
 
 const BillingProcess = () => {
-
   const billingProcessColumns = [
     {
       title: `${$lang.billing.number}`,
@@ -186,6 +186,127 @@ const BillingProcess = () => {
   const [form] = Form.useForm();
   const [allData, setAllData] = useState([]);
   const [showData, setShowData] = useState([]);
+  const [dValue, setDValue] = useState();
+  const [shipperOptions, setShipperOptions] = useState();
+  const [warehouseOptions, setWarehouseOptions] = useState([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState({
+    value: "",
+    label: "",
+  });
+  // ------------Shipper-----------
+  const [seletedShipper, setSeletedShipper] = useState({
+    value: "",
+    label: "",
+  });
+  const dateOptions = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ];
+
+  const onChangeDateValue = () => {
+    console.log("log");
+  };
+
+  //  -------Get warehouse names--------
+  const getWarehouses = () => {
+    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+      const warehouses = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+
+      setWarehouseOptions(warehouses);
+
+      if (warehouses.length > 0)
+        setSelectedWarehouse({
+          value: warehouses[0].value,
+          label: warehouses[0].label,
+        });
+    });
+  };
+
+  // --------Get shipper data--------
+  const getShippers = () => {
+    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+      const shippers = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+
+      setShipperOptions(shippers);
+
+      if (shippers.length > 0)
+        setSeletedShipper({
+          value: shippers[0].value,
+          label: shippers[0].label,
+        });
+    });
+  };
+
+  const onChangeWarehouse = (value, option) => {
+    setSelectedWarehouse({ value: value, label: option.label });
+  };
+  const onChangeShipper = (value, option) => {
+    setSeletedShipper({ value: value, label: option.label });
+  };
+
+  const exportDataAndDownloadPdf = async () => {
+    try {
+      const response = await axios.post(
+        "/api/product_export",
+        {
+          /* your data */
+        },
+        {
+          responseType: "arraybuffer",
+        }
+      );
+
+      // Handle the response and initiate the PDF download
+      downloadPDF(response);
+    } catch (error) {
+      // Handle errors
+      console.error(error);
+    }
+  };
+  const downloadPDF = (response) => {
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const fileName = "generated_pdf.pdf";
+
+    // Construct the URL and initiate the download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.setAttribute("download", fileName);
+    a.click();
+  };
+
+  const exportDataAndDownloadCVS = async () => {
+    try {
+      const response = await axios.get("/api/product_csv_export", {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "products.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error exporting CSV:", error);
+    }
+  };
+
+  useEffect(() => {
+    getWarehouses();
+    getShippers();
+  }, []);
 
   return (
     <Content style={{ width: 1024 }} className="mx-auto content-h">
@@ -212,12 +333,30 @@ const BillingProcess = () => {
             />
             <label>{$lang.billing.month}</label>
             <label className="ml-16">{$lang.billing.day}:</label>
-            <DatePicker picker="day" className="ml-4" />
+            <Select
+              defaultValue={dateOptions[0]}
+              onChange={onChangeDateValue}
+              value={dValue}
+              options={dateOptions.map((v) => ({
+                label: v,
+                value: v,
+              }))}
+              style={{ width: 80 }}
+            ></Select>
 
             <Button
               className="btn-bg-black ml-16"
+              onClick={exportDataAndDownloadPdf}
             >
-              {$lang.buttons.return}
+              {/* {$lang.buttons.return} */}
+              download pdf
+            </Button>
+            <Button
+              className="btn-bg-black ml-16"
+              onClick={exportDataAndDownloadCVS}
+            >
+              {/* {$lang.buttons.return} */}
+              download cvs
             </Button>
           </div>
           <div className="mt-5  flex flex-row item-center">
@@ -227,36 +366,30 @@ const BillingProcess = () => {
               popoverDirection={"down"}
               toggleClassName="invisible"
               showShortcuts={true}
-              placeholder={['YYYY/MM/DD', 'YYYY/MM/DD']}
+              placeholder={["YYYY/MM/DD", "YYYY/MM/DD"]}
               className="ml-4"
             />
           </div>
           <div className="flex flex-row item-center">
             <label>{$lang.billing.targetShipper}</label>
-            <InputNumber className="ml-4" />
-            <label className="ml-4" >~</label>
-            <InputNumber className="ml-4" />
+            <Select
+              style={{ width: 300, marginLeft: 14 }}
+              onChange={onChangeShipper}
+              options={shipperOptions}
+              value={seletedShipper.value}
+              defaultValue={""}
+              placeholder={$lang.IncomePageJp.shipper}
+            />
           </div>
           <div className="mt-5  flex flex-row item-center ">
             <div>
               <label>{$lang.billing.targetWarehouse}</label>
-              <Select className="ml-4 w-100"
-                defaultValue={1}
-                align={'center'}
-                options={[
-                  {
-                    value: 1,
-                    label: 1
-                  },
-                  {
-                    value: 2,
-                    label: 2
-                  },
-                  {
-                    value: 3,
-                    label: 3
-                  },
-                ]}
+              <Select
+                placeholder={$lang.IncomePageJp.warehouse}
+                style={{ width: 150, marginLeft: 14 }}
+                value={selectedWarehouse}
+                options={warehouseOptions}
+                onChange={onChangeWarehouse}
               />
             </div>
             <label className="ml-16"></label>
@@ -266,9 +399,7 @@ const BillingProcess = () => {
             </Button>
           </div>
           <div className="mt-5">
-            <div>
-              {$lang.billing.new}
-            </div>
+            <div>{$lang.billing.new}</div>
             <div className="flex flex-row">
               <Button className="btn-bg-black">
                 {$lang.buttons.billingListOutput}
@@ -294,9 +425,8 @@ const BillingProcess = () => {
           </div>
         </div>
       </div>
-    </Content >
+    </Content>
   );
 };
 
 export default BillingProcess;
-
