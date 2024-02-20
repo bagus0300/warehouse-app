@@ -70,7 +70,7 @@ const DepositPage = () => {
         "post",
         postReceivedPaymentURL
       )
-    ).then((req) => {});
+    ).then((req) => { });
     notification.success({ message: "正常に作成されました。", duration: 1 });
     initDataValue();
     getAllReceivedValue();
@@ -187,7 +187,7 @@ const DepositPage = () => {
 
   const deleteRow = (id) => {
     makeHttpReq(makeHttpOptions({ id }, "delete", postReceivedPaymentURL)).then(
-      (res) => {}
+      (res) => { }
     );
     notification.success({ message: "正常に削除されました。", duration: 1 });
     setIsDelelte(true);

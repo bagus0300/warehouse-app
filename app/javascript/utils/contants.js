@@ -18,6 +18,8 @@ export const productURL = baseUrl + "api/product";
 
 export const warehouseFeeURL = baseUrl + "api/warehouse_fee";
 
+export const navigatiionsURL = baseUrl + "api/client_page";
+
 export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";

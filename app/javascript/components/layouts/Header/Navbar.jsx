@@ -1,43 +1,53 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate, useLocation, useMatch, Link } from "react-router-dom";
 import { Typography, Breadcrumb, Button } from "antd";
 import { Layout, Menu, theme } from "antd";
-import { siteInfo, navigations } from "../../../utils/content";
+import { siteInfo } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
+import { navigatiionsURL } from "../../../utils/contants";
 
 const NavbarSection = () => {
   const { logoutAction } = useAuth();
   const { Title } = Typography;
   const { Header } = Layout;
-
   const navigate = useNavigate();
-  const loc = useLocation()
+  const location = useLocation()
   const [current, setCurrent] = useState("");
   const [title, setTitle] = useState("");
+  const [navigations, setNavigations] = useState([]);
+
+  const getNavigations = () => {
+    axios.get(`${navigatiionsURL}`).then((res) => {
+      const allData = res.data.data.map((item) => {
+        return { ...item, key: item.path, label: item.name, url: item.path };
+      });
+
+      setNavigations(allData);
+    });
+  };
 
   const onMenuClick = (e) => {
-    const flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    )
-    const { label } = flattenNavigations.find((item) => item.key === e.key) || {};
+
+    const { label } = navigations.find((item) => item.key === e.key) || {};
     setTitle(label);
     setCurrent(e.key);
     navigate(e.key);
   };
 
   useEffect(() => {
-    setCurrent(loc.pathname);
-  }, [])
+    getNavigations();
+  }, []);
 
   useEffect(() => {
-    const flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    )
-    const { label } = flattenNavigations.find((item) => item.key === current) || {};
+    setCurrent(location.pathname);
+  }, [location.pathname]);
+
+  useEffect(() => {
+
+    const { label } = navigations.find((item) => item.key === current) || {};
     setTitle(label);
-  }, [current]);
+  }, [current, navigations]);
 
   return (
     <Layout>

@@ -60,8 +60,7 @@ const ProductPage = () => {
   const [searchBtn, setSearchBtn] = useState(false);
 
   const handlePageChange = (page, pageSize) => {
-    console.log(page, "page")
-    console.log(pageSize, "pageSize")
+
     setCurrentPage((page - 1) * pageSize);
     setItemPerPage(pageSize);
   };
@@ -82,10 +81,8 @@ const ProductPage = () => {
           fee_category: feeData.fee_category,
         };
       });
-      console.log(products, 'filterdata');
-      console.log(res.data.count, 'res.data.count');
+
       setTotal(res.data.count);
-      console.log('============');
       setAllData(products);
     });
   };

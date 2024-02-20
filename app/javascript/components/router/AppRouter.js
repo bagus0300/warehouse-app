@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
@@ -16,12 +16,8 @@ import DepositPage from "../../pages/DepositPage";
 import AuthContextProvider from "../../contexts/AuthContextProvider";
 
 import InventoryPage from "../../pages/InventoryPage";
-import { getAuthUserToken } from "../../utils/helper";
 import PrivateRoute from "./PrivateRoute";
-import NavbarSection from "../layouts/Header/Navbar";
-import FooterSection from "../layouts/Footer/Index";
 
-import BillingPage from "../../pages/BillingPage";
 import { useAuth } from "../../hooks/useAuth";
 
 export const AppRouter = () => {
