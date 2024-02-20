@@ -43,18 +43,8 @@ const UserTable = ({ data, onCheckChange }) => {
   const handleCheckboxChange = (e, record, checkboxName) => {
     const isChecked = e.target.checked;
   
-    // Update the status of the clicked checkbox
     record[checkboxName] = isChecked;
   
-    // If the clicked checkbox is "Edit", also update the "Readonly" checkbox
-    // if (checkboxName === "is_edit" && isChecked === true) {
-    //   record.is_read = isChecked; // Update the "Readonly" checkbox to match the "Edit" checkbox
-    // }
-
-    // if (checkboxName === "is_read" && isChecked === false) {
-    //   record.is_edit = isChecked;
-    // }
-
     const updatedRows = data.map((item) =>
       item.key === record.key ? { ...item, [checkboxName]: isChecked } : item
     );

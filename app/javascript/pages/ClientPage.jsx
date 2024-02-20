@@ -11,7 +11,6 @@ const { TabPane } = Tabs;
 
 const ClientPage = () => {
 
-
   const [userAuthData, setUserAuthData] = useState([]);
   const [clientPageData, setClientPageData] = useState([]);
   const [allAuthData, setAllAuthData] = useState([]);
@@ -128,7 +127,7 @@ const ClientPage = () => {
       <div style={{textAlign: "center"}}>
         <Button 
           onClick={saveAuthData}
-          style={{backgroundColor: "#000", color: "#fff", width: 200, height: 40, marginTop: 40}}
+          style={{backgroundColor: "#000", color: "#fff", width: 200, height: 40, marginTop: 40, }}
         >
           {messages.buttons.save}
         </Button>
