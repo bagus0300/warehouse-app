@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
 import dayjs from "dayjs";
 import {
   Form,
@@ -12,21 +11,18 @@ import {
   Card,
   Row,
   Col,
-  Popconfirm,
-  Button,
 } from "antd";
 
-import OutputTable from "../components/Output/OutputTable";
-import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import IncomeTable from "../components/Income/IncomeTable";
+import { API } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
-
 import {
   warehouseURL,
   shipperURL,
-  warehouseFeeURL,
   productURL,
   productDetailURL,
   saveStockInoutUrl,
+  exportCSVDataUrl,
 } from "../utils/contants";
 
 import CustomButton from "../components/common/CustomButton";
@@ -35,10 +31,16 @@ import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
-const IncomePage = () => {
-  const [isVisibleAddButton, setAddButtonVisability] = useState(false);
+const InStockPage = () => {
   const [prepareProducts, setPrepareProducts] = useState([]);
   const [isDisabledProduct, setDiabledProduct] = useState(false);
+
+  const [shipperDisctription, setShipperDescription] = useState({
+    code: "",
+    closingDate: "",
+  });
+
+  const [editMode, setEditMode] = useState("new");
 
   // ---------Warehouse--------
   const [selectedWarehouse, setSelectedWarehouse] = useState({
@@ -52,13 +54,16 @@ const IncomePage = () => {
     value: "",
     label: "",
   });
-  const [shipperOptions, setShipperOptions] = useState();
+
+  const [shipperOptions, setShipperOptions] = useState([]);
+
+  const currentDate = dayjs().tz("Asia/Tokyo");
 
   // ----------------Openday--------------
-  // const [departureDate, setInoutOn] = useState(moment("2024-02-16"));
-  const [departureDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
-
-  const [receiptDate, setReceiptDate] = useState(dayjs("", dateFormat));
+  const [inStockDate, setInstockDate] = useState(
+    dayjs(currentDate, dateFormat)
+  );
+  //
 
   // ---------product----------
   const [selectedProduct, setSelectedProduct] = useState({
@@ -80,40 +85,43 @@ const IncomePage = () => {
   // -------------lotNumber-----------
   const [lotNumber, setLotNumber] = useState("");
 
-  // ---------------libraryNumber---------------
-  const [libraryNumber, setLibraryNumber] = useState("");
+  // ---------------weight---------------
+  const [weight, setWeight] = useState("");
 
   // -------------amount--------------
   const [amount, setStock] = useState("");
 
-  const [editMode, setEditMode] = useState("new");
   //  -------init prepareProductItem--------
   const initPrepareProductItem = () => {
     setLotNumber("");
     setStock("");
-    setLibraryNumber("");
+    setWeight("");
   };
 
   const setPrepareProductItem = (editData) => {
     setLotNumber(editData.lot_number);
     setStock(editData.amount);
-    setLibraryNumber(editData.libraryNumber, readOnly);
+    setWeight(editData.weight);
     setPackaging(editData.product_type);
     setHandlePrice(editData.handling_fee_rate);
     setStoragePrice(editData.storage_fee_rate);
+
     setSelectedWarehouse({
       value: editData.warehouse_id,
-      name: editData.warehouse_name,
+      label: editData.warehouse_name,
     });
+
     setSeletedShipper({
       value: editData.shipper_id,
-      name: editData.shipper_name,
+      label: editData.shipper_name,
     });
+
     setSelectedProduct({
       value: editData.product_id,
       label: editData.product_name,
     });
-    setInoutOn(dayjs(editData.inout_on, dateFormat));
+
+    setInstockDate(dayjs.tz(new Date(editData.inout_on), "Asia/Tokyo"));
   };
 
   const onChangeWarehouse = (value, option) => {
@@ -121,26 +129,27 @@ const IncomePage = () => {
   };
 
   const onChangeShipper = (value, option) => {
-    setSeletedShipper({ value: value, label: option.label });
+    setSeletedShipper({
+      value: value,
+      label: option.label,
+    });
   };
 
   const onChangeProduct = (value, option) => {
     setSelectedProduct({ value: value, label: option.label });
 
-    makeHttpReq(makeHttpOptions({}, "get", productDetailURL(value))).then(
-      (res) => {
-        const warehouseFee = res.data.data.data.attributes.warehouse_fee;
+    API.get(productDetailURL(value)).then((res) => {
+      const warehouseFee = res.data.data.data.attributes.warehouse_fee;
 
-        setPackaging(warehouseFee.packaging);
-        setStoragePrice(warehouseFee.storage_fee_rate);
-        setHandlePrice(warehouseFee.handling_fee_rate);
-      }
-    );
+      setPackaging(warehouseFee.packaging);
+      setStoragePrice(warehouseFee.storage_fee_rate);
+      setHandlePrice(warehouseFee.handling_fee_rate);
+    });
   };
 
   //  -------Get warehouse names--------
   const getWarehouses = () => {
-    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+    API.get(warehouseURL).then((res) => {
       const warehouses = res.data.data.map((item) => {
         return {
           value: item.id,
@@ -160,27 +169,35 @@ const IncomePage = () => {
 
   // --------Get shipper data--------
   const getShippers = () => {
-    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+    API.get(shipperURL).then((res) => {
       const shippers = res.data.data.map((item) => {
         return {
           value: item.id,
           label: item.name,
+          code: item.code,
+          closingDate: item.closing_date,
         };
       });
-
       setShipperOptions(shippers);
-
-      if (shippers.length > 0)
+      if (shippers.length > 0) {
         setSeletedShipper({
           value: shippers[0].value,
           label: shippers[0].label,
+          code: shippers[0].code,
+          closingDate: shippers[0].closingDate,
         });
+
+        setShipperDescription({
+          code: shippers[0].code,
+          closingDate: shippers[0].closingDate,
+        });
+      }
     });
   };
 
   // ----------Get product data-----------
   const getProducts = () => {
-    makeHttpReq(makeHttpOptions({}, "get", productURL)).then((res) => {
+    API.get(productURL).then((res) => {
       const products = res.data.data.map((item) => {
         return {
           value: item.data.attributes.id,
@@ -195,6 +212,7 @@ const IncomePage = () => {
           value: products[0].value,
           label: products[0].label,
         });
+
       onChangeProduct(products[0].value, {
         value: products[0].value,
         label: products[0].label,
@@ -203,41 +221,52 @@ const IncomePage = () => {
   };
 
   const savePrepareProducts = () => {
-    makeHttpReq(
-      makeHttpOptions(
-        { stock_inout: prepareProducts },
-        "post",
-        saveStockInoutUrl
-      )
-    )
+    API.post(saveStockInoutUrl, { stock_inout: prepareProducts })
       .then((res) => {
         setPrepareProducts([]);
-        openNotificationWithIcon("success", "", $lang.messages.success);
+        initPrepareProductItem();
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.success,
+          $lang.messages.success
+        );
       })
       .catch((err) => {
-        openNotificationWithIcon("error", "error", err.messages);
+        openNotificationWithIcon(
+          "error",
+          $lang.popConrimType.error,
+          err.messages
+        );
       });
   };
 
   const isReadyPrepareProducts = () => {
-    if (departureDate == "") {
+    if (inStockDate == "") {
       openNotificationWithIcon(
         "warning",
-        "",
-        $lang.messages.input_in_stock_date
+        $lang.popConrimType.warning,
+        $lang.messages.input_inStock_date
       );
       return false;
     } else if (lotNumber == "") {
-      openNotificationWithIcon("warning", $lang.messages.input_lotNumber);
-      return false;
-    } else if (amount == "") {
-      openNotificationWithIcon("warning", "", $lang.messages.input_stock);
-      return false;
-    } else if (libraryNumber == "") {
       openNotificationWithIcon(
         "warning",
-        "",
-        $lang.messages.input_libraryNumber
+        $lang.popConrimType.warning,
+        $lang.messages.input_lotNumber
+      );
+      return false;
+    } else if (amount == "") {
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.input_stock
+      );
+      return false;
+    } else if (weight == "") {
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.input_weight
       );
       return false;
     }
@@ -248,8 +277,11 @@ const IncomePage = () => {
   const doPrepareProducts = () => {
     if (!isReadyPrepareProducts()) return;
 
-    let index = 0;
     let selectedProductArr = prepareProducts.slice();
+    const inStockDateStr = new Date(inStockDate.toString())
+      .toISOString()
+      .substring(0, 10)
+      .replace(/\-/g, "/");
 
     const newData = {
       handling_fee_rate: handlePrice,
@@ -259,54 +291,29 @@ const IncomePage = () => {
       product_type: packaging,
       catagory: 0,
       lot_number: lotNumber,
-      libraryNumber: libraryNumber,
+      weight: weight,
       amount: amount,
       warehouse_id: selectedWarehouse.value,
       warehouse_name: selectedWarehouse.label,
       shipper_id: seletedShipper.value,
       shipper_name: seletedShipper.label,
-      inout_on: departureDate,
-      idx: index++,
+      inout_on: inStockDateStr,
+      idx: selectedProductArr.length + 1,
       category: 0,
     };
-
     selectedProductArr.push(newData);
 
     setPrepareProducts(selectedProductArr);
     initPrepareProductItem();
-
-    // setAddButtonVisability(true);
-  };
-
-  const getLotNumber = () => {
-    makeHttpReq(makeHttpOptions({}, "get", saveStockInoutUrl))
-      .then((res) => {
-        console.log("res", res.data.data);
-        let index = 0;
-        const productData = res.data.data.map((item) => {
-          return {
-            value: item.lot_number,
-            // label: item.
-          };
-        });
-      })
-      .catch((err) => {
-        openNotificationWithIcon("error", "error", err.messages);
-      });
   };
 
   const editRow = (productId) => {
-    setEditMode("edit");
     const oldData = prepareProducts.slice();
     const editData = oldData.filter((data) => data.product_id == productId)[0];
 
     setPrepareProductItem(editData);
     setDiabledProduct(true);
-  };
-
-  const onSearch = (value, _e, info) => {
-    const result = products.filter((product) => product.product_id == value)[0];
-    setSearchResult(result);
+    setEditMode("edit");
   };
 
   const deleteRow = (id) => {
@@ -317,21 +324,10 @@ const IncomePage = () => {
     setPrepareProducts(newData);
   };
 
-  const insertData = () => {
-    const newData = data.slice();
-    newData.push(searchResult);
-    setData(newData);
-  };
-
   const cancelEditProduct = () => {
-    setAddButtonVisability(false);
-    initPrepareProductItem();
+    setEditMode("new");
     setDiabledProduct(false);
-  };
-
-  const confirmInitPrepareProducts = () => {
-    if (prepareProducts.length > 0) setPrepareProducts([]);
-    else openNotificationWithIcon("warning", "", "no data");
+    initPrepareProductItem();
   };
 
   const updatePrepareProduct = () => {
@@ -344,17 +340,68 @@ const IncomePage = () => {
     updateData.warehouse_name = selectedWarehouse.label;
     updateData.shipper_id = seletedShipper.value;
     updateData.shipper_name = seletedShipper.label;
-    updateData.inout_on = departureDate;
+    updateData.inout_on = dayjs
+      .tz(new Date(inStockDate), "Asia/Tokyo")
+      .format(dateFormat);
 
     updateData.lot_number = lotNumber;
-    updateData.libraryNumber = libraryNumber;
+    updateData.weight = weight;
     updateData.amount = amount;
 
-    //
     setPrepareProducts(oldData);
-
     setDiabledProduct(false);
-    setAddButtonVisability(false);
+    setEditMode("new");
+  };
+
+  const getCSVData = () => {
+    return prepareProducts.map((item) => {
+      return {
+        product_name: item.product_name,
+        product_type: item.product_type,
+        lot_number: item.lot_number,
+        weight: item.weight,
+        amount: item.amount,
+      };
+    });
+  };
+
+  const exportDataAndDownloadCVS = async () => {
+    const csvData = getCSVData();
+    if (csvData.length == 0) {
+      openNotificationWithIcon(
+        "warning",
+        $lang.messages.warning,
+        "empty data to export"
+      );
+      return;
+    }
+
+    API.post(exportCSVDataUrl, { data: csvData })
+      .then((response) => {
+        const timestamp = Date.now();
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "入庫_" + timestamp + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => {
+          openNotificationWithIcon(
+            "success",
+            $lang.popConrimType.success,
+            $lang.messages.success
+          );
+        }, 1000);
+      })
+      .catch((err) => {
+        openNotificationWithIcon(
+          "error",
+          $lang.popConrimType.error,
+          err.messages
+        );
+      });
   };
 
   // ----------When rerender, get all data------
@@ -362,8 +409,17 @@ const IncomePage = () => {
     getWarehouses();
     getShippers();
     getProducts();
-    getLotNumber();
   }, []);
+
+  useEffect(() => {
+    const shipper = shipperOptions.filter(
+      (item) => item.value == seletedShipper.value
+    );
+    setShipperDescription({
+      code: shipper.length > 0 ? shipper[0].code : "",
+      closingDate: shipper.length > 0 ? shipper[0].closingDate : "",
+    });
+  }, [seletedShipper]);
 
   return (
     <div>
@@ -372,7 +428,7 @@ const IncomePage = () => {
         className="mx-auto flex flex-col justify-content content-h"
       >
         <Card
-          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          style={{ width: "100%", marginTop: 10, marginBottom: 10 }}
           className="py-2 my-2"
           bordered={false}
         >
@@ -388,17 +444,17 @@ const IncomePage = () => {
               storagePrice: "",
               handlePrice: "",
               lotNumber: "",
-              libraryNumber: "",
+              weight: "",
               amount: "",
             }}
           >
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.warehouse}: </label>
+                <label>{$lang.inStock.warehouse}: </label>
               </Col>
               <Col span={6}>
                 <Select
-                  placeholder={$lang.IncomePageJp.warehouse}
+                  placeholder={$lang.inStock.warehouse}
                   style={{ width: 150, marginLeft: 14 }}
                   value={selectedWarehouse}
                   options={warehouseOptions}
@@ -408,7 +464,7 @@ const IncomePage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.shipper}:</label>
+                <label>{$lang.inStock.shipper}:</label>
               </Col>
               <Col span={6}>
                 <Select
@@ -417,25 +473,35 @@ const IncomePage = () => {
                   options={shipperOptions}
                   value={seletedShipper.value}
                   defaultValue={""}
-                  placeholder={$lang.IncomePageJp.shipper}
+                  placeholder={$lang.inStock.shipper}
                 />
+                {shipperOptions.length > 0 && (
+                  <span className="" style={{ marginLeft: 16 }}>
+                    {$lang.inStock.shipper} :&nbsp;&nbsp;
+                    {shipperDisctription.code} &nbsp;/ &nbsp;
+                    {shipperDisctription.closingDate}
+                  </span>
+                )}
               </Col>
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.OutputPage.departureDate}:</label>
+                <label>{$lang.inStock.inStockDate}:</label>
               </Col>
               <Col span={6}>
                 <div className="ml-2">
                   <DatePicker
                     style={{ width: 150 }}
-                    value={departureDate}
-                    onChange={(date, dateStr) => {
-                      if (dateStr == "") {
-                        setInoutOn(dayjs("2024/02/20", dateFormat));
-                      } else setInoutOn(dayjs(dateStr, dateFormat));
+                    value={inStockDate}
+                    onChange={(date, dt) => {
+                      if (dt == "") {
+                        setInstockDate(dayjs(currentDate, dateFormat));
+                      } else {
+                        setInstockDate(dayjs(date, dateFormat));
+                      }
                     }}
-                    placeholder={$lang.OutputPage.departureDate}
+                    defaultValue={dayjs(currentDate, dateFormat)}
+                    placeholder={$lang.inStock.inStockDate}
                     className="ml-1"
                     format={dateFormat}
                   />
@@ -444,12 +510,12 @@ const IncomePage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.productName}:</label>
+                <label>{$lang.inStock.productName}:</label>
               </Col>
               <Col span={10}>
                 <Space.Compact block className="ml-3">
                   <Select
-                    placeholder={$lang.IncomePageJp.productName}
+                    placeholder={$lang.inStock.productName}
                     style={{ width: 200 }}
                     value={selectedProduct.value}
                     options={productOptions}
@@ -462,19 +528,19 @@ const IncomePage = () => {
                   />
                   <Input
                     style={{ width: 150 }}
-                    placeholder={$lang.IncomePageJp.packing}
+                    placeholder={$lang.inStock.packing}
                     value={packaging}
                     readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.cargoPrice}
+                    placeholder={$lang.inStock.cargoPrice}
                     value={storagePrice}
                     readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.storagePrice}
+                    placeholder={$lang.inStock.storagePrice}
                     value={handlePrice}
                     readOnly
                   />
@@ -483,39 +549,27 @@ const IncomePage = () => {
             </Row>
             <Row>
               <Col span={1}></Col>
-              <Col span={8} style={{ display: "flex" }}>
+              <Col span={8}>
                 <Space.Compact block className="ml-3">
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.receiptDate}
-                    value={receiptDate}
-                    onChange={(e) => {
-                      setReceiptDate(e.target.value);
-                    }}
-                    readOnly
-                  />
-                  <Select
-                    style={{ width: 100 }}
-                    placeholder={$lang.IncomePageJp.lotNumber}
+                    placeholder={$lang.inStock.lotNumber}
                     value={lotNumber}
                     onChange={(e) => {
                       setLotNumber(e.target.value);
                     }}
                   />
-                </Space.Compact>
-                <Space.Compact className="ml-3">
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.OutputPage.libraryNumber}
-                    value={libraryNumber}
+                    placeholder={$lang.inStock.weight + "(kg)"}
+                    value={weight}
                     onChange={(e) => {
-                      setLibraryNumber(e.target.value);
+                      setWeight(e.target.value);
                     }}
-                    readOnly
                   />
                   <Input
                     style={{ width: 100 }}
-                    placeholder={$lang.OutputPage.shipmentNumber}
+                    placeholder={$lang.inStock.itemNumber}
                     value={amount}
                     onChange={(e) => {
                       setStock(e.target.value);
@@ -533,30 +587,30 @@ const IncomePage = () => {
                   className="px-5 ml-2 btn-bg-black"
                   title={$lang.buttons.add}
                   htmlType="submit"
-                  visability={!isVisibleAddButton}
+                  visability={editMode != "edit"}
                 />
                 <CustomButton
                   onClick={updatePrepareProduct}
                   className="px-5 ml-2 btn-bg-black"
                   title={$lang.buttons.change}
-                  visability={isVisibleAddButton}
+                  visability={editMode == "edit"}
                 />
                 <CustomButton
                   onClick={cancelEditProduct}
                   className="px-5 ml-2 default"
                   title={$lang.buttons.cancel}
-                  visability={isVisibleAddButton}
+                  visability={editMode == "edit"}
                 />
               </Col>
             </Row>
           </Form>
         </Card>
         <Card
-          style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+          style={{ width: "100%", marginTop: 10, marginBottom: 20 }}
           className="py-4 my-2"
           bordered={false}
         >
-          <OutputTable
+          <IncomeTable
             data={prepareProducts}
             editRow={(key) => editRow(key)}
             deleteRow={deleteRow}
@@ -568,27 +622,13 @@ const IncomePage = () => {
               title={$lang.buttons.csvExchange}
               className="mr-2 btn-bg-black"
               visability={true}
-              onClick={() =>
-                openNotificationWithIcon("warning", "", "on working")
-              }
+              onClick={exportDataAndDownloadCVS}
             ></CustomButton>
             <CustomButton
               onClick={savePrepareProducts}
               title={$lang.buttons.confirmDeparture}
               visability={true}
             ></CustomButton>
-            <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this task?"
-              onConfirm={confirmInitPrepareProducts}
-              okText="Yes"
-              cancelText="No"
-              className=" ml-2"
-            >
-              <Button type="primary" danger>
-                {$lang.buttons.init}
-              </Button>
-            </Popconfirm>
           </div>
         </Card>
       </Content>
@@ -596,4 +636,4 @@ const IncomePage = () => {
   );
 };
 
-export default IncomePage;
+export default InStockPage;

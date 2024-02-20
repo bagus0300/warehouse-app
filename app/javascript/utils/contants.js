@@ -52,3 +52,5 @@ export const httpErrors = {
   404: "Not Found",
   default: "Internal Server Error",
 };
+
+export const dateFormat = "YYYY/MM/DD";

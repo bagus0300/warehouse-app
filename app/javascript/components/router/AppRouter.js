@@ -5,11 +5,11 @@ import SignupPage from "../../pages/SignupPage";
 import NotFonud from "../../pages/404";
 
 import TopPage from "../../pages/TopPage";
-import IncomePage from "../../pages/IncomePage";
+import InStockPage from "../../pages/InStockPage";
 import ProductPage from "../../pages/ProductPage";
 import ShipperPage from "../../pages/ShipperPage";
 import WarehouseFee from "../../pages/WarehouseFee";
-import OutputPage from "../../pages/OutputPage";
+import OutStockPage from "../../pages/OutStockPage";
 import BillingProcess from "../../pages/BillingProcess";
 import BillingList from "../../pages/BillingList";
 import DepositPage from "../../pages/DepositPage";
@@ -45,7 +45,7 @@ export const AppRouter = () => {
           />
           <Route
             path="/in_stock"
-            element={<PrivateRoute Component={IncomePage} />}
+            element={<PrivateRoute Component={InStockPage} />}
           />
           <Route
             path="/product"
@@ -57,7 +57,7 @@ export const AppRouter = () => {
           />
           <Route
             path="/out_stock"
-            element={<PrivateRoute Component={OutputPage} />}
+            element={<PrivateRoute Component={OutStockPage} />}
           />
           <Route
             path="/warehouse_fee"

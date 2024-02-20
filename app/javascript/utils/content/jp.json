@@ -173,12 +173,12 @@
     "productName": "品名",
     "productNumber": "品番",
     "search": "検索",
-    "recievedDate": "入庫日",
+    "inStockDate": "入庫日",
     "shipper": "荷主",
     "warehouse": "倉庫"
   },
-  "OutputPage": {
-    "departureDate": "出庫日",
+  "outStock": {
+    "outStockDate": "出庫日",
     "libraryNumber": "現在庫数",
     "shipmentNumber": "出庫数"
   },

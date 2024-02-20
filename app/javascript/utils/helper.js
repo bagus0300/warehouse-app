@@ -12,11 +12,19 @@ class HTTPError extends Error {
     this.statusCode = statusCode;
   }
 }
+export const API = axios.create({
+  baseURL: "/",
+  headers: {
+    "content-type": "application/json",
+    // token: `Bearer ${token}`,
+    Authorization: getAuthUserToken,
+  },
+});
 
 export const makeHttpReq = async (options = {}) => {
   const apiClient = axios.create({ baseURL: "/" });
   try {
-    const res = await apiClient.request(options);
+    const res = await apiClient.request({});
     return res;
   } catch (error) {
     if (!error.response) {
@@ -95,4 +103,4 @@ export const saveAuthUser = (username, token) => {
 
 export const clearStorage = () => localStorage.clear();
 
-export const currentDate = () => dayjs().tz("Asia/Tokyo");
+export const currentDate = dayjs().tz("Asia/Tokyo");
