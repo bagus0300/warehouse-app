@@ -5,6 +5,7 @@ import { Button } from 'antd';
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { getUserAuthURL, getClientPageURL, getAuthDataURL, setAuthDataURL } from "../utils/contants";
 import { Tabs } from 'antd';
+import CustomButton from "../components/common/CustomButton";
 
 const { TabPane } = Tabs;
 
@@ -110,7 +111,6 @@ const ClientPage = () => {
 
   return (
     <>
-      <Button onClick={saveAuthData}>{messages.buttons.save}</Button>
       <div style={{ display: "flex", gap: "100px", alignItems: "center", justifyContent: "center" }}>
         <Tabs defaultActiveKey="1" tabPosition="left" onChange={handleTabChange} >
           {userAuthData.map((row) => (
@@ -124,6 +124,14 @@ const ClientPage = () => {
             onCheckChange = {onCheckChange}
           />
         </div>
+      </div>
+      <div style={{textAlign: "center"}}>
+        <Button 
+          onClick={saveAuthData}
+          style={{backgroundColor: "#000", color: "#fff", width: 200, height: 40, marginTop: 40}}
+        >
+          {messages.buttons.save}
+        </Button>
       </div>
     </>
   );
