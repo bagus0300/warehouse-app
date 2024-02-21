@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   post "/api/set_auth_data", to: 'authority_client_pages#create_or_update'
 
 
+
   get '/*path', to: 'component#index'
 
 
