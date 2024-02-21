@@ -36,7 +36,6 @@ const BillingPage = () => {
 
   return (
     <div>
-      <NavbarSection />
       <Content
         style={{ width: 1280 }}
         className="mx-auto flex flex-col justify-content content-h"
@@ -108,11 +107,8 @@ const BillingPage = () => {
                     marginBottom: 0,
                   }}
                 >
-                  <DatePicker
-                    placeholder={messages.Modal.depositDate}
-                    style={{ marginLeft: 15, width: 150 }}
-                    locale={localeJP}
-                  />
+                  {messages.Modal.depositDate}
+                  <Input type="number" min={2000} />
                 </Form.Item>
                 <Form.Item
                   label={messages.Modal.depositAmount}

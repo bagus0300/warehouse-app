@@ -16,7 +16,7 @@ import {
   Table,
 } from "antd";
 
-import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { API } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
 
 import { warehouseURL, shipperURL, warehouseFeeURL } from "../utils/contants";
@@ -41,8 +41,11 @@ const InventoryPage = () => {
     label: "",
   });
 
-  const [shipperOptions, setShipperOptions] = useState();
-
+  const [shipperOptions, setShipperOptions] = useState([]);
+  const [shipperDisctription, setShipperDescription] = useState({
+    code: "",
+    closingDate: "",
+  });
   // ----------------Openday--------------
   const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
 
@@ -56,7 +59,7 @@ const InventoryPage = () => {
 
   //  -------Get warehouse names--------
   const getWarehouses = () => {
-    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+    API.get(warehouseURL).then((res) => {
       const warehouses = res.data.data.map((item) => {
         return {
           value: item.id,
@@ -76,21 +79,28 @@ const InventoryPage = () => {
 
   // --------Get shipper data--------
   const getShippers = () => {
-    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+    API.get(shipperURL).then((res) => {
       const shippers = res.data.data.map((item) => {
         return {
           value: item.id,
           label: item.name,
+          code: item.code,
+          closingDate: item.closingDate,
         };
       });
-
       setShipperOptions(shippers);
 
-      if (shippers.length > 0)
+      if (shippers.length > 0) {
         setSeletedShipper({
           value: shippers[0].value,
           label: shippers[0].label,
         });
+
+        setShipperDescription({
+          code: shippers[0].code,
+          closingDate: shippers[0].closingDate,
+        });
+      }
     });
   };
 
@@ -141,6 +151,16 @@ const InventoryPage = () => {
     getShippers();
   }, []);
 
+  useEffect(() => {
+    const shipper = shipperOptions.filter(
+      (item) => item.value == seletedShipper.value
+    );
+    setShipperDescription({
+      code: shipper.length > 0 ? shipper[0].code : "",
+      closingDate: shipper.length > 0 ? shipper[0].closingDate : "",
+    });
+  }, [seletedShipper]);
+
   return (
     <div>
       <Content
@@ -163,11 +183,11 @@ const InventoryPage = () => {
           >
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.warehouse}: </label>
+                <label>{$lang.inStock.warehouse}: </label>
               </Col>
               <Col span={6}>
                 <Select
-                  placeholder={$lang.IncomePageJp.warehouse}
+                  placeholder={$lang.inStock.warehouse}
                   style={{ width: 150, marginLeft: 14 }}
                   value={selectedWarehouse}
                   options={warehouseOptions}
@@ -177,7 +197,7 @@ const InventoryPage = () => {
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.shipper}:</label>
+                <label>{$lang.inStock.shipper}:</label>
               </Col>
               <Col span={6}>
                 <Select
@@ -186,13 +206,20 @@ const InventoryPage = () => {
                   options={shipperOptions}
                   value={seletedShipper.value}
                   defaultValue={""}
-                  placeholder={$lang.IncomePageJp.shipper}
+                  placeholder={$lang.inStock.shipper}
                 />
+                {shipperOptions.length > 0 && (
+                  <span className="" style={{ marginLeft: 16 }}>
+                    {$lang.inStock.shipper} :&nbsp;&nbsp;
+                    {shipperDisctription.code} &nbsp;/ &nbsp;
+                    {shipperDisctription.closingDate}
+                  </span>
+                )}{" "}
               </Col>
             </Row>
             <Row className="my-2">
               <Col span={1}>
-                <label>{$lang.IncomePageJp.receiptDate}:</label>
+                <label>{$lang.stock.targetDate}:</label>
               </Col>
               <Col span={10}>
                 <div className="ml-2">
@@ -204,7 +231,7 @@ const InventoryPage = () => {
                         setInoutOn(dayjs("2024/02/20", dateFormat));
                       } else setInoutOn(dayjs(dateStr, dateFormat));
                     }}
-                    placeholder={$lang.IncomePageJp.receiptDate}
+                    placeholder={$lang.inStock.in}
                     className="ml-1"
                     format={dateFormat}
                   />

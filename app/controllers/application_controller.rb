@@ -25,7 +25,6 @@ class ApplicationController < ActionController::Base
     render json: { error: 'Not Authorized' }, status: 401 unless @current_user
   end
   def current_user
-    puts "----------------current user----------------------"
     @current_user
   end
 end

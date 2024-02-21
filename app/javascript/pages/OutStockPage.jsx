@@ -46,12 +46,15 @@ const OutStockPage = () => {
   });
 
   // ------------Shipper-----------
-  const [shipperOptions, setShipperOptions] = useState();
+  const [shipperOptions, setShipperOptions] = useState([]);
   const [seletedShipper, setSeletedShipper] = useState({
     value: "",
     label: "",
   });
-
+  const [shipperDisctription, setShipperDescription] = useState({
+    code: "",
+    closingDate: "",
+  });
   // ---------product----------
   const [productOptions, setProductOptions] = useState("");
   const [selectedProduct, setSelectedProduct] = useState({
@@ -123,6 +126,8 @@ const OutStockPage = () => {
           return {
             value: item.id,
             label: item.name,
+            code: item.code,
+            closingDate: item.closing_date,
           };
         });
 
@@ -133,13 +138,15 @@ const OutStockPage = () => {
             value: shippers[0].value,
             label: shippers[0].label,
           });
+
+        setShipperDescription({
+          code: shippers[0].code,
+          closingDate: shippers[0].closingDate,
+        });
       })
       .catch((err) => {});
   };
 
-  useEffect(() => {
-    console.log("productOpt", productOptions);
-  }, [productOptions]);
   // ----------Get product data-----------
   const getProducts = () => {
     const url = API.get(
@@ -209,7 +216,6 @@ const OutStockPage = () => {
   };
 
   const onChangeProduct = (value, option) => {
-    console.log("onchange product event ", value, option);
     setSelectedProduct({
       value: value,
       label: option.label,
@@ -337,7 +343,6 @@ const OutStockPage = () => {
       packaging: packaging,
       handling_fee_rate: handlePrice,
       storage_fee_rate: storagePrice,
-      idx: selectedProductArr.length + 1,
       category: 1,
     };
     selectedProductArr.push(newData);
@@ -440,6 +445,16 @@ const OutStockPage = () => {
   }, [seletedShipper, selectedWarehouse]);
 
   useEffect(() => {
+    const shipper = shipperOptions.filter(
+      (item) => item.value == seletedShipper.value
+    );
+    setShipperDescription({
+      code: shipper.length > 0 ? shipper[0].code : "",
+      closingDate: shipper.length > 0 ? shipper[0].closingDate : "",
+    });
+  }, [seletedShipper]);
+
+  useEffect(() => {
     console.log("stock in date", inStockDate);
   }, [inStockDate]);
   return (
@@ -498,6 +513,13 @@ const OutStockPage = () => {
                   placeholder={$lang.inStock.shipper}
                   disabled={editMode == "edit"}
                 />
+                {shipperOptions.length > 0 && (
+                  <span className="" style={{ marginLeft: 16 }}>
+                    {$lang.inStock.shipper} :&nbsp;&nbsp;
+                    {shipperDisctription.code} &nbsp;/ &nbsp;
+                    {shipperDisctription.closingDate}
+                  </span>
+                )}{" "}
               </Col>
             </Row>
             <Row className="my-2">

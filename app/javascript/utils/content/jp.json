@@ -27,7 +27,8 @@
     "packaging": "荷姿",
     "lotoNumber": "ロット番号",
     "amount": "数量",
-    "inStockDate": "入庫日"
+    "inStockDate": "入庫日",
+    "targetDate": "対象日"
   },
   "buttons": {
     "login": "ログイン",
@@ -124,7 +125,22 @@
     "lastBilledAmount": "前回請求額",
     "billingAmout": "請求額",
     "consumptionTax": "消費税",
-    "output": "出力"
+    "output": "出力",
+    "buttons": {
+      "billingList": "請求リスト",
+      "billingCalculation": "請求計算"
+    },
+    "table": {
+      "number": "NO",
+      "productName": "番号",
+      "shipperName": "荷主名",
+      "previousInvoicedAmount": "前回請求額",
+      "receivedAmount": "入金額",
+      "handlingFee": "荷役料",
+      "storageFee": "保管料",
+      "invoiceAmount": "請求額",
+      "consumptionTax": "消費税"
+    }
   },
   "Maintenance": {
     "addNew": "新規登録",

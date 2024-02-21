@@ -119,7 +119,7 @@ const InStockPage = () => {
       value: editData.product_id,
       label: editData.product_name,
     });
-    debugger;
+
     setInstockDate(dayjs.tz(new Date(editData.inout_on), "Asia/Tokyo"));
   };
 

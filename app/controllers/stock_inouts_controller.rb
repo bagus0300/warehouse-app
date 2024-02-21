@@ -7,8 +7,6 @@ class StockInoutsController < ApplicationController
     shipper_id = params[:shipper_id]
     category = params[:category]
 
-    puts "-------------------------------------------------"
-
     stock_inout = StockInout.includes(:stocks);
     if warehouse_id.present?
       stock_inout = StockInout.joins(:stock)
@@ -38,11 +36,10 @@ class StockInoutsController < ApplicationController
           :warehouse_id, :shipper_id, :product_id, :category, :amount, :inout_on,
           :handling_fee_rate, :storage_fee_rate, :lot_number, :weight
         )
-
         stock = Stock.find_by(
-          warehouse_id:     params[:warehouse_id],
-          shipper_id:       params[:shipper_id],
-          product_id:       params[:product_id],
+          warehouse_id:     stock_inout_params[:warehouse_id],
+          shipper_id:       stock_inout_params[:shipper_id],
+          product_id:       stock_inout_params[:product_id],
         );
 
         category = params[:category]
@@ -110,9 +107,10 @@ class StockInoutsController < ApplicationController
 
   private
   def calculate_adjusted_total_amount(stock, stock_inout_params)
-    existing_total_amount = stock.inspect.total_amount
+    existing_total_amount = stock.total_amount
     category = stock_inout_params[:category]
-    new_total_amount = category == 0 ? (existing_total_amount + stock_inout_params[:amount]) : (existing_total_amount - stock_inout_params[:amount])
+
+    new_total_amount = category == 0 ? (existing_total_amount.to_i + stock_inout_params[:amount].to_i) : (existing_total_amount.to_i - stock_inout_params[:amount].to_i)
     new_total_amount
   end
 

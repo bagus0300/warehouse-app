@@ -3,8 +3,9 @@ import axios from "axios";
 import moment from "moment";
 import $lang from "../utils/content/jp.json";
 import CTable from "../components/CTable";
-import { makeHttpReq, makeHttpOptions } from "../utils/helper";
+import { API } from "../utils/helper";
 import { warehouseURL, shipperURL } from "../utils/contants";
+import { Space, Card, Row, Col, Divider } from "antd";
 const { RangePicker } = DatePicker;
 
 import {
@@ -21,18 +22,19 @@ import {
   DatePicker,
   message,
 } from "antd";
+import { Spa } from "@mui/icons-material";
 const { Content } = Layout;
 
 const BillingProcess = () => {
   const billingProcessColumns = [
     {
-      title: `${$lang.billing.number}`,
+      title: `${$lang.billing.table.number}`,
       dataIndex: "key",
       align: "center",
       width: "8%",
     },
     {
-      title: `${$lang.Maintenance.shipperID}`,
+      title: `${$lang.billing.table.shipperName}`,
       key: "name",
       width: "8%",
       dataIndex: "name",
@@ -47,7 +49,7 @@ const BillingProcess = () => {
       // },
     },
     {
-      title: `${$lang.Maintenance.shipperName}`,
+      title: `${$lang.billing.table.receivedAmount}`,
       key: "name",
       width: "10%",
       dataIndex: "name",
@@ -62,7 +64,7 @@ const BillingProcess = () => {
       // },
     },
     {
-      title: `${$lang.billing.lastBilledAmount}`,
+      title: `${$lang.billing.table.handlingFee}`,
       key: "name",
       width: "10%",
       dataIndex: "name",
@@ -77,7 +79,7 @@ const BillingProcess = () => {
       // },
     },
     {
-      title: `${$lang.DepositPage.amount}`,
+      title: `${$lang.billing.table.storageFee}`,
       key: "name",
       width: "10%",
       dataIndex: "name",
@@ -92,7 +94,7 @@ const BillingProcess = () => {
       // },
     },
     {
-      title: `${$lang.Maintenance.handlingFee}`,
+      title: `${$lang.billing.table.invoiceAmount}`,
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
@@ -106,38 +108,10 @@ const BillingProcess = () => {
       // },
     },
     {
-      title: `${$lang.Maintenance.storageFee}`,
+      title: `${$lang.billing.table.consumptionTax}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
-    },
-    {
-      title: `${$lang.billing.billingAmout}`,
-      dataIndex: "fee_category",
-      align: "center",
-      key: "fee_category",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
-    },
-    {
-      title: `${$lang.billing.consumptionTax}`,
-      dataIndex: "fee_category",
-      align: "center",
-      key: "fee_category",
       // render: (text, record, dataIndex) => {
       //   return (
       //     <div>
@@ -209,7 +183,7 @@ const BillingProcess = () => {
 
   //  -------Get warehouse names--------
   const getWarehouses = () => {
-    makeHttpReq(makeHttpOptions({}, "get", warehouseURL)).then((res) => {
+    API.get(warehouseURL).then((res) => {
       const warehouses = res.data.data.map((item) => {
         return {
           value: item.id,
@@ -229,7 +203,7 @@ const BillingProcess = () => {
 
   // --------Get shipper data--------
   const getShippers = () => {
-    makeHttpReq(makeHttpOptions({}, "get", shipperURL)).then((res) => {
+    API.get(shipperURL).then((res) => {
       const shippers = res.data.data.map((item) => {
         return {
           value: item.id,
@@ -309,122 +283,119 @@ const BillingProcess = () => {
   }, []);
 
   return (
-    <Content style={{ width: 1024 }} className="mx-auto content-h">
-      <div>
-        <div className="mt-5">
-          <div className="mt-5  flex flex-row item-center">
+    <Content
+      style={{ width: 1024, marginTop: 20 }}
+      className="mx-auto content-h"
+    >
+      <Card
+        style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+        className="py-2 my-2"
+        bordered={false}
+      >
+        <Row className="my-2">
+          <Space align="center">
             <label>{$lang.billing.billingDate}:</label>
-            <DatePicker
-              theme={"light"}
-              popoverDirection={"down"}
-              toggleClassName="invisible"
-              showShortcuts={true}
-              picker="year"
-              className="ml-4"
-            />
-            <label>{$lang.billing.year}</label>
-            <DatePicker
-              theme={"light"}
-              popoverDirection={"down"}
-              toggleClassName="invisible"
-              showShortcuts={true}
-              picker="month"
-              className="ml-4"
-            />
-            <label>{$lang.billing.month}</label>
-            <label className="ml-16">{$lang.billing.day}:</label>
-            <Select
-              defaultValue={dateOptions[0]}
-              onChange={onChangeDateValue}
-              value={dValue}
-              options={dateOptions.map((v) => ({
-                label: v,
-                value: v,
-              }))}
+            <Input
+              type="number"
+              className=""
+              min={2000}
+              style={{ width: 100 }}
+            ></Input>
+          </Space>
+          <Space align="center" className="ml-4">
+            <label>{$lang.billing.month}:</label>
+            <Input
+              type="number"
+              className=""
+              min={2000}
               style={{ width: 80 }}
-            ></Select>
-
-            <Button
-              className="btn-bg-black ml-16"
-              onClick={exportDataAndDownloadPdf}
-            >
-              {/* {$lang.buttons.return} */}
-              download pdf
-            </Button>
-            <Button
-              className="btn-bg-black ml-16"
-              onClick={exportDataAndDownloadCVS}
-            >
-              {/* {$lang.buttons.return} */}
-              download cvs
-            </Button>
-          </div>
-          <div className="mt-5  flex flex-row item-center">
-            <label>{$lang.billing.targetPeriod}</label>
+            ></Input>
+          </Space>
+          <Space align="center" className="ml-4">
+            <label className="">{$lang.billing.day}:</label>
+            <Input
+              type="number"
+              className=""
+              min={2000}
+              style={{ width: 80 }}
+            ></Input>
+          </Space>
+        </Row>
+        <Row className="my-2">
+          <Space align="center">
+            <label>{$lang.billing.targetPeriod}:</label>
             <RangePicker
               theme={"light"}
               popoverDirection={"down"}
               toggleClassName="invisible"
               showShortcuts={true}
               placeholder={["YYYY/MM/DD", "YYYY/MM/DD"]}
-              className="ml-4"
             />
-          </div>
-          <div className="flex flex-row item-center">
-            <label>{$lang.billing.targetShipper}</label>
+          </Space>
+        </Row>
+        <Row className="my-2">
+          <Space align="center">
+            <label>{$lang.billing.targetShipper}:</label>
             <Select
-              style={{ width: 300, marginLeft: 14 }}
+              style={{ width: 200 }}
               onChange={onChangeShipper}
               options={shipperOptions}
               value={seletedShipper.value}
               defaultValue={""}
-              placeholder={$lang.IncomePageJp.shipper}
+              placeholder={$lang.inStock.shipper}
             />
-          </div>
-          <div className="mt-5  flex flex-row item-center ">
-            <div>
-              <label>{$lang.billing.targetWarehouse}</label>
-              <Select
-                placeholder={$lang.IncomePageJp.warehouse}
-                style={{ width: 150, marginLeft: 14 }}
-                value={selectedWarehouse}
-                options={warehouseOptions}
-                onChange={onChangeWarehouse}
-              />
-            </div>
-            <label className="ml-16"></label>
-            <label className="ml-16"></label>
-            <Button className="btn-bg-black ml-16">
-              {$lang.buttons.calculation}
+          </Space>
+        </Row>
+        <Row className="my-2">
+          <Space align="center">
+            <label>{$lang.billing.targetWarehouse}:</label>
+            <Select
+              placeholder={$lang.inStock.warehouse}
+              style={{ width: 150 }}
+              value={selectedWarehouse}
+              options={warehouseOptions}
+              onChange={onChangeWarehouse}
+            />
+          </Space>
+        </Row>
+        <Divider />
+        <Row>
+          <Space align="center">
+            {" "}
+            <Button className="btn-bg-black" style={{ marginLeft: 60 }}>
+              {$lang.billing.buttons.billingCalculation}
             </Button>
-          </div>
-          <div className="mt-5">
+            <Button className="btn-bg-black ml-1">
+              {$lang.billing.buttons.billingList}
+            </Button>
+          </Space>
+        </Row>
+      </Card>
+      <Card>
+        <Row>
+          <Col span={12}>
             <div>{$lang.billing.new}</div>
-            <div className="flex flex-row">
+          </Col>
+          <Col span={12}>
+            <Space className="" style={{ float: "right" }}>
               <Button className="btn-bg-black">
                 {$lang.buttons.billingListOutput}
               </Button>
-              <label className="ml-16"></label>
-              <label className="ml-16"></label>
-              <label className="ml-16"></label>
-              <Button className="btn-bg-black ml-32">
+              <Button className="btn-bg-black">
                 {$lang.buttons.billingConfirmed}
               </Button>
-            </div>
-          </div>
-          <div className="mt-5">
-            <CTable
-              rowKey={(node) => node.key}
-              dataSource={allData}
-              columns={billingProcessColumns}
-              pagination={false}
-            />
-          </div>
-          <div>
-            <Button className="btn-bg-black ml-64">{$lang.buttons.next}</Button>
-          </div>
-        </div>
-      </div>
+            </Space>
+          </Col>
+        </Row>
+        <Row className="my-2">
+          <CTable
+            rowKey={(node) => node.key}
+            dataSource={allData}
+            columns={billingProcessColumns}
+            pagination={false}
+          />
+        </Row>
+      </Card>
     </Content>
   );
 };
