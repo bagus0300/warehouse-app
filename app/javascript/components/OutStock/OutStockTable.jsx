@@ -1,72 +1,68 @@
 import React, { useEffect } from "react";
 import { Space, Table, Button, Pagination, Tag } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  PlusSmallIcon,
-  InboxIcon,
-} from "@heroicons/react/24/outline";
+
 import Lang from "../../utils/content/jp.json";
 import CustomButton from "../common/CustomButton";
 import $lang from "../../utils/content/jp.json";
 
-const IncomeTable = ({ data, editRow, deleteRow }) => {
+const OutStockTable = ({ data, editRow, deleteRow }) => {
   const columns = [
     {
       title: "No",
-      dataIndex: "product_id",
+      dataIndex: "index",
       // key: "product",
       key: "",
       width: 70,
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "品名",
+      title: $lang.outStock.table.productName,
       dataIndex: "product_name",
       key: "product_name",
       width: "35%",
       render: (_, record) => (
         <>
-          <p className="my-2">{record.product_name}</p>
+          <p className="text-lg">{record.product_name}</p>
           <p>
-            <Tag bordered={false} className="px-5" color="default">
-              {record.shipper_name}
-            </Tag>
-            <Tag bordered={false} color="default" className="px-5">
-              {record.warehouse_name}
-            </Tag>
+            <span className="text-xs text-blue">{record.shipper_name}</span>{" "}
+            <span className="px-5 text-xs text-blue">|</span>
+            <span className="text-xs text-blue">{record.warehouse_name}</span>
+            <span className="px-5 text-xs text-blue">|</span>
+            <span className="text-xs text-blue">
+              {$lang.outStock.outStockDate}: {record.outstock_date}
+            </span>
           </p>
         </>
       ),
     },
     {
-      title: "荷姿",
+      title: $lang.outStock.table.packaging,
       dataIndex: "product_type",
       key: "product_type",
     },
     {
-      title: "ロット番号",
+      title: $lang.outStock.table.lotNumber,
       dataIndex: "lot_number",
       key: "lot_number",
     },
     {
-      title: "重量",
+      title: $lang.outStock.table.weight,
       dataIndex: "weight",
       key: "weight",
     },
     {
-      title: "数量",
-      dataIndex: "amount",
-      key: "amount",
+      title: $lang.outStock.table.amount,
+      dataIndex: "outstock_amount",
+      key: "outstock_amount",
     },
     {
-      title: "Action",
+      title: "#",
       key: "action",
       render: (_, record) => (
         <Space size="small">
           <CustomButton
-            onClick={() => editRow(record.product_id)}
+            onClick={() => editRow(record.stock_inout_id)}
             title={Lang.buttons.change}
             icon={<EditOutlined />}
             size="small"
@@ -75,7 +71,7 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
             visability={true}
           />
           <CustomButton
-            onClick={() => deleteRow(record.product_id)}
+            onClick={() => deleteRow(record.stock_inout_id)}
             title={Lang.buttons.delete}
             icon={<DeleteOutlined />}
             style={{ backgroundColor: "transparent", color: "#000" }}
@@ -101,4 +97,4 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
   );
 };
 
-export default IncomeTable;
+export default OutStockTable;

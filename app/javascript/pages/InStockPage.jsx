@@ -33,7 +33,6 @@ const dateFormat = "YYYY/MM/DD";
 
 const InStockPage = () => {
   const [prepareProducts, setPrepareProducts] = useState([]);
-  const [isDisabledProduct, setDiabledProduct] = useState(false);
 
   const [shipperDisctription, setShipperDescription] = useState({
     code: "",
@@ -120,7 +119,7 @@ const InStockPage = () => {
       value: editData.product_id,
       label: editData.product_name,
     });
-
+    debugger;
     setInstockDate(dayjs.tz(new Date(editData.inout_on), "Asia/Tokyo"));
   };
 
@@ -312,7 +311,6 @@ const InStockPage = () => {
     const editData = oldData.filter((data) => data.product_id == productId)[0];
 
     setPrepareProductItem(editData);
-    setDiabledProduct(true);
     setEditMode("edit");
   };
 
@@ -326,7 +324,6 @@ const InStockPage = () => {
 
   const cancelEditProduct = () => {
     setEditMode("new");
-    setDiabledProduct(false);
     initPrepareProductItem();
   };
 
@@ -349,7 +346,6 @@ const InStockPage = () => {
     updateData.amount = amount;
 
     setPrepareProducts(oldData);
-    setDiabledProduct(false);
     setEditMode("new");
   };
 
@@ -520,7 +516,7 @@ const InStockPage = () => {
                     value={selectedProduct.value}
                     options={productOptions}
                     onChange={onChangeProduct}
-                    disabled={isDisabledProduct}
+                    disabled={editMode == "edit"}
                     defaultValue={{
                       value: "",
                       label: "",
@@ -568,6 +564,7 @@ const InStockPage = () => {
                     }}
                   />
                   <Input
+                    type="number"
                     style={{ width: 100 }}
                     placeholder={$lang.inStock.itemNumber}
                     value={amount}
@@ -616,8 +613,13 @@ const InStockPage = () => {
             deleteRow={deleteRow}
             pagination={false}
           />
-          <div style={{ height: 15 }}></div>
-          <div style={{ justifyContent: "flex-end", display: "flex" }}>
+          <div
+            style={{
+              justifyContent: "flex-end",
+              display: "flex",
+              marginTop: 15,
+            }}
+          >
             <CustomButton
               title={$lang.buttons.csvExchange}
               className="mr-2 btn-bg-black"

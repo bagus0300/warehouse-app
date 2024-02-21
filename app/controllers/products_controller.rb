@@ -9,6 +9,7 @@ class ProductsController < ApplicationController
     keyword = params[:keyword]
     offset = params[:offset]
     limit = params[:limit]
+    
     products = Product.includes(:warehouse_fee)
   
     if keyword.present?
@@ -16,15 +17,44 @@ class ProductsController < ApplicationController
     end
     count = products.count
     filtered_products = products.offset(offset).limit(limit)
-    
-   
-      
-  
+
     render json: {
       data: filtered_products.map { |product| ProductSerializer.new(product).as_json },
       count: count,
       status: :accepted
     }
+  end
+  def with_in_stock
+    warehouse_id = params[:warehouse_id]
+    shipper_id = params[:shipper_id]
+    category = params[:category]
+
+    result = StockInout.joins(:stock)
+                       .merge(Stock.filtered(warehouse_id, shipper_id))
+                       .select("concat(products.name, '(', stock_inouts.lot_number, ')') product_name, stocks.product_id AS product_id, stock_inouts.inout_on, stock_inouts.lot_number, stock_inouts.weight, stock_inouts.id stock_inout_id, stock_inouts.amount stock_inout_amount")
+
+    render json: {
+      data: result,
+      # data: subquery,
+      status: :accepted
+    }
+
+  end
+  def with_stock
+
+    product_id = params[:product_id]
+    stock_id = params[:id]
+
+    product = Product.includes(:warehouse_fee).find(product_id)
+    # stock = Stock.select("total_amount").find(stock_id)
+
+    render :json => {
+      data: ProductSerializer.new(product).as_json ,
+      # stock: stock,
+      status: :accepted
+    }
+
+
   end
   def create
     product = Product.find_or_create_by(
@@ -54,8 +84,6 @@ class ProductsController < ApplicationController
     end
   end
   def show_by_id
-    puts "-----------------"
-    puts params[:id]
     product = Product.includes(:warehouse_fee).find(params[:id])
     render :json => {
       data: ProductSerializer.new(product).as_json ,

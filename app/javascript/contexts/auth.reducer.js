@@ -6,6 +6,17 @@ export const initialAuthState = {
   loginErrors: null,
   signupErrors: null,
   beforeRequest: true,
+  perf: [
+    { page_id: 1, is_read: true, is_write: true },
+    { page_id: 2, is_read: true, is_write: true },
+    { page_id: 2, is_read: true, is_write: true },
+    { page_id: 3, is_read: true, is_write: true },
+    { page_id: 1, is_read: true, is_write: true },
+    { page_id: 1, is_read: true, is_write: true },
+    { page_id: 1, is_read: true, is_write: true },
+    { page_id: 1, is_read: true, is_write: true },
+    { page_id: 1, is_read: true, is_write: true },
+  ],
 };
 export const AuthReducer = (state = initialAuthState, action) => {
   switch (action.type) {

@@ -16,9 +16,19 @@ export const shipperURL = baseUrl + "api/shipper";
 
 export const productURL = baseUrl + "api/product";
 
+export const productSetUrl = (warehouse_id, shipper_id) =>
+  baseUrl +
+  "api/product_set?warehouse_id=" +
+  warehouse_id +
+  "&shipper_id=" +
+  shipper_id;
+
 export const warehouseFeeURL = baseUrl + "api/warehouse_fee";
 
 export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
+export const productStockURL = (id, productId, warehouseId, shipperId) =>
+  baseUrl +
+  `api/product_stock?id=${id}&product_id=${productId}&warehouse_id=${warehouseId}&shipper_id=${shipperId}`;
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 

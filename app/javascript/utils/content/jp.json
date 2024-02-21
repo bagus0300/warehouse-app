@@ -179,8 +179,16 @@
   },
   "outStock": {
     "outStockDate": "出庫日",
-    "libraryNumber": "現在庫数",
-    "shipmentNumber": "出庫数"
+    "outStockAmount": "出庫数",
+    "stockAmount": "現在庫数",
+    "shipmentNumber": "出庫数",
+    "table": {
+      "productName": "品名",
+      "packaging": "荷姿",
+      "lotNumber": "ロット番号",
+      "weight": "重量",
+      "amount": "数量"
+    }
   },
   "DepositPage": {
     "depositDate": "入金年月日",
@@ -217,10 +225,13 @@
     "input_stock": "入庫数を入力してください!",
     "input_weight": "重量(kg)を入力してください!",
     "input_in_stock_date": "入庫日を入力してください!",
+    "input_out_stock_date": "出庫日を入力してください!",
+    "input_out_amount": "出庫数を入力してください!",
     "success": "操作に成功しました。",
     "confirm": "確認",
     "confirm_delete": "本当に初期化してもよろしいですか？",
-    "empty_data_to_init": "初期化するデータはありません。"
+    "empty_data_to_init": "初期化するデータはありません。",
+    "stockAmountError": "出庫量は在庫量より少なく入力してください。"
   },
   "popConrimType": {
     "success": "成功",

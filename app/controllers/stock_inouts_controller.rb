@@ -3,9 +3,27 @@ class StockInoutsController < ApplicationController
   require 'csv'
   
   def index
-    if StockInout.where(category: 0).exists?
-      stock_inouts = StockInout.includes(:stocks).all
+    warehouse_id = params[:warehouse_id]
+    shipper_id = params[:shipper_id]
+    category = params[:category]
+
+    puts "-------------------------------------------------"
+
+    stock_inout = StockInout.includes(:stocks);
+    if warehouse_id.present?
+      stock_inout = StockInout.joins(:stock)
+          .where(stocks: { warehouse_id: warehouse_id})
     end
+
+    if shipper_id.present?
+      stock_inout = stockInout.where(stocks: {shipper_id: shipper_id})
+    end
+
+    if category.present? 
+      stock_inout = stockInout.where(category: 0)
+    end
+
+    stock_inout = stockInout.all
   
     render json: {
       data: stock_inouts.map { |stock_inout| StockInoutSerializer.new(stock_inout).as_json },

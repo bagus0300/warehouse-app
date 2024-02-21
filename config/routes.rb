@@ -19,16 +19,16 @@ Rails.application.routes.draw do
   put "/api/warehouse" , to: 'warehouses#update'
   delete "/api/warehouse" , to: 'warehouses#destroy'
 
-  get "/api/product_dd", to:'products#show_by_id'
   get "/api/product", to: 'products#index'
-  # get "/api/product_detail", to:'products#show_with_warehouse_fee'
   post "/api/product" , to: 'products#create'
   put "/api/product" , to: 'products#update'
   delete "/api/product" , to: 'products#destroy'
   get "/api/product_detail", to:'products#show_by_id'
   post "/api/product_export", to: 'products#pdf_export'
   get "/api/product_csv_export", to: 'products#csv_export'
-
+  get "/api/product_set", to: 'products#with_in_stock'
+  get "/api/product_stock", to: 'products#with_stock'
+  
   get "/api/warehouse_fee", to: 'warehouse_fees#index'
   post "/api/warehouse_fee" , to: 'warehouse_fees#create'
   put "/api/warehouse_fee" , to: 'warehouse_fees#update'
