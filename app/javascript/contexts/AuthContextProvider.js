@@ -42,7 +42,6 @@ const AuthContextProvider = ({ children }) => {
     const res = await services.logout();
     if (res?.data?.ok) {
       authActions.logoutAction(dispatch);
-
     }
   };
 

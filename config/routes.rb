@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   post "/api/received_payment", to: 'received_payments#create'
   put "/api/received_payment", to: 'received_payments#update'
   delete "/api/received_payment", to: 'received_payments#destroy'
+  get "/api/client_page", to: 'client_pages#index'
   
   get "/api/user", to: 'users#index'
   put "/api/user", to: 'users#update'

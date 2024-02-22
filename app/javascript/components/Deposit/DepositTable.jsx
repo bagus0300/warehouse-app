@@ -6,7 +6,7 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 
-const DepositTable = ({ data, editRow, deleteRow }) => {
+const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
     {
       title: "入金日",
@@ -39,7 +39,7 @@ const DepositTable = ({ data, editRow, deleteRow }) => {
       dataIndex: "processing_on",
       key: "processing_on",
     },
-    {
+    is_edit === 1 ? ({
       title: 'Action',
       key: 'action',
       render: (_, record) => (
@@ -48,7 +48,8 @@ const DepositTable = ({ data, editRow, deleteRow }) => {
           <TrashIcon style={{ width: 20, cursor: "pointer" }} onClick={() => deleteRow(record.id)}>{messages.buttons.delete}</TrashIcon>
         </div>
       ),
-    }
+    }) : (<div></div>),
+
   ];
   return (
     <Table columns={columns} dataSource={data} pagination={true} />

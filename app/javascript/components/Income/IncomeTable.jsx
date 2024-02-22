@@ -11,7 +11,7 @@ import Lang from "../../utils/content/jp.json";
 import CustomButton from "../common/CustomButton";
 import $lang from "../../utils/content/jp.json";
 
-const IncomeTable = ({ data, editRow, deleteRow }) => {
+const IncomeTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
     {
       title: "No",
@@ -60,32 +60,36 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
       dataIndex: "amount",
       key: "amount",
     },
-    {
-      title: "#",
-      key: "action",
-      render: (_, record) => (
-        <Space size="small">
-          <CustomButton
-            onClick={() => editRow(record.product_id)}
-            title={Lang.buttons.change}
-            icon={<EditOutlined />}
-            size="small"
-            className="btn-default btn-hover-black"
-            style={{ backgroundColor: "transparent", color: "#000" }}
-            visability={true}
-          />
-          <CustomButton
-            onClick={() => deleteRow(record.product_id)}
-            title={Lang.buttons.delete}
-            icon={<DeleteOutlined />}
-            style={{ backgroundColor: "transparent", color: "#000" }}
-            size="small"
-            className="btn-default btn-hover-black"
-            visability={true}
-          />
-        </Space>
-      ),
-    },
+    is_edit === 1 ? (
+      {
+        title: "Action",
+        key: "action",
+        render: (_, record) => (
+          <Space size="small">
+            <CustomButton
+              onClick={() => editRow(record.product_id)}
+              title={Lang.buttons.change}
+              icon={<EditOutlined />}
+              size="small"
+              className="btn-default btn-hover-black"
+              style={{ backgroundColor: "transparent", color: "#000" }}
+              visability={true}
+            />
+            <CustomButton
+              onClick={() => deleteRow(record.product_id)}
+              title={Lang.buttons.delete}
+              icon={<DeleteOutlined />}
+              style={{ backgroundColor: "transparent", color: "#000" }}
+              size="small"
+              className="btn-default btn-hover-black"
+              visability={true}
+            />
+          </Space>
+        ),
+      }
+    ) : (
+      <div></div>
+    ),
   ];
   return (
     <Table

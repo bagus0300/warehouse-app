@@ -5,7 +5,8 @@
   },
   "pages": {
     "login": "ログイン",
-    "signup": "新規登録"
+    "signup": "新規登録",
+    "warning" : "このページは表示できません!"
   },
   "LoginFields": {
     "username": "ログインID",

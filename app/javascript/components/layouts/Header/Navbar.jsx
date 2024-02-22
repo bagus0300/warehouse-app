@@ -1,46 +1,36 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate, useLocation, useMatch, Link } from "react-router-dom";
 import { Typography, Breadcrumb, Button } from "antd";
 import { Layout, Menu, theme } from "antd";
-import { siteInfo, navigations } from "../../../utils/content";
+import { siteInfo } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
-import $lang from "../../../utils/content/jp.json";
+import { navigatiionsURL } from "../../../utils/contants";
 
-const NavbarSection = () => {
+const NavbarSection = ({ navigations }) => {
   const { logoutAction } = useAuth();
   const { Title } = Typography;
   const { Header } = Layout;
-
   const navigate = useNavigate();
-  const loc = useLocation();
+  const location = useLocation();
   const [current, setCurrent] = useState("");
   const [title, setTitle] = useState("");
 
   const onMenuClick = (e) => {
-    const flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    );
-    const { label } =
-      flattenNavigations.find((item) => item.key === e.key) || {};
+    const { label } = navigations.find((item) => item.key === e.key) || {};
     setTitle(label);
     setCurrent(e.key);
     navigate(e.key);
   };
 
   useEffect(() => {
-    setCurrent(loc.pathname);
-  }, []);
+    setCurrent(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
-    const flattenNavigations = navigations.reduce(
-      (a, b) => a.concat(b.children ? b.children : b),
-      []
-    );
-    const { label } =
-      flattenNavigations.find((item) => item.key === current) || {};
+    const { label } = navigations.find((item) => item.key === current) || {};
     setTitle(label);
-  }, [current]);
+  }, [current, navigations]);
 
   return (
     <Layout>
@@ -56,9 +46,7 @@ const NavbarSection = () => {
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
           <Title level={4} style={{ marginTop: 15 }}>
-            <Link to="home" style={{ color: "#fff" }}>
-              {siteInfo.title}
-            </Link>
+            <Link to="home">{siteInfo.title}</Link>
           </Title>
         </div>
         <Menu
@@ -75,23 +63,19 @@ const NavbarSection = () => {
         />
         <Button
           onClick={logoutAction}
-          style={{ marginLeft: "300px", marginTop: "15px", border: "none" }}
+          style={{ marginLeft: "300px", marginTop: "15px" }}
         >
-          <Link to="/signin" style={{ color: "#fff" }}>
-            {$lang.buttons.logout}
-          </Link>
+          <Link to="/signin">LogOut</Link>
         </Button>
       </Header>
-      <div className="">
-        <Breadcrumb
-          items={[{ title }]}
-          style={{
-            padding: "10px 50px ",
-            backgroundColor: "#dfdfdf",
-            marginTop: "55px",
-          }}
-        />
-      </div>
+      <Breadcrumb
+        items={[{ title }]}
+        style={{
+          padding: "10px 50px ",
+          backgroundColor: "grey",
+          marginTop: "55px",
+        }}
+      />
     </Layout>
   );
 };

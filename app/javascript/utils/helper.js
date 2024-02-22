@@ -87,18 +87,27 @@ export const hasKey = (obj, key) => typeof obj === "object" && !falsy(obj[key]);
 export const getAuthUser = () => {
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
+  const pemissionpage = localStorage.getItem("pemission_page");
 
-  return falsy(username) || falsy(token) || isEmpty(username) || isEmpty(token) 
-    ? { username: null, token: null,  }
-    : { username, token};
+  return falsy(username) ||
+    falsy(token) ||
+    isEmpty(username) ||
+    isEmpty(token) ||
+    falsy(pemissionpage) ||
+    isEmpty(pemissionpage)
+    ? { username: null, token: null, pemissionpage: [] }
+    : { username, token, pemissionpage };
 };
 
 export const getAuthUsername = () => getAuthUser()?.username;
 export const getAuthUserToken = () => getAuthUser()?.token;
+export const getPermissionPage = () => getAuthUser()?.pemissionpage;
 
-export const saveAuthUser = (username, token, ) => {
+export const saveAuthUser = (username, token, pemissionPage) => {
+  console.log("asfd", JSON.stringify(pemissionPage));
   localStorage.setItem("username", username);
   localStorage.setItem("token", token);
+  localStorage.setItem("pemission_page", JSON.stringify(pemissionPage));
 };
 
 export const clearStorage = () => localStorage.clear();

@@ -25,6 +25,8 @@ export const productSetUrl = (warehouse_id, shipper_id) =>
 
 export const warehouseFeeURL = baseUrl + "api/warehouse_fee";
 
+export const navigatiionsURL = baseUrl + "api/client_page";
+
 export const productDetailURL = (id) => baseUrl + `api/product_detail?id=${id}`;
 export const productStockURL = (id, productId, warehouseId, shipperId) =>
   baseUrl +

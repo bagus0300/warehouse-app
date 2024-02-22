@@ -10,6 +10,7 @@ import {
   makeHttpReq,
   getAuthUserToken,
   makeHttpOptions,
+  API,
   makeURLOptionsWtoken,
 } from "../utils/helper";
 
@@ -17,17 +18,16 @@ const verifyAuth = async (token = getAuthUserToken()) =>
   makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token));
 
 const login = async (payload) => {
-  return makeHttpReq(makeHttpOptions(payload, "POST", loginURL));
+  return API.post(loginURL, payload);
 };
 
-const signup = async (payload) =>
-  makeHttpReq(makeHttpOptions(payload, "POST", signupURL));
+const signup = async (payload) => API.post(signupURL, payload);
 
-const logout = async () =>
-  makeHttpReq(
-    logoutURL,
-    makeURLOptionsWtoken(getAuthUserToken(), {}, "DELETE")
-  );
+const logout = async () => API.delete(logoutURL, getAuthUserToken());
+// makeHttpReq(
+//   logoutURL,
+//   makeURLOptionsWtoken(getAuthUserToken(), {}, "DELETE")
+// );
 
 const services = {
   signup,

@@ -9,7 +9,6 @@ class ProductsController < ApplicationController
     keyword = params[:keyword]
     offset = params[:offset]
     limit = params[:limit]
-    
     products = Product.includes(:warehouse_fee)
   
     if keyword.present?
@@ -17,7 +16,7 @@ class ProductsController < ApplicationController
     end
     count = products.count
     filtered_products = products.offset(offset).limit(limit)
-
+   
     render json: {
       data: filtered_products.map { |product| ProductSerializer.new(product).as_json },
       count: count,

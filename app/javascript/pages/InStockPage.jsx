@@ -31,7 +31,8 @@ import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
-const InStockPage = () => {
+const InStockPage = ({ is_edit }) => {
+  const [isVisibleAddButton, setAddButtonVisability] = useState(false);
   const [prepareProducts, setPrepareProducts] = useState([]);
 
   const [shipperDisctription, setShipperDescription] = useState({
@@ -612,6 +613,7 @@ const InStockPage = () => {
             editRow={(key) => editRow(key)}
             deleteRow={deleteRow}
             pagination={false}
+            is_edit={is_edit}
           />
           <div
             style={{

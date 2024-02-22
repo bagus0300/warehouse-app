@@ -33,7 +33,7 @@ let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const ProductPage = () => {
+const ProductPage = ({ is_edit }) => {
   const [form] = Form.useForm();
 
   const [searchText, setSearchText] = useState("");
@@ -60,8 +60,7 @@ const ProductPage = () => {
   const [searchBtn, setSearchBtn] = useState(false);
 
   const handlePageChange = (page, pageSize) => {
-    console.log(page, "page")
-    console.log(pageSize, "pageSize")
+
     setCurrentPage((page - 1) * pageSize);
     setItemPerPage(pageSize);
   };
@@ -82,10 +81,8 @@ const ProductPage = () => {
           fee_category: feeData.fee_category,
         };
       });
-      console.log(products, 'filterdata');
-      console.log(res.data.count, 'res.data.count');
+
       setTotal(res.data.count);
-      console.log('============');
       setAllData(products);
     });
   };
@@ -269,7 +266,7 @@ const ProductPage = () => {
       //   );
       // },
     },
-    {
+    is_edit === 1 ? ({
       title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
@@ -299,10 +296,10 @@ const ProductPage = () => {
               />
             </div>
           </div>
-        );
+        )
       },
       align: "center",
-    },
+    }) : (<div></div>)
   ];
 
   return (

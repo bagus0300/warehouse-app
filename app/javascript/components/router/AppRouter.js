@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../../pages/LoginPage";
 import SignupPage from "../../pages/SignupPage";
@@ -23,52 +24,110 @@ import { useAuth } from "../../hooks/useAuth";
 import ClientPage from "../../pages/ClientPage";
 import ChangePassword from "../../pages/changePasswordPage";
 
+import { navigatiionsURL } from "../../utils/contants";
+
 export const AppRouter = () => {
+  const [navigations, setNavigations] = useState([]);
   const user = useAuth();
+
+  const getNavigations = () => {
+    axios.get(`${navigatiionsURL}`).then((res) => {
+      const allData = res.data.data.map((item) => {
+        return { ...item, key: item.path, label: item.name, url: item.path };
+      });
+      setNavigations(allData);
+    });
+  };
+  useEffect(() => {
+    console.log("app  router pass");
+
+    if (user.authUserName != null) getNavigations();
+  }, [user.authUserName]);
+
   return (
     <AuthContextProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/home" element={<PrivateRoute Component={TopPage} />} />
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute navigations={navigations} Component={TopPage} />
+            }
+          />
           <Route
             path="/billing_process"
-            element={<PrivateRoute Component={BillingProcess} />}
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={BillingProcess}
+              />
+            }
           />
           <Route
             path="/billing_list"
-            element={<PrivateRoute Component={BillingList} />}
+            element={
+              <PrivateRoute navigations={navigations} Component={BillingList} />
+            }
           />
           <Route
             path="/in_stock"
-            element={<PrivateRoute Component={InStockPage} />}
+            element={
+              <PrivateRoute navigations={navigations} Component={InStockPage} />
+            }
           />
           <Route
             path="/product"
-            element={<PrivateRoute Component={ProductPage} />}
+            element={
+              <PrivateRoute navigations={navigations} Component={ProductPage} />
+            }
           />
           <Route
             path="/shipper"
-            element={<PrivateRoute Component={ShipperPage} />}
+            element={
+              <PrivateRoute navigations={navigations} Component={ShipperPage} />
+            }
           />
           <Route
             path="/out_stock"
-            element={<PrivateRoute Component={OutStockPage} />}
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={OutStockPage}
+              />
+            }
           />
           <Route
             path="/warehouse_fee"
-            element={<PrivateRoute Component={WarehouseFee} />}
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={WarehouseFee}
+              />
+            }
           />
           <Route
             path="/stock"
-            element={<PrivateRoute Component={InventoryPage} />}
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={InventoryPage}
+              />
+            }
           />
           <Route
             path="/deposit_process"
-            element={<PrivateRoute Component={DepositPage} />}
+            element={
+              <PrivateRoute navigations={navigations} Component={DepositPage} />
+            }
           />
-          <Route path="/*" element={<PrivateRoute Component={NotFonud} />} />
+          <Route
+            path="/*"
+            element={
+              <PrivateRoute navigations={navigations} Component={NotFonud} />
+            }
+          />
           <Route path="/" element={<LoginPage />} />
           <Route
             path="/user_process"

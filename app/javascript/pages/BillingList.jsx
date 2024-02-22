@@ -19,7 +19,7 @@ import {
 import Item from "antd/es/list/Item";
 const { Content } = Layout;
 
-const BillingList = () => {
+const BillingList = ({ is_edit }) => {
   const [year, setYear] = useState(2024);
   const [day, setDay] = useState(1);
   const billingListColumns = [
@@ -63,40 +63,44 @@ const BillingList = () => {
       align: "center",
       key: "fee_category",
     },
-    {
-      title: `${$lang.buttons.change}`,
-      dataIndex: "operation",
-      render: (text, record, dataIndex) => {
-        return (
-          <div className="flex justify-center">
-            <div className="hidden rounded-full">
-              {(star_color = record.done == true ? "text-yellow-500" : "")}
+    is_edit === 1 ? (
+      {
+        title: `${$lang.buttons.change}`,
+        dataIndex: "operation",
+        render: (text, record, dataIndex) => {
+          return (
+            <div className="flex justify-center">
+              <div className="hidden rounded-full">
+                {(star_color = record.done == true ? "text-yellow-500" : "")}
+              </div>
+              <div className="p-2 rounded-full cursor-pointer text-center">
+                <PencilSquareIcon
+                  shape="circle"
+                  className="w-20"
+                  style={{ marginRight: "5px" }}
+                  onClick={() => {
+                    setUpdateStatus("Edit");
+                    onAction(record);
+                  }}
+                />
+              </div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center">
+                <TrashIcon
+                  shape="circle"
+                  className="w-20"
+                  onClick={() => {
+                    onDelete(record);
+                  }}
+                />
+              </div>
             </div>
-            <div className="p-2 rounded-full cursor-pointer text-center">
-              <PencilSquareIcon
-                shape="circle"
-                className="w-20"
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  setUpdateStatus("Edit");
-                  onAction(record);
-                }}
-              />
-            </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <TrashIcon
-                shape="circle"
-                className="w-20"
-                onClick={() => {
-                  onDelete(record);
-                }}
-              />
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    },
+          );
+        },
+        align: "center",
+      }
+    ) : (
+      <div></div>
+    ),
   ];
 
   const [form] = Form.useForm();
