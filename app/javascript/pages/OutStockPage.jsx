@@ -133,16 +133,17 @@ const OutStockPage = () => {
 
         setShipperOptions(shippers);
 
-        if (shippers.length > 0)
+        if (shippers.length > 0) {
           setSeletedShipper({
             value: shippers[0].value,
             label: shippers[0].label,
           });
 
-        setShipperDescription({
-          code: shippers[0].code,
-          closingDate: shippers[0].closingDate,
-        });
+          setShipperDescription({
+            code: shippers[0].code,
+            closingDate: shippers[0].closingDate,
+          });
+        }
       })
       .catch((err) => {});
   };

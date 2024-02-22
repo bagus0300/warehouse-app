@@ -17,6 +17,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_014710) do
     t.boolean "is_edit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_read"
   end
 
   create_table "bill_amounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -85,9 +86,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_014710) do
     t.string "main_address", null: false, comment: "住所1"
     t.string "sub_address", null: false, comment: "住所2"
     t.string "tel", null: false, comment: "電話番号"
-    t.datetime "closing_date", null: false, comment: "締日"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "closing_date", null: false
     t.index ["code"], name: "index_shippers_on_code", unique: true
     t.index ["name"], name: "index_shippers_on_name", unique: true
   end
@@ -113,9 +114,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_014710) do
     t.bigint "total_amount", null: false, comment: "在庫数"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_stocks_on_product_id", unique: true
-    t.index ["shipper_id"], name: "index_stocks_on_shipper_id", unique: true
-    t.index ["warehouse_id"], name: "index_stocks_on_warehouse_id", unique: true
+    t.index ["product_id"], name: "index_stocks_on_product_id"
+    t.index ["shipper_id"], name: "index_stocks_on_shipper_id"
+    t.index ["warehouse_id"], name: "index_stocks_on_warehouse_id"
   end
 
   create_table "user_authorities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

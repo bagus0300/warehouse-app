@@ -206,7 +206,7 @@
       "amount": "数量"
     }
   },
-  "DepositPage": {
+  "deposit": {
     "depositDate": "入金年月日",
     "received_onFrom": "入金日From",
     "received_onTo": "入金日To",
@@ -218,7 +218,8 @@
     "shipperCode": "荷主コード",
     "processing_onDate": "処理日時",
     "description": "摘要",
-    "received": "入金"
+    "received": "入金",
+    "shipper": "荷主名"
   },
   "UserPage": {
     "loginNumber": "番号",

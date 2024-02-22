@@ -150,42 +150,18 @@ const WarehouseFee = () => {
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.handling_fee_rate.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.storageFeeUnitPrice}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.storage_fee_rate.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       key: "fee_category",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
 
     {

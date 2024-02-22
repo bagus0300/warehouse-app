@@ -9,19 +9,19 @@ import {
   Input,
   InputNumber,
   Layout,
-  Popconfirm,
-  Table,
-  Select,
   Button,
-  Modal,
-  notification,
-  DatePicker,
-  message,
+  Card,
+  Space,
+  Row,
+  Col,
+  Select,
 } from "antd";
+import Item from "antd/es/list/Item";
 const { Content } = Layout;
 
 const BillingList = () => {
-
+  const [year, setYear] = useState(2024);
+  const [day, setDay] = useState(1);
   const billingListColumns = [
     {
       title: "No",
@@ -50,42 +50,18 @@ const BillingList = () => {
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.storageFee}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       align: "center",
       key: "fee_category",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.buttons.change}`,
@@ -127,42 +103,61 @@ const BillingList = () => {
   const [allData, setAllData] = useState([]);
   const [showData, setShowData] = useState([]);
 
+  const dateOptions = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+  ];
+
   return (
-    <Content style={{ width: 1024 }} className="mx-auto content-h">
-      <div>
+    <Content style={{ width: 1280 }} className="mx-auto content-h">
+      <Card
+        style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+        className="py-2 my-2"
+        bordered={false}
+      >
+        <Row>
+          <Col span={12}>
+            <Space>
+              <label>{$lang.billing.YM}:</label>
+              <InputNumber defaultValue={2024} value={year} />
+            </Space>
+            <Space>
+              <label className="ml-8">{$lang.billing.day}:</label>
+              <Select
+                options={dateOptions.map((item) => {
+                  return {
+                    value: item,
+                    label: item,
+                  };
+                })}
+                defaultValue={1}
+                style={{ width: 80 }}
+              />
+            </Space>
+          </Col>
+          <Col span={12}>
+            <div style={{ float: "right" }}>
+              <Button className="btn-bg-black">{$lang.buttons.search}</Button>
+              <Button className="ml-2">{$lang.billing.new}</Button>
+            </div>
+          </Col>
+        </Row>
+      </Card>
+      <Card
+        style={{ width: "100%", marginTop: 20, marginBottom: 20 }}
+        className="py-2 my-2"
+        bordered={false}
+      >
+        {" "}
         <div className="mt-5">
-          <Button>{$lang.billing.new}</Button>
-          <div className="mt-5  flex flex-row item-center">
-            <label>{$lang.billing.YM}</label>
-            <DatePicker
-              theme={"light"}
-              popoverDirection={"down"}
-              toggleClassName="invisible"
-              showShortcuts={true}
-              picker="month"
-              className="ml-4"
-            />
-            <label className="ml-8">{$lang.billing.day}</label>
-            <DatePicker picker="day" className="ml-4" />
-            <Button
-              className="btn-bg-black ml-16"
-            >
-              {$lang.buttons.search}
-            </Button>
-          </div>
-          <div className="mt-5">
-            <CTable
-              rowKey={(node) => node.key}
-              dataSource={allData}
-              columns={billingListColumns}
-              pagination={false}
-            />
-          </div>
-          <div>
-            <Button className="btn-bg-black ml-64">{$lang.buttons.next}</Button>
-          </div>
+          <CTable
+            rowKey={(node) => node.key}
+            dataSource={allData}
+            columns={billingListColumns}
+            pagination={false}
+          />
         </div>
-      </div>
+      </Card>
     </Content>
   );
 };

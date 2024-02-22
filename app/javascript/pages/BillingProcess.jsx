@@ -54,14 +54,6 @@ const BillingProcess = () => {
       width: "10%",
       dataIndex: "name",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.name.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.billing.table.handlingFee}`,
@@ -69,14 +61,6 @@ const BillingProcess = () => {
       width: "10%",
       dataIndex: "name",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.name.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.billing.table.storageFee}`,
@@ -84,42 +68,18 @@ const BillingProcess = () => {
       width: "10%",
       dataIndex: "name",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.name.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.billing.table.invoiceAmount}`,
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.billing.table.consumptionTax}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.billing.output}`,
@@ -172,6 +132,8 @@ const BillingProcess = () => {
     value: "",
     label: "",
   });
+
+  const monthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const dateOptions = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
     22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -228,55 +190,6 @@ const BillingProcess = () => {
     setSeletedShipper({ value: value, label: option.label });
   };
 
-  const exportDataAndDownloadPdf = async () => {
-    try {
-      const response = await axios.post(
-        "/api/product_export",
-        {
-          /* your data */
-        },
-        {
-          responseType: "arraybuffer",
-        }
-      );
-
-      // Handle the response and initiate the PDF download
-      downloadPDF(response);
-    } catch (error) {
-      // Handle errors
-      console.error(error);
-    }
-  };
-  const downloadPDF = (response) => {
-    const blob = new Blob([response.data], { type: "application/pdf" });
-    const fileName = "generated_pdf.pdf";
-
-    // Construct the URL and initiate the download
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.setAttribute("download", fileName);
-    a.click();
-  };
-
-  const exportDataAndDownloadCVS = async () => {
-    try {
-      const response = await axios.get("/api/product_csv_export", {
-        responseType: "blob",
-      });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "products.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error exporting CSV:", error);
-    }
-  };
-
   useEffect(() => {
     getWarehouses();
     getShippers();
@@ -284,7 +197,7 @@ const BillingProcess = () => {
 
   return (
     <Content
-      style={{ width: 1024, marginTop: 20 }}
+      style={{ width: 1280, marginTop: 20 }}
       className="mx-auto content-h"
     >
       <Card
@@ -300,25 +213,34 @@ const BillingProcess = () => {
               className=""
               min={2000}
               style={{ width: 100 }}
+              defaultValue={2024}
             ></Input>
           </Space>
           <Space align="center" className="ml-4">
             <label>{$lang.billing.month}:</label>
-            <Input
-              type="number"
-              className=""
-              min={2000}
+            <Select
+              options={monthOptions.map((item) => {
+                return {
+                  value: item,
+                  label: item,
+                };
+              })}
+              defaultValue={1}
               style={{ width: 80 }}
-            ></Input>
+            />
           </Space>
           <Space align="center" className="ml-4">
             <label className="">{$lang.billing.day}:</label>
-            <Input
-              type="number"
-              className=""
-              min={2000}
+            <Select
+              options={dateOptions.map((item) => {
+                return {
+                  value: item,
+                  label: item,
+                };
+              })}
+              defaultValue={1}
               style={{ width: 80 }}
-            ></Input>
+            />
           </Space>
         </Row>
         <Row className="my-2">
