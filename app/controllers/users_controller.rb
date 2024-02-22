@@ -19,11 +19,21 @@ class UsersController < ApplicationController
       }
     end
   end
-  def create_or_update
-    #  x : params[:currentPassword ];
-    # hashed_password: Digest::SHA256.hexdigest(x)
-    # secret_number: hashed_password.to_i(16)
-    # puts secret_number
+  def change_password
+    userId = params[:login_id]
+    current_password = params[:current_password]
+    new_password = params[:new_password]
 
-  end 
+    # Perform validation on the user_id, current_password, and new_password
+    # ...
+
+    # Find the user by user_id and update the password
+    user = User.find_by(login_id: userId)
+    if user && user.authenticate(current_password)
+      user.update(password: new_password)
+      render json: { message: 'Password changed successfully' }
+    else
+      render json: { error: 'Invalid user or password' }, status: :unprocessable_entity
+    end
+  end
 end

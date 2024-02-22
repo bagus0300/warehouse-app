@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   
   get "/api/user", to: 'users#index'
   put "/api/user", to: 'users#update'
-  post "/api/user", to: 'users#create_or_update'
+  post '/users/:userId/change_password', to: 'users#change_password'
 
   get "/api/authorities", to: 'authorities#index'
   get "/api/client_page", to: 'client_pages#index'
