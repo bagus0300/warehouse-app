@@ -1,23 +1,45 @@
-import React, { useState } from 'react';
+import React, { 
+  useEffect, 
+  useState 
+} from 'react';
 
-import { Input, Button } from 'antd';
+import { 
+  Input, 
+  Button 
+} from 'antd';
 
 import {
   getUserURL
 } from "../utils/contants";
 
-import { getAuthUserToken } from "../../utils/helper";
+import { 
+  makeHttpReq, 
+  makeHttpOptions 
+} from "../utils/helper";
+
+import { 
+  getAuthUsername, 
+  getAuthUserToken 
+} from "../utils/helper";
 
 
 const  ChangePassword = () => {
   const token = getAuthUserToken();
+  const username = getAuthUsername();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+
+
   const handleChangePassword = async () => {
-    makeHttpReq(makeHttpOptions({}, "post", getUserURL))
+    // console.log()
+    makeHttpReq(makeHttpOptions({
+      username,
+      currentPassword,
+      newPassword
+    }, "post", getUserURL))
     .then((res) => {
       
     })
@@ -25,6 +47,11 @@ const  ChangePassword = () => {
       console.error("Error fetching client page data:", error);
     });
   };
+  useEffect(()=> {
+    console.log(username, "------------");
+    console.log(token, "1111111111111")
+  
+  })
 
   return (
     <div style={{display:"flex", justifyContent:"center"}}>

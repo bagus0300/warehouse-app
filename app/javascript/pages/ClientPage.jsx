@@ -5,7 +5,6 @@ import { Button } from 'antd';
 import { makeHttpReq, makeHttpOptions } from "../utils/helper";
 import { getUserAuthURL, getClientPageURL, getAuthDataURL, setAuthDataURL } from "../utils/contants";
 import { Tabs } from 'antd';
-import CustomButton from "../components/common/CustomButton";
 
 const { TabPane } = Tabs;
 

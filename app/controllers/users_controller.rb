@@ -19,4 +19,11 @@ class UsersController < ApplicationController
       }
     end
   end
+  def create_or_update
+    #  x : params[:currentPassword ];
+    # hashed_password: Digest::SHA256.hexdigest(x)
+    # secret_number: hashed_password.to_i(16)
+    # puts secret_number
+
+  end 
 end

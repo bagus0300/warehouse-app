@@ -72,15 +72,15 @@ export const getAuthUser = () => {
   const username = localStorage.getItem("username");
   const token = localStorage.getItem("token");
 
-  return falsy(username) || falsy(token) || isEmpty(username) || isEmpty(token)
-    ? { username: null, token: null }
-    : { username, token };
+  return falsy(username) || falsy(token) || isEmpty(username) || isEmpty(token) 
+    ? { username: null, token: null,  }
+    : { username, token};
 };
 
 export const getAuthUsername = () => getAuthUser()?.username;
 export const getAuthUserToken = () => getAuthUser()?.token;
 
-export const saveAuthUser = (username, token) => {
+export const saveAuthUser = (username, token, ) => {
   localStorage.setItem("username", username);
   localStorage.setItem("token", token);
 };
