@@ -430,6 +430,7 @@ const DepositPage = () => {
             editRow={(key) => editRow(key)}
             deleteRow={deleteRow}
             pagination={true}
+            is_edit={is_edit}
           />
           {/* <div style={{    display: "flex", marginTop: 20, justifyContent: "flex-end"}}>
 						<Button style={{width: 120, }}>{messages.buttons.next}</Button>

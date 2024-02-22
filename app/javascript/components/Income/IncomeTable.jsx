@@ -11,7 +11,7 @@ import Lang from "../../utils/content/jp.json";
 import CustomButton from "../common/CustomButton";
 import $lang from "../../utils/content/jp.json";
 
-const IncomeTable = ({ data, editRow, deleteRow }) => {
+const IncomeTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
     {
       title: "No",
@@ -60,7 +60,7 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
       dataIndex: "amount",
       key: "amount",
     },
-    {
+    is_edit === 1 ? ({
       title: "Action",
       key: "action",
       render: (_, record) => (
@@ -85,7 +85,8 @@ const IncomeTable = ({ data, editRow, deleteRow }) => {
           />
         </Space>
       ),
-    },
+    }) : (<div></div>)
+
   ];
   return (
     <Table

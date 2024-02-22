@@ -30,7 +30,7 @@ let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const WarehouseFee = () => {
+const WarehouseFee = ({ is_edit }) => {
   const [form] = Form.useForm();
 
   const [searchText, setSearchText] = useState("");
@@ -187,8 +187,7 @@ const WarehouseFee = () => {
       //   );
       // },
     },
-
-    {
+    is_edit === 1 ? ({
       title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
@@ -221,7 +220,8 @@ const WarehouseFee = () => {
         );
       },
       align: "center",
-    },
+    }) : (<div></div>)
+    ,
   ];
 
   return (

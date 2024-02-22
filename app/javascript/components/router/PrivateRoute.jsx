@@ -9,7 +9,7 @@ import $lang from "../../utils/content/jp.json";
 
 const PrivateRoute = ({ Component, navigations }) => {
   const token = getAuthUserToken();
-  const permissionPages = eval(getPermissionPage());
+  const permissionPages = JSON.parse(getPermissionPage());
   const name = getAuthUsername();
   const [currentPage, setCurrentPage] = useState({});
 
@@ -35,7 +35,7 @@ const PrivateRoute = ({ Component, navigations }) => {
     <>
       <NavbarSection navigations={navigations} />
       {currentPage.is_read == 1 ?
-        <Component /> : <p className="items-center" style={{ fontSize: 50, margin: 300 }}>{$lang.pages.warning}</p>}
+        <Component is_edit={currentPage.is_edit} /> : <p className="items-center" style={{ fontSize: 50, margin: 300 }}>{$lang.pages.warning}</p>}
       <FooterSection />
     </>
   ) : (

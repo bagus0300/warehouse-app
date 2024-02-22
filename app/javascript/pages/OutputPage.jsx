@@ -35,7 +35,7 @@ import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
-const IncomePage = () => {
+const IncomePage = ({ is_edit }) => {
   const [isVisibleAddButton, setAddButtonVisability] = useState(false);
   const [prepareProducts, setPrepareProducts] = useState([]);
   const [isDisabledProduct, setDiabledProduct] = useState(false);
@@ -528,6 +528,7 @@ const IncomePage = () => {
             editRow={(key) => editRow(key)}
             deleteRow={deleteRow}
             pagination={false}
+            is_edit={is_edit}
           />
           <div style={{ height: 15 }}></div>
           <div style={{ justifyContent: "flex-end", display: "flex" }}>

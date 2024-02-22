@@ -27,7 +27,7 @@ let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const ShipperList = () => {
+const ShipperList = ({ is_edit }) => {
   const [form] = Form.useForm();
   const [updateData, setUpdateData] = useState({});
   const [isposted, setIsPosted] = useState(false);
@@ -176,7 +176,7 @@ const ShipperList = () => {
       align: "center",
       width: "11%",
     },
-    {
+    is_edit === 1 ? ({
       title: `${message.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
@@ -206,10 +206,11 @@ const ShipperList = () => {
               />
             </div>
           </div>
-        );
+        )
       },
       align: "center",
-    },
+    }) : (<div></div >)
+    ,
   ];
 
   return (

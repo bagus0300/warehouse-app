@@ -20,7 +20,7 @@ import {
 } from "antd";
 const { Content } = Layout;
 
-const BillingList = () => {
+const BillingList = ({ is_edit }) => {
 
   const billingListColumns = [
     {
@@ -87,7 +87,7 @@ const BillingList = () => {
       //   );
       // },
     },
-    {
+    is_edit === 1 ? ({
       title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
@@ -120,7 +120,8 @@ const BillingList = () => {
         );
       },
       align: "center",
-    },
+    }) : (<div></div>)
+    ,
   ];
 
   const [form] = Form.useForm();

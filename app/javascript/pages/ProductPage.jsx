@@ -33,7 +33,7 @@ let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
-const ProductPage = () => {
+const ProductPage = ({ is_edit }) => {
   const [form] = Form.useForm();
 
   const [searchText, setSearchText] = useState("");
@@ -266,7 +266,7 @@ const ProductPage = () => {
       //   );
       // },
     },
-    {
+    is_edit === 1 ? ({
       title: `${$lang.buttons.change}`,
       dataIndex: "operation",
       render: (text, record, dataIndex) => {
@@ -296,10 +296,10 @@ const ProductPage = () => {
               />
             </div>
           </div>
-        );
+        )
       },
       align: "center",
-    },
+    }) : (<div></div>)
   ];
 
   return (
