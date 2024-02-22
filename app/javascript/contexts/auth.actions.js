@@ -28,9 +28,14 @@ const loginAction = (res) => (dispatch) => {
     payload: {
       authUserName: res?.data?.data?.user_name,
       token: res?.headers?.authorization,
+      authority_client_pages: res?.data?.authority_client_pages,
     },
   });
-  saveAuthUser(res?.data?.data?.user_name, res?.headers?.authorization);
+  saveAuthUser(
+    res?.data?.data?.user_name,
+    res?.headers?.authorization,
+    res?.data?.authority_client_pages
+  );
 };
 
 const logoutAction = (dispatch) => {

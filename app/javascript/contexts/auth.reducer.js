@@ -1,8 +1,14 @@
-import { getAuthUsername, getAuthUserToken } from "../utils/helper";
+import {
+  getAuthUsername,
+  getAuthUserToken,
+  getPermissionPage,
+} from "../utils/helper";
 
 export const initialAuthState = {
   authUserName: getAuthUsername(),
   token: getAuthUserToken(),
+  authority_client_pages: getPermissionPage(),
+
   loginErrors: null,
   signupErrors: null,
   beforeRequest: true,
@@ -14,6 +20,7 @@ export const AuthReducer = (state = initialAuthState, action) => {
         ...state,
         authUsername: action.payload.login_id,
         token: action.payload.token,
+        authority_client_pages: action.payload.authority_client_pages,
         loginErrors: null,
       };
     case "Signup":
@@ -37,6 +44,7 @@ export const AuthReducer = (state = initialAuthState, action) => {
         ...state,
         authUserName: "",
         token: "",
+        authority_client_pages: [],
         loginErrors: action?.loginErrors ?? null,
         signupErrors: action?.signupErrors ?? null,
       };

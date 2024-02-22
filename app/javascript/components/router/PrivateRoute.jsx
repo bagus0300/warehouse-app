@@ -1,16 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { getAuthUserToken } from "../../utils/helper";
+import { getAuthUserToken, getAuthUsername, getPermissionPage } from "../../utils/helper";
 import NavbarSection from "../layouts/Header/Navbar";
 import FooterSection from "../layouts/Footer/Index";
+import $lang from "../../utils/content/jp.json";
 
-const PrivateRoute = ({ Component }) => {
+
+const PrivateRoute = ({ Component, navigations }) => {
   const token = getAuthUserToken();
+  const permissionPages = eval(getPermissionPage());
+  const name = getAuthUsername();
+  const [currentPage, setCurrentPage] = useState({});
+
+  const location = useLocation();
+
+  const getCurrentPage = () => {
+    const currentPageInfo = permissionPages.find((item) => {
+      return item.path === location.pathname;
+    })
+    setCurrentPage(currentPageInfo);
+  }
+
+  useEffect(() => {
+    getCurrentPage()
+  }, [location])
+
+  useEffect(() => {
+  }, [currentPage]);
+
+
 
   return token ? (
     <>
-      <NavbarSection />
-      <Component />
+      <NavbarSection navigations={navigations} />
+      {currentPage.is_read == 1 ?
+        <Component /> : <p className="items-center" style={{ fontSize: 50, margin: 300 }}>{$lang.pages.warning}</p>}
       <FooterSection />
     </>
   ) : (

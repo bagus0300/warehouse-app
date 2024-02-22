@@ -7,7 +7,8 @@ import { siteInfo } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
 import { navigatiionsURL } from "../../../utils/contants";
 
-const NavbarSection = () => {
+const NavbarSection = ({ navigations }) => {
+
   const { logoutAction } = useAuth();
   const { Title } = Typography;
   const { Header } = Layout;
@@ -15,20 +16,8 @@ const NavbarSection = () => {
   const location = useLocation()
   const [current, setCurrent] = useState("");
   const [title, setTitle] = useState("");
-  const [navigations, setNavigations] = useState([]);
-
-  const getNavigations = () => {
-    axios.get(`${navigatiionsURL}`).then((res) => {
-      const allData = res.data.data.map((item) => {
-        return { ...item, key: item.path, label: item.name, url: item.path };
-      });
-
-      setNavigations(allData);
-    });
-  };
 
   const onMenuClick = (e) => {
-
     const { label } = navigations.find((item) => item.key === e.key) || {};
     setTitle(label);
     setCurrent(e.key);
@@ -36,15 +25,10 @@ const NavbarSection = () => {
   };
 
   useEffect(() => {
-    getNavigations();
-  }, []);
-
-  useEffect(() => {
     setCurrent(location.pathname);
   }, [location.pathname]);
 
   useEffect(() => {
-
     const { label } = navigations.find((item) => item.key === current) || {};
     setTitle(label);
   }, [current, navigations]);

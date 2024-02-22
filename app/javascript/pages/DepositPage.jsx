@@ -256,7 +256,6 @@ const DepositPage = () => {
     const res0 = getByReceivedDate(prepareProducts);
     const res1 = getByShipperName(res0);
     //const res2 = getByProcessedDate(res1);
-    console.log("resgetshowdata", res1);
     setShowData(res1);
   };
 
