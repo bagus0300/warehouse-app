@@ -1,8 +1,8 @@
-import React from "react";
-import { Table, Input } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table, Checkbox } from "antd";
 
-
-const UserTable = ({ data  }) => {
+const UserTable = ({ data, onCheckChange }) => {
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const columns = [
     {
@@ -17,27 +17,42 @@ const UserTable = ({ data  }) => {
       key: "name",
     },
     {
-      title: "読み込み専用",
-      key: "readonly",
+      title: "編集",
+      dataIndex: "is_edit",
+      key: "is_edit",
       render: (_, record) => (
-          <Input
-            type="checkbox"
-          />
+        <Checkbox
+          checked={record.is_edit}
+          onChange={(e) => handleCheckboxChange(e, record, "is_edit")}
+        />
       ),
     },
     {
-      title: "編集",
-      key: "edit",
+      title: "読み込み専用",
+      dataIndex: "is_read",
+      key: "is_read",
       render: (_, record) => (
-          <Input
-            type="checkbox"
-          />
+        <Checkbox
+          checked={record.is_read}
+          onChange={(e) => handleCheckboxChange(e, record, "is_read")}
+        />
       ),
     },
   ];
-  return (
-    <Table columns={columns} dataSource={data} pagination={false} />
-  )
+
+  const handleCheckboxChange = (e, record, checkboxName) => {
+    const isChecked = e.target.checked;
+  
+    record[checkboxName] = isChecked;
+  
+    const updatedRows = data.map((item) =>
+      item.key === record.key ? { ...item, [checkboxName]: isChecked } : item
+    );
+    setSelectedRows(updatedRows);
+    onCheckChange(updatedRows);
+  };
+
+  return <Table columns={columns} dataSource={data} pagination={false} />;
 };
 
 export default UserTable;

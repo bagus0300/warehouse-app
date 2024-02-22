@@ -52,10 +52,13 @@ Rails.application.routes.draw do
   
   get "/api/user", to: 'users#index'
   put "/api/user", to: 'users#update'
+  post "/api/user", to: 'users#create_or_update'
 
   get "/api/authorities", to: 'authorities#index'
-
   get "/api/client_page", to: 'client_pages#index'
+  get "/api/get_all_auth_data", to: 'authority_client_pages#index'
+  post "/api/set_auth_data", to: 'authority_client_pages#create_or_update'
+
 
 
   get '/*path', to: 'component#index'

@@ -21,6 +21,7 @@ import PrivateRoute from "./PrivateRoute";
 
 import { useAuth } from "../../hooks/useAuth";
 import ClientPage from "../../pages/ClientPage";
+import ChangePassword from "../../pages/changePasswordPage";
 
 export const AppRouter = () => {
   const user = useAuth();
@@ -76,6 +77,10 @@ export const AppRouter = () => {
           <Route
             path="/clientPage_process"
             element={<PrivateRoute Component={ClientPage} />}
+          />
+          <Route
+            path="/changePassword_process"
+            element={<PrivateRoute Component={ChangePassword} />}
           />
         </Routes>
         {/* <FooterSection /> */}
