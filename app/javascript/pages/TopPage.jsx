@@ -1,12 +1,10 @@
 import React from "react";
 import { Row, Layout, Card, Col } from "antd";
 
-import SectionCard from "../components/Top/SectionCard";
 import { cardTopic } from "../utils/content";
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 import { useAuth } from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
-import { margin } from "@mui/system";
 
 const Top = () => {
   const authState = useAuth();

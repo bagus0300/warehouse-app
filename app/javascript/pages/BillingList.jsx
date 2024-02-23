@@ -6,7 +6,6 @@ import CTable from "../components/CTable";
 
 import {
   Form,
-  Input,
   InputNumber,
   Layout,
   Button,

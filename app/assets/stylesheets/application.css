@@ -1046,3 +1046,87 @@ video {
   border-color: #000;
   color: #000;
 }
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-submenu-selected,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-submenu-selected {
+  color: #fff;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-item-selected::after,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-item-selected::after,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-submenu-selected::after,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  > .ant-menu.ant-menu-horizontal
+  > .ant-menu-submenu-selected::after,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light.ant-menu-horizontal
+  > .ant-menu-item:hover::after {
+  border-bottom-width: 4px;
+  border-bottom-color: #fff !important;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  .ant-menu-item:not(.ant-menu-item-selected):not(
+    .ant-menu-submenu-selected
+  ):hover {
+  color: #fff;
+}
+/* 
+:where(.css-dev-only-do-not-override-1b0bdye).ant-checkbox-checked
+  .ant-checkbox-inner {
+  background-color: #fff;
+  border-color: #d9d9d9;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-checkbox
+  .ant-checkbox-inner:after { */
+/* color: #000 !important; */
+/* } */
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-pagination
+  .ant-pagination-item-active {
+  border-color: #d9d9d9;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-pagination
+  .ant-pagination-item-active
+  a {
+  color: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-pagination
+  .ant-pagination-item-active:hover {
+  border-color: #d9d9d9;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-pagination
+  .ant-pagination-item-active:hover
+  a {
+  color: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: #fff;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-input-search
+  .ant-input:hover {
+  border-color: #d9d9d9;
+}
+
+.s-content {
+  height: calc(100% - 400px);
+}

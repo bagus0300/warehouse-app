@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const token = useMemo(() => getAuthUser().token, [getAuthUser().token]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!falsy(token)) {
-      navigate('/home')
+      navigate("/home");
       return;
     } else {
-      navigate('/signin')
+      navigate("/signin");
       return;
     }
   }, [token]);

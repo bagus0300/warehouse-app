@@ -21,7 +21,7 @@ import InventoryPage from "../../pages/InventoryPage";
 import PrivateRoute from "./PrivateRoute";
 
 import { useAuth } from "../../hooks/useAuth";
-import ClientPage from "../../pages/ClientPage";
+import PemissionPage from "../../pages/PemissionPage";
 import ChangePassword from "../../pages/changePasswordPage";
 
 import { navigatiionsURL } from "../../utils/contants";
@@ -39,10 +39,8 @@ export const AppRouter = () => {
     });
   };
   useEffect(() => {
-    console.log("app  router pass");
-
     if (user.authUserName != null) getNavigations();
-  }, [user.authUserName]);
+  }, []);
 
   return (
     <AuthContextProvider>
@@ -57,7 +55,7 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/billing_process"
+            path="/bill_process"
             element={
               <PrivateRoute
                 navigations={navigations}
@@ -66,13 +64,13 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/billing_list"
+            path="/bill_list"
             element={
               <PrivateRoute navigations={navigations} Component={BillingList} />
             }
           />
           <Route
-            path="/in_stock"
+            path="/stock_in"
             element={
               <PrivateRoute navigations={navigations} Component={InStockPage} />
             }
@@ -90,7 +88,7 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/out_stock"
+            path="/stock_out"
             element={
               <PrivateRoute
                 navigations={navigations}
@@ -117,7 +115,7 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/deposit_process"
+            path="/deposit"
             element={
               <PrivateRoute navigations={navigations} Component={DepositPage} />
             }
@@ -130,16 +128,28 @@ export const AppRouter = () => {
           />
           <Route path="/" element={<LoginPage />} />
           <Route
-            path="/user_process"
-            element={<PrivateRoute Component={UserPage} />}
+            path="/user_managent"
+            element={
+              <PrivateRoute navigations={navigations} Component={UserPage} />
+            }
           />
           <Route
-            path="/clientPage_process"
-            element={<PrivateRoute Component={ClientPage} />}
+            path="/auth_permission"
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={PemissionPage}
+              />
+            }
           />
           <Route
             path="/changePassword_process"
-            element={<PrivateRoute Component={ChangePassword} />}
+            element={
+              <PrivateRoute
+                navigations={navigations}
+                Component={ChangePassword}
+              />
+            }
           />
         </Routes>
         {/* <FooterSection /> */}

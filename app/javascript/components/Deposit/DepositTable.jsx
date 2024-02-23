@@ -1,10 +1,7 @@
 import React from "react";
 import { Table, Space, Button, Pagination } from "antd";
 import messages from "../../utils/content/jp.json";
-import {
-  TrashIcon,
-  PencilSquareIcon,
-} from "@heroicons/react/24/outline";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
@@ -12,12 +9,12 @@ const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
       title: "入金日",
       dataIndex: "received_on",
       key: "received_on",
-      render: (text) => <a>{text}</a>,
+      render: (val) => (val != undefined ? val.replace(/\-/g, "/") : ""),
     },
     {
       title: "荷主コード",
-      dataIndex: "code",
-      key: "code",
+      dataIndex: "shipper_code",
+      key: "shipper_code",
     },
     {
       title: "荷主名",
@@ -38,23 +35,37 @@ const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
       title: "処理日時",
       dataIndex: "processing_on",
       key: "processing_on",
+      render: (val) => (val != undefined ? val.replace(/\-/g, "/") : ""),
     },
-    is_edit === 1 ? ({
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <div style={{ display: "flex" }}>
-          <PencilSquareIcon style={{ width: 20, cursor: "pointer" }} onClick={() => editRow(record)}>{messages.buttons.change}</PencilSquareIcon>
-          <TrashIcon style={{ width: 20, cursor: "pointer" }} onClick={() => deleteRow(record.id)}>{messages.buttons.delete}</TrashIcon>
-        </div>
-      ),
-    }) : (<div></div>),
-
+    is_edit === 1 ? (
+      {
+        title: "#",
+        key: "action",
+        render: (_, record) => (
+          <div style={{ display: "flex" }}>
+            <PencilSquareIcon
+              style={{ width: 20, cursor: "pointer" }}
+              onClick={() => editRow(record)}
+            >
+              {messages.buttons.change}
+            </PencilSquareIcon>
+            <TrashIcon
+              style={{ width: 20, cursor: "pointer" }}
+              onClick={() => deleteRow(record.id)}
+            >
+              {messages.buttons.delete}
+            </TrashIcon>
+          </div>
+        ),
+      }
+    ) : (
+      <div></div>
+    ),
   ];
   return (
-    <Table columns={columns} dataSource={data} pagination={true} />
+    <Table columns={columns} dataSource={data} pagination={false} />
     // <Pagination pageSizeOptions={5} defaultPageSize={5}/>
-  )
+  );
 };
 
 export default DepositTable;

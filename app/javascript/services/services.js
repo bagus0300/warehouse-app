@@ -1,21 +1,9 @@
-import {
-  verifyAuthURL,
-  secretsURL,
-  loginURL,
-  logoutURL,
-  signupURL,
-} from "../utils/contants";
+import { loginURL, logoutURL, signupURL } from "../utils/contants";
 
-import {
-  makeHttpReq,
-  getAuthUserToken,
-  makeHttpOptions,
-  API,
-  makeURLOptionsWtoken,
-} from "../utils/helper";
+import { getAuthUserToken, API, makeURLOptionsWtoken } from "../utils/helper";
 
-const verifyAuth = async (token = getAuthUserToken()) =>
-  makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token));
+// const verifyAuth = async (token = getAuthUserToken()) =>
+//   makeHttpReq(verifyAuthURL, makeURLOptionsWtoken(token));
 
 const login = async (payload) => {
   return API.post(loginURL, payload);
@@ -33,10 +21,6 @@ const services = {
   signup,
   login,
   logout,
-  verifyAuth,
-  // addNewSecret,
-  // getSecrets,
-  // deleteSecret,
 };
 
 export default services;

@@ -6,6 +6,7 @@ import { Layout, Menu, theme } from "antd";
 import { siteInfo } from "../../../utils/content";
 import { useAuth } from "../../../hooks/useAuth";
 import { navigatiionsURL } from "../../../utils/contants";
+import $lang from "../../../utils/content/jp.json";
 
 const NavbarSection = ({ navigations }) => {
   const { logoutAction } = useAuth();
@@ -46,7 +47,9 @@ const NavbarSection = ({ navigations }) => {
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
           <Title level={4} style={{ marginTop: 15 }}>
-            <Link to="home">{siteInfo.title}</Link>
+            <Link to="home" style={{ color: "#fff" }}>
+              {siteInfo.title}
+            </Link>
           </Title>
         </div>
         <Menu
@@ -63,17 +66,19 @@ const NavbarSection = ({ navigations }) => {
         />
         <Button
           onClick={logoutAction}
-          style={{ marginLeft: "300px", marginTop: "15px" }}
+          style={{ marginLeft: "300px", marginTop: "15px", border: "none" }}
         >
-          <Link to="/signin">LogOut</Link>
+          <Link to="/signin" style={{ color: "#fff" }}>
+            {$lang.buttons.logout}
+          </Link>
         </Button>
       </Header>
       <Breadcrumb
         items={[{ title }]}
         style={{
-          padding: "10px 50px ",
-          backgroundColor: "grey",
+          padding: "20px 50px ",
           marginTop: "55px",
+          backgroundColor: "#fff",
         }}
       />
     </Layout>

@@ -3,27 +3,11 @@ import axios from "axios";
 import moment from "moment";
 import { shipperURL } from "../utils/contants";
 import CTable from "../components/CTable";
-import {
-  Form,
-  Input,
-  Layout,
-  Table,
-  Button,
-  Modal,
-  notification,
-  Flex,
-  Card,
-} from "antd";
+import { Form, Input, Layout, Button, Modal, notification, Card } from "antd";
 
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  CalendarDaysIcon,
-} from "@heroicons/react/24/outline";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 import message from "../utils/content/jp.json";
-
-let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
@@ -176,41 +160,44 @@ const ShipperList = ({ is_edit }) => {
       align: "center",
       width: "11%",
     },
-    is_edit === 1 ? ({
-      title: `${message.buttons.change}`,
-      dataIndex: "operation",
-      render: (text, record, dataIndex) => {
-        return (
-          <div className="flex justify-center items-center">
-            <div className="hidden rounded-full">
-              {(star_color = record.done == true ? "text-yellow-500" : "")}
+    is_edit === 1 ? (
+      {
+        title: `${message.buttons.change}`,
+        dataIndex: "operation",
+        render: (text, record, dataIndex) => {
+          return (
+            <div className="flex justify-center items-center">
+              <div className="hidden rounded-full">
+                {/* {(star_color = record.done == true ? "text-yellow-500" : "")} */}
+              </div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center">
+                <PencilSquareIcon
+                  shape="circle"
+                  className="w-20"
+                  style={{ marginRight: "5px" }}
+                  onClick={() => {
+                    setUpdateStatus("Edit");
+                    onAction(record);
+                  }}
+                />
+              </div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center">
+                <TrashIcon
+                  shape="circle"
+                  className="w-20"
+                  onClick={() => {
+                    onDelete(record);
+                  }}
+                />
+              </div>
             </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <PencilSquareIcon
-                shape="circle"
-                className="w-20"
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  setUpdateStatus("Edit");
-                  onAction(record);
-                }}
-              />
-            </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <TrashIcon
-                shape="circle"
-                className="w-20"
-                onClick={() => {
-                  onDelete(record);
-                }}
-              />
-            </div>
-          </div>
-        )
-      },
-      align: "center",
-    }) : (<div></div >)
-    ,
+          );
+        },
+        align: "center",
+      }
+    ) : (
+      <div></div>
+    ),
   ];
 
   return (

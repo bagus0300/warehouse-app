@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import moment from "moment";
 import $lang from "../utils/content/jp.json";
 import CTable from "../components/CTable";
 import { API } from "../utils/helper";

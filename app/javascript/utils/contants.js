@@ -41,14 +41,8 @@ export const exportPdfDataUrl = baseUrl + "/api/export_pdf";
 //unit_price urls
 
 export const feeUrl = baseUrl + "api/warehouse_fee";
-export const postReceivedPaymentUrl = baseUrl + "api/received_payment";
 
-export const getReceivedPaymentUrl = baseUrl + "api/received_payment";
-//unit_price urls
-
-export const postReceivedPaymentURL = baseUrl + "api/received_payment";
-
-export const getReceivedPaymentURL = baseUrl + "api/received_payment";
+export const receivedPaymentURL = baseUrl + "api/received_payment";
 
 export const getUserURL = baseUrl + "api/user";
 

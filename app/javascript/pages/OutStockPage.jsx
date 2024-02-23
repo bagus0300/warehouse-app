@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 
 import {
   Form,
-  Layout,
   Select,
   Space,
   Input,
@@ -12,16 +11,11 @@ import {
   Card,
   Row,
   Col,
-  Popconfirm,
-  Button,
 } from "antd";
 import { API } from "../utils/helper";
 import {
   warehouseURL,
   shipperURL,
-  warehouseFeeURL,
-  productURL,
-  productDetailURL,
   saveStockInoutUrl,
   productSetUrl,
   productStockURL,
@@ -238,7 +232,6 @@ const OutStockPage = () => {
     )
       .then((res) => {
         const warehouseFee = res.data.data.data.attributes.warehouse_fee;
-        console.log("after onchange product options api", res);
         setPackaging(warehouseFee.packaging);
         setStoragePrice(warehouseFee.storage_fee_rate);
         setHandlePrice(warehouseFee.handling_fee_rate);
@@ -432,7 +425,6 @@ const OutStockPage = () => {
   useEffect(() => {
     getWarehouses();
     getShippers();
-    console.log("outStockDate", outStockDate);
   }, []);
 
   useEffect(() => {
@@ -455,9 +447,6 @@ const OutStockPage = () => {
     });
   }, [seletedShipper]);
 
-  useEffect(() => {
-    console.log("stock in date", inStockDate);
-  }, [inStockDate]);
   return (
     <div>
       <Content

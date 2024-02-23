@@ -104,7 +104,6 @@ export const getAuthUserToken = () => getAuthUser()?.token;
 export const getPermissionPage = () => getAuthUser()?.pemissionpage;
 
 export const saveAuthUser = (username, token, pemissionPage) => {
-  console.log("asfd", JSON.stringify(pemissionPage));
   localStorage.setItem("username", username);
   localStorage.setItem("token", token);
   localStorage.setItem("pemission_page", JSON.stringify(pemissionPage));

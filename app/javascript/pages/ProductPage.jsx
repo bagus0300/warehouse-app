@@ -7,29 +7,19 @@ import CTable from "../components/CTable/CCTable";
 import {
   Form,
   Input,
-  InputNumber,
   Layout,
-  Popconfirm,
-  DatePicker,
-  Table,
-  Button,
   Select,
   Modal,
   notification,
   Pagination,
   Card,
   Flex,
+  Button,
 } from "antd";
 
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  CalendarDaysIcon,
-} from "@heroicons/react/24/outline";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 import $lang from "../utils/content/jp.json";
-
-let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
@@ -60,14 +50,12 @@ const ProductPage = ({ is_edit }) => {
   const [searchBtn, setSearchBtn] = useState(false);
 
   const handlePageChange = (page, pageSize) => {
-
     setCurrentPage((page - 1) * pageSize);
     setItemPerPage(pageSize);
   };
 
   const getAllProduct = () => {
-
-    const urlParam = `${productURL}?offset=${currentPage}&limit=${itemsPerPage}&keyword=${searchText}`
+    const urlParam = `${productURL}?offset=${currentPage}&limit=${itemsPerPage}&keyword=${searchText}`;
     axios.get(urlParam).then((res) => {
       let index = 1;
       let products = res.data.data.map((item) => {
@@ -156,7 +144,6 @@ const ProductPage = ({ is_edit }) => {
 
   useEffect(() => {
     getAllProduct();
-
   }, [searchText, currentPage, itemsPerPage, isposted]);
 
   const onAction = async (item) => {
@@ -199,8 +186,6 @@ const ProductPage = ({ is_edit }) => {
     setIsModalOpen(false);
   };
 
-
-
   const productListColumns = [
     {
       title: "No",
@@ -229,77 +214,57 @@ const ProductPage = ({ is_edit }) => {
       dataIndex: "handling_fee_rate",
       key: "handling_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.storageFee}`,
       dataIndex: "storage_fee_rate",
       key: "storage_fee_rate",
       align: "center",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
     {
       title: `${$lang.Maintenance.billingClass}`,
       dataIndex: "fee_category",
       align: "center",
       key: "fee_category",
-      // render: (text, record, dataIndex) => {
-      //   return (
-      //     <div>
-      //       {record.tel.slice(0, 18)}
-      //       {text.length >= 18 ? "..." : ""}
-      //     </div>
-      //   );
-      // },
     },
-    is_edit === 1 ? ({
-      title: `${$lang.buttons.change}`,
-      dataIndex: "operation",
-      render: (text, record, dataIndex) => {
-        return (
-          <div className="flex justify-center">
-            <div className="hidden rounded-full">
-              {(star_color = record.done == true ? "text-yellow-500" : "")}
+    is_edit === 1 ? (
+      {
+        title: `${$lang.buttons.change}`,
+        dataIndex: "operation",
+        render: (text, record, dataIndex) => {
+          return (
+            <div className="flex justify-center">
+              <div className="hidden rounded-full">
+                {(star_color = record.done == true ? "text-yellow-500" : "")}
+              </div>
+              <div className="p-2 rounded-full cursor-pointer text-center">
+                <PencilSquareIcon
+                  shape="circle"
+                  className="w-20"
+                  style={{ marginRight: "5px" }}
+                  onClick={() => {
+                    setUpdateStatus("Edit");
+                    onAction(record);
+                  }}
+                />
+              </div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center">
+                <TrashIcon
+                  shape="circle"
+                  className="w-20"
+                  onClick={() => {
+                    onDelete(record);
+                  }}
+                />
+              </div>
             </div>
-            <div className="p-2 rounded-full cursor-pointer text-center">
-              <PencilSquareIcon
-                shape="circle"
-                className="w-20"
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  setUpdateStatus("Edit");
-                  onAction(record);
-                }}
-              />
-            </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <TrashIcon
-                shape="circle"
-                className="w-20"
-                onClick={() => {
-                  onDelete(record);
-                }}
-              />
-            </div>
-          </div>
-        )
-      },
-      align: "center",
-    }) : (<div></div>)
+          );
+        },
+        align: "center",
+      }
+    ) : (
+      <div></div>
+    ),
   ];
 
   return (
@@ -482,7 +447,7 @@ const ProductPage = ({ is_edit }) => {
           </div>
         </Card>
       </Content>
-    </div >
+    </div>
   );
 };
 export default ProductPage;
