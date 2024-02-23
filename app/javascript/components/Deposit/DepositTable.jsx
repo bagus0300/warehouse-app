@@ -1,8 +1,9 @@
 import React from "react";
 import { Table, Space, Button, Pagination } from "antd";
-import messages from "../../utils/content/jp.json";
+import $lang from "../../utils/content/jp.json";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-
+import CustomButton from "../common/CustomButton";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
     {
@@ -43,18 +44,30 @@ const DepositTable = ({ data, editRow, deleteRow, is_edit }) => {
         key: "action",
         render: (_, record) => (
           <div style={{ display: "flex" }}>
-            <PencilSquareIcon
-              style={{ width: 20, cursor: "pointer" }}
-              onClick={() => editRow(record)}
-            >
-              {messages.buttons.change}
-            </PencilSquareIcon>
-            <TrashIcon
-              style={{ width: 20, cursor: "pointer" }}
+            <CustomButton
+              onClick={() => {
+                editRow(record);
+              }}
+              title={$lang.buttons.change}
+              icon={<EditOutlined />}
+              size="small"
+              className="btn-default btn-hover-black"
+              style={{ backgroundColor: "transparent", color: "#000" }}
+              visability={true}
+            />{" "}
+            <CustomButton
               onClick={() => deleteRow(record.id)}
-            >
-              {messages.buttons.delete}
-            </TrashIcon>
+              title={$lang.buttons.delete}
+              icon={<DeleteOutlined />}
+              style={{
+                backgroundColor: "transparent",
+                color: "#000",
+                marginLeft: 10,
+              }}
+              size="small"
+              className="btn-default btn-hover-black"
+              visability={true}
+            />
           </div>
         ),
       }

@@ -1130,3 +1130,17 @@ video {
 .s-content {
   height: calc(100% - 400px);
 }
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-range
+  .ant-picker-active-bar {
+  background: #000;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-input-number-outlined:focus,
+:where(
+    .css-dev-only-do-not-override-1b0bdye
+  ).ant-input-number-outlined:focus-within,
+:where(.css-dev-only-do-not-override-1b0bdye).ant-input-number-outlined:hover {
+  border-color: #000 !important;
+  box-shadow: none;
+}

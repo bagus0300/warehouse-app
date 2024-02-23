@@ -24,7 +24,7 @@ import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 const dateFormat = "YYYY/MM/DD";
 
-const InventoryPage = () => {
+const InventoryPage = ({ is_edit }) => {
   // ---------Warehouse--------
   const [selectedWarehouse, setSelectedWarehouse] = useState({
     value: "",
@@ -248,7 +248,7 @@ const InventoryPage = () => {
                 </div>
               </Col>
               <Col span={13}>
-                <CustomButton
+                {is_edit === 1 ? (<CustomButton
                   onClick={() => {
                     openNotificationWithIcon(
                       "success",
@@ -260,7 +260,7 @@ const InventoryPage = () => {
                   title={$lang.stock.inventory_report}
                   visability={true}
                   style={{ float: "right" }}
-                />
+                />) : (<></>)}
               </Col>
             </Row>
             <Divider />
@@ -275,6 +275,7 @@ const InventoryPage = () => {
             columns={stockColumns}
             dataSource={[]}
             rowKey={(node) => node.key}
+            is_edit={is_edit}
           />
         </Card>
       </Content>

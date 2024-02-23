@@ -1,5 +1,5 @@
-// const baseUrl = "http://127.0.0.1:3000/";
-const baseUrl = "http://160.16.75.49/";
+const baseUrl = "http://127.0.0.1:3000/";
+// const baseUrl = "http://160.16.75.49/";
 
 export const loginURL = baseUrl + "login";
 
@@ -54,7 +54,7 @@ export const getClientPageURL = baseUrl + "api/client_page";
 export const getAuthDataURL = baseUrl + "api/get_all_auth_data";
 
 export const setAuthDataURL = baseUrl + "api/set_auth_data";
-
+export const exportDepositCSVDataUrl = baseUrl + "api/received_payment_csv";
 //unit_price urls
 
 export const httpErrors = {

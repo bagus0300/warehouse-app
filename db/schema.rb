@@ -86,9 +86,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_014710) do
     t.string "main_address", null: false, comment: "住所1"
     t.string "sub_address", null: false, comment: "住所2"
     t.string "tel", null: false, comment: "電話番号"
+    t.integer "closing_date", null: false, comment: "締日"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "closing_date", null: false
     t.index ["code"], name: "index_shippers_on_code", unique: true
     t.index ["name"], name: "index_shippers_on_name", unique: true
   end

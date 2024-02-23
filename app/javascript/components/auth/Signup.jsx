@@ -126,6 +126,15 @@ const Signup = () => {
               name="password"
               rules={[
                 { required: true, message: messages.messages.type_password },
+                {
+                  min: 6,
+                  message: messages.signupFields.passwordLength,
+                },
+                {
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                  message: messages.signupFields.passwordPattern,
+                },
               ]}
               hasFeedback
             >
@@ -153,12 +162,12 @@ const Signup = () => {
               <Input.Password />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-              <Button type="" htmlType="submit" className="btn-bg-black">
+              <Button className="btn-bg-black" htmlType="submit">
                 {messages.signupFields.signup}
               </Button>
-              <small style={{ marginLeft: 20 }}>
-                {messages.signupFields.to_login}
-              </small>
+              <Button style={{ marginLeft: 20 }}>
+                <Link to="/login">{messages.signupFields.to_login}</Link>
+              </Button>
             </Form.Item>
           </Form>
         </Card>

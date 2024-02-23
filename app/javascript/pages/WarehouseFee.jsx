@@ -8,8 +8,6 @@ import { warehouseFeeURL } from "../utils/contants";
 import {
   Form,
   Input,
-  InputNumber,
-  Table,
   Layout,
   Select,
   Button,
@@ -24,9 +22,10 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
 
+import CustomButton from "../components/common/CustomButton";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import $lang from "../utils/content/jp.json";
-
-let plan_color, star_color, plan_text;
+import { openNotificationWithIcon } from "../components/common/notification";
 
 const { Content } = Layout;
 
@@ -66,20 +65,30 @@ const WarehouseFee = ({ is_edit }) => {
           id: updateData.id,
           ...fee,
         });
-        notification.success({ message: "Update Success" });
+
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.error,
+          $lang.messages.succes
+        );
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
         await axios.post(`${feeUrl}`, fee);
-        notification.success({ message: "Create Success", duration: 1 });
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.success,
+          $lang.messages.succes
+        );
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
     } catch (err) {
-      notification.error({
-        message: "Complete All Input Fields.",
-        duration: 1,
-      });
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.error,
+        $lang.messages.complete_all_nput_fields
+      );
     }
   };
 
@@ -89,10 +98,21 @@ const WarehouseFee = ({ is_edit }) => {
         data: { id: item.id },
       });
       setIsPosted(!isposted);
-      notification.success({ message: "Delete Success.", duration: 1 });
       //getAllShipper();
+
+      openNotificationWithIcon(
+        "success",
+        $lang.popConrimType.error,
+        $lang.messages.success
+      );
     } catch (error) {
       notification.error({ message: "Server Error", duration: 1 });
+
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.error,
+        "Server Error"
+      );
     }
   };
 
@@ -163,41 +183,47 @@ const WarehouseFee = ({ is_edit }) => {
       key: "fee_category",
       align: "center",
     },
-    is_edit === 1 ? ({
-      title: `${$lang.buttons.change}`,
-      dataIndex: "operation",
-      render: (text, record, dataIndex) => {
-        return (
-          <div className="flex justify-center items-center">
-            <div className="hidden rounded-full">
-              {(star_color = record.done == true ? "text-yellow-500" : "")}
+    is_edit === 1 ? (
+      {
+        title: `${$lang.buttons.change}`,
+        dataIndex: "operation",
+        render: (text, record, dataIndex) => {
+          return (
+            <div className="flex justify-center items-center">
+              <div className="hidden rounded-full"></div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center">
+                <CustomButton
+                  onClick={() => {
+                    setUpdateStatus("Edit");
+                    onAction(record);
+                  }}
+                  title={$lang.buttons.change}
+                  icon={<EditOutlined />}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  visability={true}
+                />{" "}
+              </div>
+              <div className="p-2 rounded-full cursor-pointer items-center text-center ml-2">
+                <CustomButton
+                  onClick={() => onDelete(record)}
+                  title={$lang.buttons.delete}
+                  icon={<DeleteOutlined />}
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  visability={true}
+                />
+              </div>
             </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <PencilSquareIcon
-                shape="circle"
-                className="w-20"
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  setUpdateStatus("Edit");
-                  onAction(record);
-                }}
-              />
-            </div>
-            <div className="p-2 rounded-full cursor-pointer items-center text-center">
-              <TrashIcon
-                shape="circle"
-                className="w-20"
-                onClick={() => {
-                  onDelete(record);
-                }}
-              />
-            </div>
-          </div>
-        );
-      },
-      align: "center",
-    }) : (<div></div>)
-    ,
+          );
+        },
+        align: "center",
+      }
+    ) : (
+      <div></div>
+    ),
   ];
 
   return (
@@ -213,15 +239,19 @@ const WarehouseFee = ({ is_edit }) => {
         >
           <div>
             <div className="mt-2" style={{ marginLeft: "880px" }}>
-              <Button
-                onClick={() => {
-                  onAction();
-                  setUpdateStatus("Create");
-                }}
-                className="px-5 btn-bg-black"
-              >
-                {$lang?.Maintenance?.addNew}
-              </Button>
+              {is_edit === 1 ? (
+                <Button
+                  onClick={() => {
+                    onAction();
+                    setUpdateStatus("Create");
+                  }}
+                  className="px-5 btn-bg-black"
+                >
+                  {$lang?.Maintenance?.addNew}
+                </Button>
+              ) : (
+                <div></div>
+              )}
 
               <Modal
                 title={$lang.Maintenance.shipperMaster}

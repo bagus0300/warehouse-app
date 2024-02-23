@@ -17,8 +17,7 @@ const LoginForm = () => {
     setBeforeRequestAction,
   } = useAuth();
 
-  const onFinishFailed = (errorInfo) => {
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   const onFormSubmit = ({ login_id, password }) => {
     loginAction({ user: { login_id, password } });
@@ -44,7 +43,7 @@ const LoginForm = () => {
         >
           {messages.SiteInfo.title}
         </Title>
-        <Card style={{ width: 450, borderColor: "#000" }} className="py-4">
+        <Card style={{ width: 450 }} className="py-4">
           <Title
             level={5}
             className="text-center"
@@ -77,24 +76,17 @@ const LoginForm = () => {
               rules={[
                 { required: true, message: messages.messages.type_password },
               ]}
+              hasFeedback
             >
               <Input.Password />
             </Form.Item>
-
-            {/* <Form.Item
-              valuePropName="checked"
-              wrapperCol={{ offset: 8, span: 16 }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item> */}
-
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button htmlType="submit" className="btn-bg-black">
                 {messages.buttons.login}
               </Button>
-              <small style={{ marginLeft: 20 }}>
+              <Button style={{ marginLeft: 10 }}>
                 <Link to="/signup">{messages.buttons.register}</Link>
-              </small>
+              </Button>
             </Form.Item>
           </Form>
         </Card>

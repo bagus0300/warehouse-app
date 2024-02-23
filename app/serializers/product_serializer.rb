@@ -1,7 +1,7 @@
 class ProductSerializer
   include FastJsonapi::ObjectSerializer
   
-  attributes :id, :name, :warehouse_fee, :stock
+  attributes :id, :name, :specification, :warehouse_fee, :stock
 
   def warehouse_fee
     {

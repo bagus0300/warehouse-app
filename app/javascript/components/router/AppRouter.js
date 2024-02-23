@@ -38,10 +38,10 @@ export const AppRouter = () => {
       setNavigations(allData);
     });
   };
+
   useEffect(() => {
-    // if (user.authUserName != null)
-    getNavigations();
-  }, []);
+    if (user.authUserName != null) getNavigations();
+  }, [user.authUserName]);
 
   return (
     <AuthContextProvider>

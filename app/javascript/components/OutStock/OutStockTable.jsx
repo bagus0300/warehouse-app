@@ -6,7 +6,7 @@ import Lang from "../../utils/content/jp.json";
 import CustomButton from "../common/CustomButton";
 import $lang from "../../utils/content/jp.json";
 
-const OutStockTable = ({ data, editRow, deleteRow }) => {
+const OutStockTable = ({ data, editRow, deleteRow, is_edit }) => {
   const columns = [
     {
       title: "No",
@@ -56,7 +56,7 @@ const OutStockTable = ({ data, editRow, deleteRow }) => {
       dataIndex: "outstock_amount",
       key: "outstock_amount",
     },
-    {
+    is_edit === 1 ? ({
       title: "#",
       key: "action",
       render: (_, record) => (
@@ -81,7 +81,7 @@ const OutStockTable = ({ data, editRow, deleteRow }) => {
           />
         </Space>
       ),
-    },
+    }) : (<></>)
   ];
   return (
     <Table

@@ -71,6 +71,7 @@ class ProductsController < ApplicationController
     end
   end
   def update
+    puts "-----------------------"
     if Product.where(id: params[:id]).update_all(
       name:                     params[:name],
       code:                     params[:code],

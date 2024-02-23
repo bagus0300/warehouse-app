@@ -6,7 +6,7 @@
   "pages": {
     "login": "ログイン",
     "signup": "新規登録",
-    "warning" : "このページは表示できません!"
+    "warning": "このページは表示できません!"
   },
   "LoginFields": {
     "username": "ログインID",
@@ -19,6 +19,8 @@
     "email": "Eメール",
     "password": "パスワード",
     "confirm_password": "パスワードの確認",
+    "passwordLength": "パスワードは6文字以上でなければなりません",
+    "passwordPattern": "パスワードには、少なくとも 1 つの大文字、1 つの小文字、1 つの数字、および 1 つの特殊文字が含まれている必要があります",
     "to_login": "サインインペジロ",
     "signup": "登録"
   },
@@ -52,51 +54,11 @@
     "yes": "はい",
     "no": "なり"
   },
-  "CardTopics": [
-    "１．入庫処理",
-    "４．入金処理",
-    "２．出庫処理",
-    "５．請求処理",
-    "３．倉庫管理",
-    "６．マスタ保守",
-    " 7 . 荷主一覧"
-  ],
-  "Navigations": [
-    {
-      "label": "トップ",
-      "key": "/home",
-      "url": "/home"
-    },
-    {
-      "label": "入庫処理",
-      "key": "/in_stock",
-      "url": "/in_stock"
-    },
-    {
-      "label": "出庫処理",
-      "key": "/out_stock",
-      "url": "/out_stock"
-    },
-    {
-      "label": "在庫管理",
-      "key": "/inventory_control",
-      "url": "/inventory_control"
-    },
-    {
-      "label": "入金処理",
-      "key": "/deposit_process",
-      "url": "/deposit_process"
-    },
-    {
-      "label": "請求処理",
-      "key": "/billing_process",
-      "url": "/billing_process"
-    }
-  ],
   "tableCommon": {
     "no": "NO",
     "warning": "このフィールドは必ず入力してください"
   },
+
   "shipper": {
     "name": "荷主名",
     "main_address": "住所1",
@@ -249,7 +211,8 @@
     "confirm": "確認",
     "confirm_delete": "本当に初期化してもよろしいですか？",
     "empty_data_to_init": "初期化するデータはありません。",
-    "stockAmountError": "出庫量は在庫量より少なく入力してください。"
+    "stockAmountError": "出庫量は在庫量より少なく入力してください。",
+    "complete_all_nput_fields": "すべての入力フィールドに入力します。"
   },
   "popConrimType": {
     "success": "成功",

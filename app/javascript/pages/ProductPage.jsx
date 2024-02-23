@@ -16,8 +16,11 @@ import {
   Flex,
   Button,
 } from "antd";
+import CustomButton from "../components/common/CustomButton";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { openNotificationWithIcon } from "../components/common/notification";
 
 import $lang from "../utils/content/jp.json";
 
@@ -61,12 +64,16 @@ const ProductPage = ({ is_edit }) => {
       let products = res.data.data.map((item) => {
         let feeData = item.data.attributes.warehouse_fee;
         return {
+          id: item.data.attributes.id,
           key: index++,
           name: item.data.attributes.name,
           packaging: feeData.packaging,
           storage_fee_rate: feeData.storage_fee_rate,
           handling_fee_rate: feeData.handling_fee_rate,
           fee_category: feeData.fee_category,
+          code: feeData.code,
+          specification: item.data.attributes.specification,
+          warehouse_fee_id: feeData.id,
         };
       });
 
@@ -81,6 +88,7 @@ const ProductPage = ({ is_edit }) => {
       const priceData = res.data.data.map((item) => {
         return {
           ...item,
+          // code: item.
           key: index++,
         };
       });
@@ -93,12 +101,19 @@ const ProductPage = ({ is_edit }) => {
   const onSubmit = async () => {
     try {
       let product = await form.validateFields();
+
       if (updateData) {
         await axios.put(`${productURL}`, {
           id: updateData.id,
+          warehouse_fee_id: feeID,
           ...product,
         });
-        notification.success({ message: "Update Success", duration: 1 });
+
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.success,
+          $lang.messages.success
+        );
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
@@ -107,7 +122,12 @@ const ProductPage = ({ is_edit }) => {
           ...product,
           warehouse_fee_id: feeID,
         });
-        notification.success({ message: "Create Success", duration: 1 });
+
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.success,
+          $lang.messages.success
+        );
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
@@ -157,6 +177,7 @@ const ProductPage = ({ is_edit }) => {
       setHandlingFeeRate(item.handling_fee_rate);
       setFeeCategory(item.fee_category);
       setStorageFeeRate(item.storage_fee_rate);
+      setFeeID(item.warehouse_fee_id);
     } else {
       form.resetFields();
       setHandlingFeeRate("");
@@ -173,9 +194,18 @@ const ProductPage = ({ is_edit }) => {
         data: { id: item.id },
       });
       setIsPosted(!isposted);
-      notification.success({ message: "Delete Success.", duration: 1 });
+
+      openNotificationWithIcon(
+        "success",
+        $lang.popConrimType.success,
+        $lang.messages.success
+      );
     } catch (error) {
-      notification.error({ message: "Server Error", duration: 1 });
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.success,
+        "Server Error"
+      );
     }
   };
 
@@ -238,23 +268,28 @@ const ProductPage = ({ is_edit }) => {
                 {/* {(star_color = record.done == true ? "text-yellow-500" : "")} */}
               </div>
               <div className="p-2 rounded-full cursor-pointer text-center">
-                <PencilSquareIcon
-                  shape="circle"
-                  className="w-20"
-                  style={{ marginRight: "5px" }}
+                <CustomButton
                   onClick={() => {
                     setUpdateStatus("Edit");
                     onAction(record);
                   }}
-                />
+                  title={$lang.buttons.change}
+                  icon={<EditOutlined />}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  visability={true}
+                />{" "}
               </div>
-              <div className="p-2 rounded-full cursor-pointer items-center text-center">
-                <TrashIcon
-                  shape="circle"
-                  className="w-20"
-                  onClick={() => {
-                    onDelete(record);
-                  }}
+              <div className="p-2 rounded-full cursor-pointer items-center text-center ml-2">
+                <CustomButton
+                  onClick={() => onDelete(record)}
+                  title={$lang.buttons.delete}
+                  icon={<DeleteOutlined />}
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  visability={true}
                 />
               </div>
             </div>
@@ -288,26 +323,23 @@ const ProductPage = ({ is_edit }) => {
                     <Input.Search
                       value={searchText}
                       className="w-190"
-                      placeholder={"Search"}
+                      placeholder={$lang.buttons.search}
                       onChange={handleSearchText}
                     />
-                    {/* <Button
-                      onClick={() => setSearchBtn(true)}
-                      style={{ width: 120, marginLeft: 60 }}
-                      className="btn-bg-black"
-                    >
-                      {$lang?.buttons?.search}
-                    </Button> */}
-                    <Button
-                      // style={{ marginLeft: "640px" }}
-                      onClick={() => {
-                        onAction();
-                        setUpdateStatus("Create");
-                      }}
-                      className="btn-bg-black"
-                    >
-                      {$lang?.Maintenance?.addNew}
-                    </Button>
+                    {is_edit === 1 ? (
+                      <Button
+                        // style={{ marginLeft: "640px" }}
+                        onClick={() => {
+                          onAction();
+                          setUpdateStatus("Create");
+                        }}
+                        className="btn-bg-black"
+                      >
+                        {$lang?.Maintenance?.addNew}
+                      </Button>
+                    ) : (
+                      <div></div>
+                    )}
                   </Flex>
                 </Flex>
               </div>
@@ -317,7 +349,7 @@ const ProductPage = ({ is_edit }) => {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={[
-                  <Button key="ok" onClick={onSubmit}>
+                  <Button key="ok" onClick={onSubmit} className="btn-bg-black">
                     {$lang.Maintenance.register}
                   </Button>,
                   <Button key="cancel" onClick={handleCancel}>
@@ -325,7 +357,7 @@ const ProductPage = ({ is_edit }) => {
                   </Button>,
                 ]}
               >
-                <div>
+                <div className="" style={{ marginTop: 30 }}>
                   <Form
                     form={form}
                     size="middle"
@@ -397,7 +429,7 @@ const ProductPage = ({ is_edit }) => {
                         },
                       ]}
                     >
-                      <Input value={handlingFeeRate} />
+                      <Input value={handlingFeeRate} readOnly />
                     </Form.Item>
                     <Form.Item
                       label={$lang.Maintenance.storageFee}
@@ -408,7 +440,7 @@ const ProductPage = ({ is_edit }) => {
                         },
                       ]}
                     >
-                      <Input value={storageFeeRate} />
+                      <Input value={storageFeeRate} readOnly />
                     </Form.Item>
                     <Form.Item
                       label={$lang.Maintenance.billingClass}
@@ -419,7 +451,7 @@ const ProductPage = ({ is_edit }) => {
                         },
                       ]}
                     >
-                      <Input value={feeCategory} />
+                      <Input value={feeCategory} readOnly />
                     </Form.Item>
                   </Form>
                 </div>

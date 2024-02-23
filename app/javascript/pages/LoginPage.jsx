@@ -21,7 +21,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <LoginComponent token={token} />
+      <LoginComponent />
     </>
   );
 };

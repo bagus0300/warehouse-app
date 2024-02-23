@@ -15,13 +15,18 @@ import {
   Pagination,
   Row,
   Col,
+  InputNumber,
 } from "antd";
 import moment from "moment";
 import { API } from "../utils/helper";
 import DepositTable from "../components/Deposit/DepositTable";
 import lang from "../utils/content/jp.json";
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
-import { shipperURL, receivedPaymentURL } from "../utils/contants";
+import {
+  shipperURL,
+  receivedPaymentURL,
+  exportDepositCSVDataUrl,
+} from "../utils/contants";
 import $lang from "../utils/content/jp.json";
 import { dateFormat } from "../utils/contants";
 import { openNotificationWithIcon } from "../components/common/notification";
@@ -46,11 +51,15 @@ const deposit = () => {
   //   setIsDelelte("false");
   // }, [modalOpen, isModalOpen, isDelete, depositDate]);
   const [shipperOptions, setShipperOptions] = useState([]);
+  const [editShipperOptions, setEditShipperOptions] = useState([]);
   const [shipperDisctription, setShipperDescription] = useState({
     code: "",
     closingDate: "",
   });
-  const [registerShipper, setRegisterShipper] = useState("");
+  const [registerShipper, setRegisterShipper] = useState({
+    value: "",
+    label: "",
+  });
   const [searchShipper, setSearchShipper] = useState({
     value: "",
     label: "",
@@ -86,7 +95,18 @@ const deposit = () => {
           closingDate: item.closing_date,
         };
       });
-      shippers.unshift({
+      setEditShipperOptions(shippers);
+      const shippersWithAll = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+          key: index++,
+          id: item.id,
+          code: item.code,
+          closingDate: item.closing_date,
+        };
+      });
+      shippersWithAll.unshift({
         value: "",
         label: "ALL",
         index: 1,
@@ -94,12 +114,11 @@ const deposit = () => {
         code: "",
         closingDate: "",
       });
-      setShipperOptions(shippers);
+      setShipperOptions(shippersWithAll);
     });
   };
 
   const getReceivePayment = () => {
-    debugger;
     const inStockDateParam =
       inStockRangeDates.length > 0
         ? `&instockFromDate=${new Date(inStockRangeDates[0].toString())
@@ -179,7 +198,22 @@ const deposit = () => {
     setDescription("");
   };
 
+  const validate = () => {
+    if (registerShipper.label == "" || registerDate != "" || amount != "") {
+      return false;
+    }
+    return true;
+  };
+
   const handleRegister = () => {
+    if (!validate()) {
+      openNotificationWithIcon(
+        "warning",
+        $lang.popConrimType.warning,
+        $lang.messages.complete_all_nput_fields
+      );
+      return;
+    }
     setModalOpen(false);
     API.post(receivedPaymentURL, {
       shipper_id: registerShipper.value,
@@ -202,6 +236,9 @@ const deposit = () => {
   };
 
   const updateResiger = () => {
+    if (!validate) {
+      return;
+    }
     setModalOpen(false);
 
     API.put(receivedPaymentURL, {
@@ -268,6 +305,59 @@ const deposit = () => {
     const toDate = dayjs(dateStrings[1], "YYYY-MM-DD").add(1, "day");
     // setInstockRangeDates(date);
     setInstockRangeDates([fromDate, toDate]);
+  };
+
+  const exportDataAndDownloadCVS = async () => {
+    const inStockDateParam =
+      inStockRangeDates.length > 0
+        ? `&instockFromDate=${new Date(inStockRangeDates[0].toString())
+            .toISOString()
+            .substring(0, 10)}&instockToDate=${new Date(
+            inStockRangeDates[1].toString()
+          )
+            .toISOString()
+            .substring(0, 10)}`
+        : "";
+    const processDateParam =
+      processRangeDates.length > 0
+        ? `&instockFromDate=${new Date(processRangeDates[0].toString())
+            .toISOString()
+            .substring(0, 10)}&instockToDate=${new Date(
+            processRangeDates[1].toString()
+          )
+            .toISOString()
+            .substring(0, 10)}`
+        : "";
+    const searchShipperParam =
+      searchShipper.value != "" ? `&shipper=${searchShipper}` : "";
+    const urlParam = `${exportDepositCSVDataUrl}?offset=${currentPage}&limit=${itemsPerPage}${inStockDateParam}${processDateParam}${searchShipperParam}`;
+
+    API.get(urlParam)
+      .then((response) => {
+        const timestamp = Date.now();
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "入庫_" + timestamp + ".csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(() => {
+          openNotificationWithIcon(
+            "success",
+            $lang.popConrimType.success,
+            $lang.messages.success
+          );
+        }, 1000);
+      })
+      .catch((err) => {
+        openNotificationWithIcon(
+          "error",
+          $lang.popConrimType.error,
+          err.messages
+        );
+      });
   };
 
   useEffect(() => {
@@ -339,7 +429,10 @@ const deposit = () => {
               >
                 {$lang.buttons.search}
               </Button>
-              <Button className="btn-bg-black ml-1">
+              <Button
+                className="btn-bg-black ml-1"
+                onClick={exportDataAndDownloadCVS}
+              >
                 {$lang.buttons.csvExchange}
               </Button>
             </Space>
@@ -385,7 +478,7 @@ const deposit = () => {
                     {$lang.Maintenance.shipperName}:
                     <Select
                       style={{ width: 200, marginLeft: 43 }}
-                      options={shipperOptions}
+                      options={editShipperOptions}
                       value={registerShipper.value}
                       onChange={onChangeRegisterShipper}
                     />
@@ -413,7 +506,9 @@ const deposit = () => {
                       style={{ width: 200, marginLeft: 45 }}
                       value={amount}
                       type="number"
-                      onChange={(e) => selAmount(e.target.value)}
+                      onChange={(e) => {
+                        setAmount(e.target.value);
+                      }}
                     />
                   </div>
                   <div className="my-2">

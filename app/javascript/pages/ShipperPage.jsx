@@ -6,9 +6,12 @@ import CTable from "../components/CTable";
 import { Form, Input, Layout, Button, Modal, notification, Card } from "antd";
 
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { openNotificationWithIcon } from "../components/common/notification";
 
 import message from "../utils/content/jp.json";
-
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import CustomButton from "../components/common/CustomButton";
+import $lang from "../utils/content/jp.json";
 const { Content } = Layout;
 
 const ShipperList = ({ is_edit }) => {
@@ -42,20 +45,33 @@ const ShipperList = ({ is_edit }) => {
           id: updateData.id,
           ...shipper,
         });
-        notification.success({ message: "Update Success", duration: 1 });
+
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.error,
+          $lang.messages.success
+        );
+
         setIsModalOpen(false);
         setIsPosted(!isposted);
       } else {
         await axios.post(`${shipperURL}`, shipper);
-        notification.success({ message: "Create Success", duration: 1 });
+
+        openNotificationWithIcon(
+          "success",
+          $lang.popConrimType.error,
+          $lang.messages.success
+        );
+
         setIsModalOpen(false);
         setIsPosted(!isposted);
       }
     } catch (err) {
-      notification.error({
-        message: "Complete All Input Fields.",
-        duration: 1,
-      });
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.error,
+        $lang.messages.complete_all_nput_fields
+      );
     }
   };
 
@@ -72,12 +88,12 @@ const ShipperList = ({ is_edit }) => {
         code: item.code,
         post_code: item.post_code,
         tel: item.tel,
-        closing_date: moment(item.closing_date).format("YYYY-MM-DD"),
+        // closing_date: moment(item.closing_date).format("YYYY-MM-DD"),
+        closing_date: item.closing_date,
       });
     } else {
       form.resetFields();
     }
-
     setIsModalOpen(true);
     setUpdateData(item);
   };
@@ -88,9 +104,18 @@ const ShipperList = ({ is_edit }) => {
         data: { id: item.id },
       });
       setIsPosted(!isposted);
-      notification.success({ message: "Delete Success.", duration: 1 });
+
+      openNotificationWithIcon(
+        "success",
+        $lang.popConrimType.success,
+        $lang.messages.success
+      );
     } catch (error) {
-      notification.error({ message: "Server Error", duration: 1 });
+      openNotificationWithIcon(
+        "error",
+        $lang.popConrimType.error,
+        $lang.messages.complete_all_nput_fields
+      );
     }
   };
 
@@ -109,7 +134,7 @@ const ShipperList = ({ is_edit }) => {
       width: "8%",
     },
     {
-      title: `${message.shipper.name}`,
+      title: `${$lang.shipper.name}`,
       key: "name",
       dataIndex: "name",
       align: "center",
@@ -123,7 +148,7 @@ const ShipperList = ({ is_edit }) => {
       },
     },
     {
-      title: `${message.shipper.mainAddress}`,
+      title: `${$lang.shipper.mainAddress}`,
       dataIndex: "main_address",
       key: "main_address",
       align: "center",
@@ -137,7 +162,7 @@ const ShipperList = ({ is_edit }) => {
       },
     },
     {
-      title: `${message.shipper.tel_number}`,
+      title: `${$lang.shipper.tel_number}`,
       dataIndex: "tel",
       key: "tel",
       align: "center",
@@ -151,10 +176,10 @@ const ShipperList = ({ is_edit }) => {
       },
     },
     {
-      title: `${message.shipper.closing_date}`,
+      title: `${$lang.shipper.closing_date}`,
       dataIndex: "closing_date",
       key: "closing_date",
-      render: (txt) => moment(txt).format("YYYY-MM-DD"),
+      // render: (txt) => moment(txt).format("YYYY-MM-DD"),
       // sorter: (a, b) =>
       //   a.closing_date.toLowerCase().localeCompare(b.closing_date.toLowerCase()),
       align: "center",
@@ -162,7 +187,7 @@ const ShipperList = ({ is_edit }) => {
     },
     is_edit === 1 ? (
       {
-        title: `${message.buttons.change}`,
+        title: `${$lang.buttons.change}`,
         dataIndex: "operation",
         render: (text, record, dataIndex) => {
           return (
@@ -171,23 +196,28 @@ const ShipperList = ({ is_edit }) => {
                 {/* {(star_color = record.done == true ? "text-yellow-500" : "")} */}
               </div>
               <div className="p-2 rounded-full cursor-pointer items-center text-center">
-                <PencilSquareIcon
-                  shape="circle"
-                  className="w-20"
-                  style={{ marginRight: "5px" }}
+                <CustomButton
                   onClick={() => {
                     setUpdateStatus("Edit");
                     onAction(record);
                   }}
-                />
+                  title={$lang.buttons.change}
+                  icon={<EditOutlined />}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  visability={true}
+                />{" "}
               </div>
-              <div className="p-2 rounded-full cursor-pointer items-center text-center">
-                <TrashIcon
-                  shape="circle"
-                  className="w-20"
-                  onClick={() => {
-                    onDelete(record);
-                  }}
+              <div className="p-2 rounded-full cursor-pointer items-center text-center ml-2">
+                <CustomButton
+                  onClick={() => onDelete(record)}
+                  title={$lang.buttons.delete}
+                  icon={<DeleteOutlined />}
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                  size="small"
+                  className="btn-default btn-hover-black"
+                  visability={true}
                 />
               </div>
             </div>
@@ -213,30 +243,34 @@ const ShipperList = ({ is_edit }) => {
         >
           <div>
             <div className="mt-5" style={{ marginLeft: "880px" }}>
-              <Button
-                onClick={() => {
-                  onAction();
-                  setUpdateStatus("Create");
-                }}
-                className="btn-bg-black"
-              >
-                {message?.Maintenance?.addNew}
-              </Button>
+              {is_edit === 1 ? (
+                <Button
+                  onClick={() => {
+                    onAction();
+                    setUpdateStatus("Create");
+                  }}
+                  className="btn-bg-black"
+                >
+                  {$lang?.Maintenance?.addNew}
+                </Button>
+              ) : (
+                <div></div>
+              )}
               <Modal
-                title={message.Maintenance.shipperMaster}
+                title={$lang.Maintenance.shipperMaster}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 footer={[
-                  <Button key="ok" onClick={onSubmit}>
-                    {message.Maintenance.register}
+                  <Button key="ok" onClick={onSubmit} className="btn-bg-black">
+                    {$lang.Maintenance.register}
                   </Button>,
                   <Button key="cancel" onClick={handleCancel}>
-                    {message.buttons.cancel}
+                    {$lang.buttons.cancel}
                   </Button>,
                 ]}
               >
-                <div>
+                <div className="" style={{ marginTop: 30 }}>
                   <Form
                     form={form}
                     size="middle"
@@ -245,88 +279,88 @@ const ShipperList = ({ is_edit }) => {
                     labelAlign="left"
                   >
                     <Form.Item
-                      label={message.Maintenance.shipperName}
+                      label={$lang.Maintenance.shipperName}
                       name={"name"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.shipper.code}
+                      label={$lang.shipper.code}
                       name={"code"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.Maintenance.postCode}
+                      label={$lang.Maintenance.postCode}
                       name={"post_code"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.shipper.main_address}
+                      label={$lang.shipper.main_address}
                       name={"main_address"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.shipper.sub_address}
+                      label={$lang.shipper.sub_address}
                       name={"sub_address"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.shipper.tel_number}
+                      label={$lang.shipper.tel_number}
                       name={"tel"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
-                      label={message.shipper.closing_date}
+                      label={$lang.shipper.closing_date}
                       name={"closing_date"}
                       rules={[
                         {
                           required: true,
-                          message: `${message.tableCommon.warning}`,
+                          message: `${$lang.tableCommon.warning}`,
                         },
                       ]}
                     >
-                      <Input type="date" />
+                      <Input type="number" />
                     </Form.Item>
                   </Form>
                 </div>

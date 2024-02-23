@@ -579,7 +579,7 @@ const InStockPage = ({ is_edit }) => {
             <Divider />
             <Row>
               <Col span={1}></Col>
-              <Col span={6}>
+              {is_edit === 1 ? (<Col span={6}>
                 <CustomButton
                   onClick={doPrepareProducts}
                   className="px-5 ml-2 btn-bg-black"
@@ -599,7 +599,7 @@ const InStockPage = ({ is_edit }) => {
                   title={$lang.buttons.cancel}
                   visability={editMode == "edit"}
                 />
-              </Col>
+              </Col>) : (<></>)}
             </Row>
           </Form>
         </Card>
@@ -615,7 +615,7 @@ const InStockPage = ({ is_edit }) => {
             pagination={false}
             is_edit={is_edit}
           />
-          <div
+          {is_edit === 1 ? (<div
             style={{
               justifyContent: "flex-end",
               display: "flex",
@@ -633,7 +633,7 @@ const InStockPage = ({ is_edit }) => {
               title={$lang.buttons.confirmDeparture}
               visability={true}
             ></CustomButton>
-          </div>
+          </div>) : (<div></div>)}
         </Card>
       </Content>
     </div>
