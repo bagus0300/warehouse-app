@@ -1,15 +1,17 @@
 import React from "react";
 import { Row, Layout, Card, Col } from "antd";
 
-import SectionCard from "../components/Top/SectionCard";
-import { cardTopic } from "../utils/content";
 const { Header, Content, Footer } = Layout;
 import { useAuth } from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
-import { margin } from "@mui/system";
 
-const Top = () => {
+const Top = ({ navigations }) => {
   const authState = useAuth();
+  let index = 1;
+  const topNavications = navigations.map((item) => ({
+    ...item,
+    title: `${index++}. ${item.name}`
+  }))
   return (
     <div>
       <Content
@@ -23,10 +25,10 @@ const Top = () => {
             marginTop: 50,
           }}
         >
-          {cardTopic.map((item, i) => (
+          {topNavications.map((item, i) => (
             <Col key={i} span={8} style={{ margin: 20 }}>
               <Link to={item.key} key={i}>
-                <Card bordered={false}>{item.label}</Card>
+                <Card bordered={false}>{item.title}</Card>
               </Link>
             </Col>
           ))}

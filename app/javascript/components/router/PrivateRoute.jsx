@@ -33,13 +33,13 @@ const PrivateRoute = ({ Component, navigations }) => {
     getCurrentPage();
   }, [location]);
 
-  useEffect(() => {}, [currentPage]);
+  useEffect(() => { }, [currentPage]);
 
   return token ? (
     <>
       <NavbarSection navigations={navigations} />
       {currentPage.is_read == 1 ? (
-        <Component is_edit={currentPage.is_edit} />
+        <Component navigations={navigations} is_edit={currentPage.is_edit} />
       ) : (
         <p className="items-center" style={{ fontSize: 50, margin: 300 }}>
           {$lang.pages.warning}

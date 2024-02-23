@@ -57,7 +57,7 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/billing_process"
+            path="/bill_process"
             element={
               <PrivateRoute
                 navigations={navigations}
@@ -66,13 +66,13 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/billing_list"
+            path="/bill_list"
             element={
               <PrivateRoute navigations={navigations} Component={BillingList} />
             }
           />
           <Route
-            path="/in_stock"
+            path="/stock_in"
             element={
               <PrivateRoute navigations={navigations} Component={InStockPage} />
             }
@@ -90,7 +90,7 @@ export const AppRouter = () => {
             }
           />
           <Route
-            path="/out_stock"
+            path="/stock_out"
             element={
               <PrivateRoute
                 navigations={navigations}
