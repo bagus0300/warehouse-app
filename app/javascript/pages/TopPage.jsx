@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Layout, Card, Col } from "antd";
-
+import axios from "axios";
 const { Header, Content, Footer } = Layout;
 import { useAuth } from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
+import { navigatiionsURL } from "../utils/contants.js";
 
-const Top = ({ navigations }) => {
+const Top = () => {
+  const [navigations, setNavigations] = useState([])
+
+  const getNavigations = () => {
+    axios.get(`${navigatiionsURL}`).then((res) => {
+      const allData = res.data.data.map((item) => {
+        let index = 1;
+        return { ...item, key: item.path, label: item.name, url: item.path, title: `${index++}. ${item.name}` };
+      });
+      setNavigations(allData);
+    });
+  };
+
+  useEffect(() => {
+    getNavigations();
+  }, []);
+
   const authState = useAuth();
-  let index = 1;
-  const topNavications = navigations.map((item) => ({
-    ...item,
-    title: `${index++}. ${item.name}`
-  }))
+
+
   return (
     <div>
       <Content
@@ -25,7 +39,7 @@ const Top = ({ navigations }) => {
             marginTop: 50,
           }}
         >
-          {topNavications.map((item, i) => (
+          {navigations.map((item, i) => (
             <Col key={i} span={8} style={{ margin: 20 }}>
               <Link to={item.key} key={i}>
                 <Card bordered={false}>{item.title}</Card>

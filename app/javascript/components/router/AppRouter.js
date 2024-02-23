@@ -38,6 +38,7 @@ export const AppRouter = () => {
       setNavigations(allData);
     });
   };
+
   useEffect(() => {
     console.log("app  router pass");
 
