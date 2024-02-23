@@ -29,7 +29,6 @@ const PrivateRoute = ({ Component, navigations }) => {
   };
 
   useEffect(() => {
-    console.log("app protected router pass");
     getCurrentPage();
   }, [location]);
 

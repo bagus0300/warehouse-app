@@ -40,8 +40,6 @@ export const AppRouter = () => {
   };
 
   useEffect(() => {
-    console.log("app  router pass");
-
     if (user.authUserName != null) getNavigations();
   }, [user.authUserName]);
 
@@ -131,11 +129,11 @@ export const AppRouter = () => {
           />
           <Route path="/" element={<LoginPage />} />
           <Route
-            path="/user_process"
+            path="/user_managent"
             element={<PrivateRoute Component={UserPage} />}
           />
           <Route
-            path="/clientPage_process"
+            path="/auth_permission"
             element={<PrivateRoute Component={ClientPage} />}
           />
           <Route

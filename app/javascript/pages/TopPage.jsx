@@ -11,8 +11,8 @@ const Top = () => {
 
   const getNavigations = () => {
     axios.get(`${navigatiionsURL}`).then((res) => {
+      let index = 1;
       const allData = res.data.data.map((item) => {
-        let index = 1;
         return { ...item, key: item.path, label: item.name, url: item.path, title: `${index++}. ${item.name}` };
       });
       setNavigations(allData);
