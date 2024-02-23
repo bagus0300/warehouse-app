@@ -8,7 +8,7 @@ import messages from "../../utils/content/jp.json";
 import { openNotificationWithIcon } from "../common/notification";
 // import AlertComponent from "../common/alert";
 
-const LoginForm = ({ token }) => {
+const LoginForm = () => {
   const navigate = useNavigate();
 
   const {

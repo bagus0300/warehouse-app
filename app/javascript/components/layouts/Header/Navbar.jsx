@@ -62,8 +62,9 @@ const NavbarSection = ({ navigations }) => {
           }}
         />
         <Button
+          className="btn-bg-black"
           onClick={logoutAction}
-          style={{ marginLeft: "300px", marginTop: "15px" }}
+          style={{ marginLeft: "300px", marginTop: "15px", borderColor: 'white', borderStyle: 'solid' }}
         >
           <Link to="/signin">LogOut</Link>
         </Button>
