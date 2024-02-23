@@ -13,15 +13,6 @@ export const loginFileds: LoginItemType = {
   rememberme: "remember me",
 };
 
-export const cardTopics = [
-  "１．入庫処理",
-  "４．入金処理",
-  "２．出庫処理",
-  "５．請求処理",
-  "３．倉庫管理",
-  "６．マスタ保守",
-  " 7 . 荷主一覧",
-];
 
 export const cardTopic = [
   {

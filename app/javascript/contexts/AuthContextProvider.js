@@ -39,10 +39,11 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const logoutAction = async () => {
-    const res = await services.logout();
-    if (res?.data?.ok) {
-      authActions.logoutAction(dispatch);
-    }
+    authActions.logoutAction(dispatch);
+    // const res = await services.logout();
+    // if (res?.data?.ok) {
+    //   authActions.logoutAction(dispatch);
+    // }
   };
 
   const setBeforeRequestAction = (flag) => {

@@ -65,6 +65,7 @@ const NavbarSection = ({ navigations }) => {
           }}
         />
         <Button
+          className="btn-bg-black"
           onClick={logoutAction}
           style={{ marginLeft: "300px", marginTop: "15px", border: "none" }}
         >
