@@ -19,9 +19,6 @@ import { API } from "../utils/helper";
 import {
   warehouseURL,
   shipperURL,
-  warehouseFeeURL,
-  productURL,
-  productDetailURL,
   saveStockInoutUrl,
   productSetUrl,
   productStockURL,
@@ -35,7 +32,7 @@ import $lang from "../utils/content/jp.json";
 import OutStockTable from "../components/OutStock/OutStockTable";
 import { openNotificationWithIcon } from "../components/common/notification";
 
-const OutStockPage = () => {
+const OutStockPage = ({ is_edit }) => {
   const [editMode, setEditMode] = useState("new");
 
   // ---------Warehouse--------
@@ -115,7 +112,7 @@ const OutStockPage = () => {
             label: warehouses[0].label,
           });
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   // --------Get shipper data--------
@@ -145,7 +142,7 @@ const OutStockPage = () => {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   // ----------Get product data-----------
@@ -205,7 +202,7 @@ const OutStockPage = () => {
           initWarehouseFee();
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   const onChangeWarehouse = (value, option) => {
@@ -245,7 +242,7 @@ const OutStockPage = () => {
         setInStockDate(option.inout_on);
         setStock(res.data.stock.total_amount);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   const setPrepareProductItem = (editData) => {
@@ -620,7 +617,7 @@ const OutStockPage = () => {
             <Divider />
             <Row>
               <Col span={1}></Col>
-              <Col span={6}>
+              {is_edit === 1 ? (<Col span={6}>
                 <CustomButton
                   onClick={doPrepareProducts}
                   className="px-5 ml-2 btn-bg-black"
@@ -640,7 +637,7 @@ const OutStockPage = () => {
                   title={$lang.buttons.cancel}
                   visability={editMode == "edit"}
                 />
-              </Col>
+              </Col>) : (<></>)}
             </Row>
           </Form>
         </Card>
@@ -654,6 +651,7 @@ const OutStockPage = () => {
             editRow={(key) => EditPrepareProduct(key)}
             deleteRow={deletePrepareProduct}
             pagination={false}
+            is_edit={is_edit}
           ></OutStockTable>
           <div
             style={{
@@ -662,11 +660,11 @@ const OutStockPage = () => {
               marginTop: 15,
             }}
           >
-            <CustomButton
+            {is_edit === 1 ? (<CustomButton
               onClick={savePrepareProducts}
               title={$lang.buttons.confirmDeparture}
               visability={true}
-            ></CustomButton>
+            ></CustomButton>) : (<></>)}
           </div>
         </Card>
       </Content>

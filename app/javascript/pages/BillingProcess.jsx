@@ -11,7 +11,6 @@ const { RangePicker } = DatePicker;
 import {
   Form,
   Input,
-  InputNumber,
   Layout,
   Popconfirm,
   Table,
@@ -25,7 +24,7 @@ import {
 import { Spa } from "@mui/icons-material";
 const { Content } = Layout;
 
-const BillingProcess = () => {
+const BillingProcess = ({ is_edit }) => {
   const billingProcessColumns = [
     {
       title: `${$lang.billing.table.number}`,
@@ -299,14 +298,16 @@ const BillingProcess = () => {
             <div>{$lang.billing.new}</div>
           </Col>
           <Col span={12}>
-            <Space className="" style={{ float: "right" }}>
-              <Button className="btn-bg-black">
-                {$lang.buttons.billingListOutput}
-              </Button>
-              <Button className="btn-bg-black">
-                {$lang.buttons.billingConfirmed}
-              </Button>
-            </Space>
+            {is_edit === 1 ?
+              (<Space className="" style={{ float: "right" }}>
+                <Button className="btn-bg-black">
+                  {$lang.buttons.billingListOutput}
+                </Button>
+                <Button className="btn-bg-black">
+                  {$lang.buttons.billingConfirmed}
+                </Button>
+              </Space>) :
+              (<></>)}
           </Col>
         </Row>
         <Row className="my-2">

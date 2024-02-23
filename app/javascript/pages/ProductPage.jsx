@@ -299,7 +299,7 @@ const ProductPage = ({ is_edit }) => {
         )
       },
       align: "center",
-    }) : (<div></div>)
+    }) : (<></>)
   ];
 
   return (
@@ -326,14 +326,7 @@ const ProductPage = ({ is_edit }) => {
                       placeholder={"Search"}
                       onChange={handleSearchText}
                     />
-                    {/* <Button
-                      onClick={() => setSearchBtn(true)}
-                      style={{ width: 120, marginLeft: 60 }}
-                      className="btn-bg-black"
-                    >
-                      {$lang?.buttons?.search}
-                    </Button> */}
-                    <Button
+                    {is_edit === 1 ? (<Button
                       // style={{ marginLeft: "640px" }}
                       onClick={() => {
                         onAction();
@@ -342,7 +335,7 @@ const ProductPage = ({ is_edit }) => {
                       className="btn-bg-black"
                     >
                       {$lang?.Maintenance?.addNew}
-                    </Button>
+                    </Button>) : (<div></div>)}
                   </Flex>
                 </Flex>
               </div>

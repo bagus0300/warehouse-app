@@ -8,8 +8,6 @@ import { warehouseFeeURL } from "../utils/contants";
 import {
   Form,
   Input,
-  InputNumber,
-  Table,
   Layout,
   Select,
   Button,
@@ -26,7 +24,6 @@ import {
 
 import $lang from "../utils/content/jp.json";
 
-let plan_color, star_color, plan_text;
 
 const { Content } = Layout;
 
@@ -213,7 +210,7 @@ const WarehouseFee = ({ is_edit }) => {
         >
           <div>
             <div className="mt-2" style={{ marginLeft: "880px" }}>
-              <Button
+              {is_edit === 1 ? (<Button
                 onClick={() => {
                   onAction();
                   setUpdateStatus("Create");
@@ -221,7 +218,7 @@ const WarehouseFee = ({ is_edit }) => {
                 className="px-5 btn-bg-black"
               >
                 {$lang?.Maintenance?.addNew}
-              </Button>
+              </Button>) : (<div></div>)}
 
               <Modal
                 title={$lang.Maintenance.shipperMaster}

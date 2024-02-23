@@ -226,7 +226,7 @@ const ShipperList = ({ is_edit }) => {
         >
           <div>
             <div className="mt-5" style={{ marginLeft: "880px" }}>
-              <Button
+              {is_edit === 1 ? (<Button
                 onClick={() => {
                   onAction();
                   setUpdateStatus("Create");
@@ -234,7 +234,7 @@ const ShipperList = ({ is_edit }) => {
                 className="btn-bg-black"
               >
                 {message?.Maintenance?.addNew}
-              </Button>
+              </Button>) : (<div></div>)}
               <Modal
                 title={message.Maintenance.shipperMaster}
                 open={isModalOpen}

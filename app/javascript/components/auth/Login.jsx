@@ -76,25 +76,26 @@ const LoginForm = () => {
               name="password"
               rules={[
                 { required: true, message: messages.messages.type_password },
+                {
+                  min: 6,
+                  message: messages.signupFields.passwordLength,
+                },
+                {
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                  message: messages.signupFields.passwordPattern,
+                },
               ]}
+              hasFeedback
             >
               <Input.Password />
             </Form.Item>
-
-            {/* <Form.Item
-              valuePropName="checked"
-              wrapperCol={{ offset: 8, span: 16 }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item> */}
-
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button htmlType="submit" className="btn-bg-black">
                 {messages.buttons.login}
               </Button>
-              <small style={{ marginLeft: 20 }}>
+              <Button style={{ marginLeft: 20 }} className="btn-bg-black">
                 <Link to="/signup">{messages.buttons.register}</Link>
-              </small>
+              </Button>
             </Form.Item>
           </Form>
         </Card>

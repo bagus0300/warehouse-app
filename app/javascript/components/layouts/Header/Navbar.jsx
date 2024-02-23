@@ -62,7 +62,7 @@ const NavbarSection = () => {
       >
         <div className="demo-logo " style={{ marginRight: "100px" }}>
           <Title level={4} style={{ marginTop: 15 }}>
-            <Link to="home">{siteInfo.title}</Link>
+            <Link to="/">{siteInfo.title}</Link>
           </Title>
         </div>
         <Menu
