@@ -5,38 +5,35 @@ class ReceivedPaymentsController < ApplicationController
     offset = params[:offset]
     limit = params[:limit]
     
-    instock_from_date = params[:instockFromDate]
-    instock_to_date = params[:instockToDate]
-    
-    process_from_date = params[:processFromDate]
-    process_to_date = params[:processToDate]
+    instock_from_date = params[:instockFromDate].present? ? Date.strptime(params[:instockFromDate]) : nil
+    instock_to_date = params[:instockToDate].present? ? Date.strptime(params[:instockToDate]) : nil
 
-    shipper = params[:shipper]
+    process_from_date = params[:processFromDate].present? ? Date.strptime("#{params[:processFromDate]} 00:00:00") : nil
+    process_to_date = params[:processToDate].present? ? Date.strptime("#{params[:processToDate]} 00:00:00") : nil
+
+    shipper = params[:shipper].presence&.to_i
+
 
     received_payments = ReceivedPayment.includes(:shipper)
     count = received_payments.count
 
     if instock_from_date.present?
-      instock_from_date = Time.parse(instock_from_date)
-      received_payments.where('received_on > ?', instock_from_date)
+      received_payments = received_payments.where('received_on > ?',instock_from_date)
     end
     if instock_to_date.present?
-      instock_to_date = Time.parse(instock_to_date)
-      received_payments.where('received_on < ?', instock_to_date )
+      received_payments = received_payments.where('received_on < ?',instock_to_date)
   
     end
     if process_from_date.present?
-      process_from_date = Time.parse(process_from_date)
-      received_payments.where('process_on > ?', process_from_date)
+      received_payments = received_payments.where('process_on > ?', process_from_date)
     
     end
     if process_to_date.present?
-      process_to_date = Time.parse(process_to_date)
-      received_payments.where('process_on < ?',process_to_date)
+      received_payments = received_payments.where('process_on < ?',process_to_date)
     end
 
     if shipper.present?
-      received_payments.where('shipper_id < ?', shipper)
+      received_payments = received_payments.where('shipper_id < ?', shipper)
     end
 
     received_payments = received_payments.offset(offset).limit(limit)

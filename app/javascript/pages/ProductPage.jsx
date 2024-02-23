@@ -235,7 +235,7 @@ const ProductPage = ({ is_edit }) => {
           return (
             <div className="flex justify-center">
               <div className="hidden rounded-full">
-                {(star_color = record.done == true ? "text-yellow-500" : "")}
+                {/* {(star_color = record.done == true ? "text-yellow-500" : "")} */}
               </div>
               <div className="p-2 rounded-full cursor-pointer text-center">
                 <PencilSquareIcon

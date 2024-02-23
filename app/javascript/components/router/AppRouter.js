@@ -39,7 +39,8 @@ export const AppRouter = () => {
     });
   };
   useEffect(() => {
-    if (user.authUserName != null) getNavigations();
+    // if (user.authUserName != null)
+    getNavigations();
   }, []);
 
   return (

@@ -4,6 +4,7 @@ class CreateAuthorityClientPages < ActiveRecord::Migration[7.1]
       t.integer :user_authority_id
       t.integer :client_page_id
       t.boolean :is_edit
+      t.boolean :is_read
 
       t.timestamps
     end

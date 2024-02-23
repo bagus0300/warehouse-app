@@ -153,7 +153,7 @@ const Signup = () => {
               <Input.Password />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="" htmlType="submit" className="btn-bg-black">
                 {messages.signupFields.signup}
               </Button>
               <small style={{ marginLeft: 20 }}>

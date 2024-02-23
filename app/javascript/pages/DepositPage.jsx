@@ -260,7 +260,6 @@ const deposit = () => {
   };
 
   const onchangeInStorkRangeDates = (_, dateStrings) => {
-    debugger;
     if (!dateStrings[0] || !dateStrings[1]) {
       setInstockRangeDates([]);
       return;

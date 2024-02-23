@@ -1,4 +1,5 @@
-const baseUrl = "http://127.0.0.1:3000/";
+// const baseUrl = "http://127.0.0.1:3000/";
+const baseUrl = "http://160.16.75.49/";
 
 export const loginURL = baseUrl + "login";
 
