@@ -6,9 +6,9 @@ class ProductsController < ApplicationController
   protect_from_forgery 
   
   def index
-    keyword = params[:keyword]
-    offset = params[:offset]
-    limit = params[:limit]
+    keyword = params[:keyword].presence || ""
+    offset = params[:offset].presence || "" 
+    limit = params[:limit].presence || ""
     products = Product.includes(:warehouse_fee)
   
     if keyword.present?

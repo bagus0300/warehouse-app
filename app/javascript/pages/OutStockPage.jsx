@@ -109,7 +109,7 @@ const OutStockPage = ({ is_edit }) => {
             label: warehouses[0].label,
           });
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   // --------Get shipper data--------
@@ -139,7 +139,7 @@ const OutStockPage = ({ is_edit }) => {
           });
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   // ----------Get product data-----------
@@ -199,7 +199,7 @@ const OutStockPage = ({ is_edit }) => {
           initWarehouseFee();
         }
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   const onChangeWarehouse = (value, option) => {
@@ -238,7 +238,7 @@ const OutStockPage = ({ is_edit }) => {
         setInStockDate(option.inout_on);
         setStock(res.data.stock.total_amount);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   const setPrepareProductItem = (editData) => {
@@ -539,12 +539,12 @@ const OutStockPage = ({ is_edit }) => {
               <Col span={1}>
                 <label>{$lang.inStock.productName}:</label>
               </Col>
-              <Col span={10}>
+              <Col span={16}>
                 <Space.Compact block className="ml-3">
                   <Select
                     showSearch
                     placeholder={$lang.inStock.productName}
-                    style={{ width: 200 }}
+                    style={{ width: 300 }}
                     value={selectedProduct.value}
                     options={productOptions}
                     onChange={onChangeProduct}
@@ -609,27 +609,31 @@ const OutStockPage = ({ is_edit }) => {
             <Divider />
             <Row>
               <Col span={1}></Col>
-              {is_edit === 1 ? (<Col span={6}>
-                <CustomButton
-                  onClick={doPrepareProducts}
-                  className="px-5 ml-2 btn-bg-black"
-                  title={$lang.buttons.add}
-                  htmlType="submit"
-                  visability={editMode != "edit"}
-                />
-                <CustomButton
-                  onClick={updatePrepareProduct}
-                  className="px-5 ml-2 btn-bg-black"
-                  title={$lang.buttons.change}
-                  visability={editMode == "edit"}
-                />
-                <CustomButton
-                  onClick={cancelEditProduct}
-                  className="px-5 ml-2 default"
-                  title={$lang.buttons.cancel}
-                  visability={editMode == "edit"}
-                />
-              </Col>) : (<></>)}
+              {is_edit === 1 ? (
+                <Col span={6}>
+                  <CustomButton
+                    onClick={doPrepareProducts}
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.add}
+                    htmlType="submit"
+                    visability={editMode != "edit"}
+                  />
+                  <CustomButton
+                    onClick={updatePrepareProduct}
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.change}
+                    visability={editMode == "edit"}
+                  />
+                  <CustomButton
+                    onClick={cancelEditProduct}
+                    className="px-5 ml-2 default"
+                    title={$lang.buttons.cancel}
+                    visability={editMode == "edit"}
+                  />
+                </Col>
+              ) : (
+                <></>
+              )}
             </Row>
           </Form>
         </Card>
@@ -652,11 +656,15 @@ const OutStockPage = ({ is_edit }) => {
               marginTop: 15,
             }}
           >
-            {is_edit === 1 ? (<CustomButton
-              onClick={savePrepareProducts}
-              title={$lang.buttons.confirmDeparture}
-              visability={true}
-            ></CustomButton>) : (<></>)}
+            {is_edit === 1 ? (
+              <CustomButton
+                onClick={savePrepareProducts}
+                title={$lang.buttons.confirmDeparture}
+                visability={true}
+              ></CustomButton>
+            ) : (
+              <></>
+            )}
           </div>
         </Card>
       </Content>

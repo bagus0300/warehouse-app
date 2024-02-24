@@ -16,7 +16,7 @@ import {
 import { API } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
 
-import { warehouseURL, shipperURL, warehouseFeeURL } from "../utils/contants";
+import { warehouseURL, shipperURL, inventoryURL } from "../utils/contants";
 
 import CustomButton from "../components/common/CustomButton";
 import $lang from "../utils/content/jp.json";
@@ -43,6 +43,8 @@ const InventoryPage = ({ is_edit }) => {
     code: "",
     closingDate: "",
   });
+
+  const [inventories, setInventories] = useState([]);
   // ----------------Openday--------------
   const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
 
@@ -101,11 +103,38 @@ const InventoryPage = ({ is_edit }) => {
     });
   };
 
+  const getInventory = () => {
+    let url = `${inventoryURL}`;
+    if (seletedShipper.value != "" || selectedWarehouse.value != "") url += "?";
+    url +=
+      seletedShipper.value != "" ? `shipper_id=${seletedShipper.value}` : "";
+    url +=
+      selectedWarehouse.value != ""
+        ? `&warehouse_id=${selectedWarehouse.value}`
+        : "";
+
+    API.get(url)
+      .then((res) => {
+        const inventories = res.data.map((item, i) => {
+          i++;
+          return {
+            inout_on: item.inout_on,
+            amount: item.inventory_stock,
+            lot_number: item.lot_number,
+            product_name: item.name,
+            packaging: item.packaging,
+            key: i,
+          };
+        });
+        setInventories(inventories);
+      })
+      .catch((err) => {});
+  };
+
   const stockColumns = [
     {
       title: "No",
       dataIndex: "key",
-      sorter: true,
       align: "center",
       width: "5%",
     },
@@ -146,6 +175,7 @@ const InventoryPage = ({ is_edit }) => {
   useEffect(() => {
     getWarehouses();
     getShippers();
+    getInventory();
   }, []);
 
   useEffect(() => {
@@ -233,6 +263,16 @@ const InventoryPage = ({ is_edit }) => {
                     format={dateFormat}
                   />
                   <CustomButton
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.search}
+                    visability={true}
+                    onClick={getInventory}
+                  />
+                </div>
+              </Col>
+              <Col span={13}>
+                {is_edit === 1 ? (
+                  <CustomButton
                     onClick={() => {
                       openNotificationWithIcon(
                         "success",
@@ -241,26 +281,13 @@ const InventoryPage = ({ is_edit }) => {
                       );
                     }}
                     className="px-5 ml-2 btn-bg-black"
-                    title={$lang.buttons.search}
-                    htmlType="submit"
+                    title={$lang.stock.inventory_report}
                     visability={true}
+                    style={{ float: "right" }}
                   />
-                </div>
-              </Col>
-              <Col span={13}>
-                {is_edit === 1 ? (<CustomButton
-                  onClick={() => {
-                    openNotificationWithIcon(
-                      "success",
-                      $lang.popConrimType.success,
-                      "currently on developing."
-                    );
-                  }}
-                  className="px-5 ml-2 btn-bg-black"
-                  title={$lang.stock.inventory_report}
-                  visability={true}
-                  style={{ float: "right" }}
-                />) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </Col>
             </Row>
             <Divider />
@@ -273,9 +300,10 @@ const InventoryPage = ({ is_edit }) => {
         >
           <Table
             columns={stockColumns}
-            dataSource={[]}
+            dataSource={inventories}
             rowKey={(node) => node.key}
             is_edit={is_edit}
+            pagination={false}
           />
         </Card>
       </Content>

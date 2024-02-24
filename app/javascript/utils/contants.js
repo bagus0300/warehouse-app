@@ -35,9 +35,11 @@ export const productStockURL = (id, productId, warehouseId, shipperId) =>
 
 export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
-export const exportCSVDataUrl = baseUrl + "/api/export_instock_csv";
+export const exportCSVDataUrl = baseUrl + "api/export_instock_csv";
 
-export const exportPdfDataUrl = baseUrl + "/api/export_pdf";
+export const exportPdfDataUrl = baseUrl + "api/export_pdf";
+
+export const inventoryURL = baseUrl + "api/inventory";
 
 //unit_price urls
 

@@ -546,10 +546,10 @@ const InStockPage = ({ is_edit }) => {
             </Row>
             <Row>
               <Col span={1}></Col>
-              <Col span={8}>
+              <Col span={16}>
                 <Space.Compact block className="ml-3">
                   <Input
-                    style={{ width: 100 }}
+                    style={{ width: 200 }}
                     placeholder={$lang.inStock.lotNumber}
                     value={lotNumber}
                     onChange={(e) => {
@@ -579,27 +579,31 @@ const InStockPage = ({ is_edit }) => {
             <Divider />
             <Row>
               <Col span={1}></Col>
-              {is_edit === 1 ? (<Col span={6}>
-                <CustomButton
-                  onClick={doPrepareProducts}
-                  className="px-5 ml-2 btn-bg-black"
-                  title={$lang.buttons.add}
-                  htmlType="submit"
-                  visability={editMode != "edit"}
-                />
-                <CustomButton
-                  onClick={updatePrepareProduct}
-                  className="px-5 ml-2 btn-bg-black"
-                  title={$lang.buttons.change}
-                  visability={editMode == "edit"}
-                />
-                <CustomButton
-                  onClick={cancelEditProduct}
-                  className="px-5 ml-2 default"
-                  title={$lang.buttons.cancel}
-                  visability={editMode == "edit"}
-                />
-              </Col>) : (<></>)}
+              {is_edit === 1 ? (
+                <Col span={6}>
+                  <CustomButton
+                    onClick={doPrepareProducts}
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.add}
+                    htmlType="submit"
+                    visability={editMode != "edit"}
+                  />
+                  <CustomButton
+                    onClick={updatePrepareProduct}
+                    className="px-5 ml-2 btn-bg-black"
+                    title={$lang.buttons.change}
+                    visability={editMode == "edit"}
+                  />
+                  <CustomButton
+                    onClick={cancelEditProduct}
+                    className="px-5 ml-2 default"
+                    title={$lang.buttons.cancel}
+                    visability={editMode == "edit"}
+                  />
+                </Col>
+              ) : (
+                <></>
+              )}
             </Row>
           </Form>
         </Card>
@@ -615,25 +619,29 @@ const InStockPage = ({ is_edit }) => {
             pagination={false}
             is_edit={is_edit}
           />
-          {is_edit === 1 ? (<div
-            style={{
-              justifyContent: "flex-end",
-              display: "flex",
-              marginTop: 15,
-            }}
-          >
-            <CustomButton
-              title={$lang.buttons.csvExchange}
-              className="mr-2 btn-bg-black"
-              visability={true}
-              onClick={exportDataAndDownloadCVS}
-            ></CustomButton>
-            <CustomButton
-              onClick={savePrepareProducts}
-              title={$lang.buttons.confirmDeparture}
-              visability={true}
-            ></CustomButton>
-          </div>) : (<div></div>)}
+          {is_edit === 1 ? (
+            <div
+              style={{
+                justifyContent: "flex-end",
+                display: "flex",
+                marginTop: 15,
+              }}
+            >
+              <CustomButton
+                title={$lang.buttons.csvExchange}
+                className="mr-2 btn-bg-black"
+                visability={true}
+                onClick={exportDataAndDownloadCVS}
+              ></CustomButton>
+              <CustomButton
+                onClick={savePrepareProducts}
+                title={$lang.buttons.confirmDeparture}
+                visability={true}
+              ></CustomButton>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </Card>
       </Content>
     </div>

@@ -101,8 +101,16 @@ class StockInoutsController < ApplicationController
         csv << [record.dig(:product_name), record.dig(:product_type), record.dig(:lot_number), record.dig(:weight), record.dig(:amount)]
       end
     end
-
+    
+    search_values = [shipper_id, warehouse_id]
     send_data csv_data, filename: "stock.csv", type: "text/csv", disposition: "inline"
+  end
+  def inventory
+    shipper_id = params[:shipper_id].presence || ''
+    warehouse_id = params[:warehouse_id].presence || ''
+    result = StockInoutsHelper.build_main_query(shipper_id, warehouse_id)
+
+    render json: result
   end
 
   private
