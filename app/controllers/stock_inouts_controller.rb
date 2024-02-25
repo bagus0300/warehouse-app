@@ -1,7 +1,8 @@
 class StockInoutsController < ApplicationController
   protect_from_forgery 
   require 'csv'
-  
+  require 'grover'
+  require 'nokogiri'
   def index
     warehouse_id = params[:warehouse_id]
     shipper_id = params[:shipper_id]
@@ -104,6 +105,41 @@ class StockInoutsController < ApplicationController
     
     search_values = [shipper_id, warehouse_id]
     send_data csv_data, filename: "stock.csv", type: "text/csv", disposition: "inline"
+  end
+  def export_pdf
+    html ='<html>
+          <div style="display: flex;justify-content: center;width: 100%;">
+              <div>
+                <div style="border-bottom: 1px solid #000;;">株式会社ADEKA(xxxxxxx)xx</div>
+              </div>
+              <div>
+                <div>在庫報告書</div>
+                <div>
+                  2023<span style="color:blue">年</span>10<span style="color: blue">月</span>30<span style="color:blue">日作成</span>
+                </div>
+              </div>
+              <div style="text-align:center">
+                <div>xxxxxxxxxxxxxxxxx</div>
+                <div>本xxxxxxxxxcc</div>
+                <div>TEL 0594-31-2532</div>
+              </div>
+            </div>
+            <div>
+              2023<span style="color:blue">年</span>10<span style="color: blue">月</span>30<span style="color:blue">日作成</span>		
+            </div>
+          </div>
+          <div></div>
+          <div>
+            <table>
+              
+            </table>
+
+          </div>
+        </html>'
+     doc = Nokogiri::HTML(html)
+    doc.encoding = 'UTF-8'
+    pdf = Grover.new(doc.to_s, format: 'A4').to_pdf
+    send_data pdf, filename: 'template.pdf', type: "application/pdf", disposition: 'inline'
   end
   def inventory
     shipper_id = params[:shipper_id].presence || ''

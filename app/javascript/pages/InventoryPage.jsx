@@ -13,10 +13,15 @@ import {
   Table,
 } from "antd";
 
-import { API } from "../utils/helper";
+import { API, currentDate } from "../utils/helper";
 import { openNotificationWithIcon } from "../components/common/notification";
 
-import { warehouseURL, shipperURL, inventoryURL } from "../utils/contants";
+import {
+  warehouseURL,
+  shipperURL,
+  inventoryURL,
+  exportInventoryPdfDataUrl,
+} from "../utils/contants";
 
 import CustomButton from "../components/common/CustomButton";
 import $lang from "../utils/content/jp.json";
@@ -28,14 +33,14 @@ const InventoryPage = ({ is_edit }) => {
   // ---------Warehouse--------
   const [selectedWarehouse, setSelectedWarehouse] = useState({
     value: "",
-    label: "",
+    label: "-",
   });
   const [warehouseOptions, setWarehouseOptions] = useState([]);
 
   // ------------Shipper-----------
   const [seletedShipper, setSeletedShipper] = useState({
     value: "",
-    label: "",
+    label: "-",
   });
 
   const [shipperOptions, setShipperOptions] = useState([]);
@@ -46,7 +51,7 @@ const InventoryPage = ({ is_edit }) => {
 
   const [inventories, setInventories] = useState([]);
   // ----------------Openday--------------
-  const [receiptDate, setInoutOn] = useState(dayjs("2015/01/01", dateFormat));
+  const [receiptDate, setInoutOn] = useState(dayjs(currentDate, dateFormat));
 
   const onChangeWarehouse = (value, option) => {
     setSelectedWarehouse({ value: value, label: option.label });
@@ -54,81 +59,6 @@ const InventoryPage = ({ is_edit }) => {
 
   const onChangeShipper = (value, option) => {
     setSeletedShipper({ value: value, label: option.label });
-  };
-
-  //  -------Get warehouse names--------
-  const getWarehouses = () => {
-    API.get(warehouseURL).then((res) => {
-      const warehouses = res.data.data.map((item) => {
-        return {
-          value: item.id,
-          label: item.name,
-        };
-      });
-
-      setWarehouseOptions(warehouses);
-
-      if (warehouses.length > 0)
-        setSelectedWarehouse({
-          value: warehouses[0].value,
-          label: warehouses[0].label,
-        });
-    });
-  };
-
-  // --------Get shipper data--------
-  const getShippers = () => {
-    API.get(shipperURL).then((res) => {
-      const shippers = res.data.data.map((item) => {
-        return {
-          value: item.id,
-          label: item.name,
-          code: item.code,
-          closingDate: item.closingDate,
-        };
-      });
-      setShipperOptions(shippers);
-
-      if (shippers.length > 0) {
-        setSeletedShipper({
-          value: shippers[0].value,
-          label: shippers[0].label,
-        });
-
-        setShipperDescription({
-          code: shippers[0].code,
-          closingDate: shippers[0].closingDate,
-        });
-      }
-    });
-  };
-
-  const getInventory = () => {
-    let url = `${inventoryURL}`;
-    if (seletedShipper.value != "" || selectedWarehouse.value != "") url += "?";
-    url +=
-      seletedShipper.value != "" ? `shipper_id=${seletedShipper.value}` : "";
-    url +=
-      selectedWarehouse.value != ""
-        ? `&warehouse_id=${selectedWarehouse.value}`
-        : "";
-
-    API.get(url)
-      .then((res) => {
-        const inventories = res.data.map((item, i) => {
-          i++;
-          return {
-            inout_on: item.inout_on,
-            amount: item.inventory_stock,
-            lot_number: item.lot_number,
-            product_name: item.name,
-            packaging: item.packaging,
-            key: i,
-          };
-        });
-        setInventories(inventories);
-      })
-      .catch((err) => {});
   };
 
   const stockColumns = [
@@ -171,6 +101,101 @@ const InventoryPage = ({ is_edit }) => {
     },
   ];
 
+  //  -------Get warehouse names--------
+  const getWarehouses = () => {
+    API.get(warehouseURL).then((res) => {
+      const warehouses = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+        };
+      });
+
+      warehouses.unshift({
+        value: "",
+        label: $lang.listCommon.all,
+      });
+
+      setWarehouseOptions(warehouses);
+    });
+  };
+
+  // --------Get shipper data--------
+  const getShippers = () => {
+    API.get(shipperURL).then((res) => {
+      const shippers = res.data.data.map((item) => {
+        return {
+          value: item.id,
+          label: item.name,
+          code: item.code,
+          closingDate: item.closingDate,
+        };
+      });
+
+      shippers.unshift({
+        value: "",
+        label: $lang.listCommon.all,
+      });
+
+      setShipperOptions(shippers);
+    });
+  };
+
+  const getInventory = () => {
+    let url = `${inventoryURL}`;
+    if (seletedShipper.value != "" || selectedWarehouse.value != "") url += "?";
+    url +=
+      seletedShipper.value != "" ? `shipper_id=${seletedShipper.value}` : "";
+    url +=
+      selectedWarehouse.value != ""
+        ? `&warehouse_id=${selectedWarehouse.value}`
+        : "";
+
+    API.get(url)
+      .then((res) => {
+        const inventories = res.data.map((item, i) => {
+          i++;
+          return {
+            inout_on: item.inout_on,
+            amount: item.inventory_stock,
+            lot_number: item.lot_number,
+            product_name: item.name,
+            packaging: item.packaging,
+            key: i,
+          };
+        });
+        setInventories(inventories);
+      })
+      .catch((err) => {});
+  };
+
+  const downloadPDF = (response) => {
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const fileName = "generated_pdf.pdf";
+
+    // Construct the URL and initiate the download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.setAttribute("download", fileName);
+    a.click();
+  };
+
+  const exportDataAndDownloadPdf = () => {
+    API.post(
+      exportInventoryPdfDataUrl,
+      {},
+      {
+        responseType: "arraybuffer",
+      }
+    )
+      .then((res) => {
+        downloadPDF(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   // ----------When rerender, get all data------
   useEffect(() => {
     getWarehouses();
@@ -273,13 +298,7 @@ const InventoryPage = ({ is_edit }) => {
               <Col span={13}>
                 {is_edit === 1 ? (
                   <CustomButton
-                    onClick={() => {
-                      openNotificationWithIcon(
-                        "success",
-                        $lang.popConrimType.success,
-                        "currently on developing."
-                      );
-                    }}
+                    onClick={exportDataAndDownloadPdf}
                     className="px-5 ml-2 btn-bg-black"
                     title={$lang.stock.inventory_report}
                     visability={true}

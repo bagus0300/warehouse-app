@@ -37,7 +37,7 @@ export const saveStockInoutUrl = baseUrl + "api/stock_inout";
 
 export const exportCSVDataUrl = baseUrl + "api/export_instock_csv";
 
-export const exportPdfDataUrl = baseUrl + "api/export_pdf";
+export const exportInventoryPdfDataUrl = baseUrl + "api/inventory_export_pdf";
 
 export const inventoryURL = baseUrl + "api/inventory";
 

@@ -89,3 +89,5 @@ gem "grover"
 
 #for exporting csv
 gem "csv"
+
+gem "nokogiri"

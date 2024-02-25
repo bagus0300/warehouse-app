@@ -77,7 +77,7 @@ class ReceivedPaymentsController < ApplicationController
     render json:  :accepted
   end
   def export_csv
-keyword = params[:keyword]
+    keyword = params[:keyword]
     offset = params[:offset]
     limit = params[:limit]
     

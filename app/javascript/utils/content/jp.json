@@ -58,7 +58,9 @@
     "no": "NO",
     "warning": "このフィールドは必ず入力してください"
   },
-
+  "listCommon": {
+    "all": "-"
+  },
   "shipper": {
     "name": "荷主名",
     "main_address": "住所1",

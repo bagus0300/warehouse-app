@@ -340,7 +340,8 @@ const InStockPage = ({ is_edit }) => {
     updateData.shipper_name = seletedShipper.label;
     updateData.inout_on = dayjs
       .tz(new Date(inStockDate), "Asia/Tokyo")
-      .format(dateFormat);
+      .format(dateFormat)
+      .replace(/\-/g, "/");
 
     updateData.lot_number = lotNumber;
     updateData.weight = weight;

@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   post "/api/stock_inout"  , to: 'stock_inouts#create'
   get "/api/stock_inout"  , to: 'stock_inouts#index'
   post "/api/export_instock_csv", to: 'stock_inouts#export_csv'
+  post "/api/inventory_export_pdf", to: 'stock_inouts#export_pdf', defaults: { format: 'pdf' }
   get "/api/inventory", to: 'stock_inouts#inventory'
 
   get "/api/received_payment", to: 'received_payments#index'
