@@ -24,6 +24,9 @@ const ShipperList = ({ is_edit }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allData, setAllData] = useState([]);
 
+  const [deleteFormVisible, setDeleteFormVisible] = useState(false);
+  const [delItem, setDelItem] = useState('');
+
   const getAllShipper = () => {
     axios.get(`${shipperURL}`).then((res) => {
       let index = 1;
@@ -117,6 +120,7 @@ const ShipperList = ({ is_edit }) => {
         $lang.messages.complete_all_nput_fields
       );
     }
+    setDeleteFormVisible(!deleteFormVisible);
   };
 
   const handleOk = () => {
@@ -211,7 +215,10 @@ const ShipperList = ({ is_edit }) => {
               </div>
               <div className="p-2 rounded-full cursor-pointer items-center text-center ml-2">
                 <CustomButton
-                  onClick={() => onDelete(record)}
+                  onClick={() => {
+                    setDelItem(record);
+                    setDeleteFormVisible(!deleteFormVisible);
+                  }}
                   title={$lang.buttons.delete}
                   icon={<DeleteOutlined />}
                   style={{ backgroundColor: "transparent", color: "#000" }}
@@ -364,6 +371,34 @@ const ShipperList = ({ is_edit }) => {
                     </Form.Item>
                   </Form>
                 </div>
+              </Modal>
+              <Modal
+                open={deleteFormVisible}
+                onCancel={() => setDeleteFormVisible(!deleteFormVisible)}
+                className="py-5"
+                closable={true}
+                footer=""
+                style={{ marginTop: 180 }}
+              >
+                <br />
+                <p className="items-center" style={{ fontSize: 20 }}>{$lang.pages.confirm}</p>
+                <br />
+                <div className="flex flex-row" style={{ marginLeft: 260 }}>
+                  <div className="items-center" >
+                    <Button
+                      onClick={() => onDelete(delItem)}
+                      className="items-center btn-bg-black">
+                      <DeleteOutlined />{$lang.buttons.delete}
+                    </Button>
+                  </div>
+                  <Button
+                    style={{ marginLeft: 10 }}
+                    onClick={() => setDeleteFormVisible(!deleteFormVisible)}
+                  >
+                    {$lang.buttons.cancel}
+                  </Button>
+                </div>
+
               </Modal>
             </div>
             <div className="mt-5">

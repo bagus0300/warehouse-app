@@ -23,6 +23,7 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { openNotificationWithIcon } from "../components/common/notification";
 
 import $lang from "../utils/content/jp.json";
+import { Footer } from "antd/es/layout/layout";
 
 const { Content } = Layout;
 
@@ -51,6 +52,10 @@ const ProductPage = ({ is_edit }) => {
   const [itemsPerPage, setItemPerPage] = useState(10);
   const [total, setTotal] = useState(0);
   const [searchBtn, setSearchBtn] = useState(false);
+
+
+  const [deleteFormVisible, setDeleteFormVisible] = useState(false);
+  const [delItem, setDelItem] = useState('');
 
   const handlePageChange = (page, pageSize) => {
     setCurrentPage((page - 1) * pageSize);
@@ -207,6 +212,7 @@ const ProductPage = ({ is_edit }) => {
         "Server Error"
       );
     }
+    setDeleteFormVisible(!deleteFormVisible);
   };
 
   const handleOk = () => {
@@ -283,7 +289,10 @@ const ProductPage = ({ is_edit }) => {
               </div>
               <div className="p-2 rounded-full cursor-pointer items-center text-center ml-2">
                 <CustomButton
-                  onClick={() => onDelete(record)}
+                  onClick={() => {
+                    setDelItem(record);
+                    setDeleteFormVisible(!deleteFormVisible);
+                  }}
                   title={$lang.buttons.delete}
                   icon={<DeleteOutlined />}
                   style={{ backgroundColor: "transparent", color: "#000" }}
@@ -455,6 +464,34 @@ const ProductPage = ({ is_edit }) => {
                     </Form.Item>
                   </Form>
                 </div>
+              </Modal>
+              <Modal
+                open={deleteFormVisible}
+                onCancel={() => setDeleteFormVisible(!deleteFormVisible)}
+                className="py-5"
+                closable={true}
+                footer=""
+                style={{ marginTop: 180 }}
+              >
+                <br />
+                <p className="items-center" style={{ fontSize: 20 }}>{$lang.pages.confirm}</p>
+                <br />
+                <div className="flex flex-row" style={{ marginLeft: 260 }}>
+                  <div className="items-center" >
+                    <Button
+                      onClick={() => onDelete(delItem)}
+                      className="items-center btn-bg-black">
+                      <DeleteOutlined />{$lang.buttons.delete}
+                    </Button>
+                  </div>
+                  <Button
+                    style={{ marginLeft: 10 }}
+                    onClick={() => setDeleteFormVisible(!deleteFormVisible)}
+                  >
+                    {$lang.buttons.cancel}
+                  </Button>
+                </div>
+
               </Modal>
             </div>
             <div className="mt-5">

@@ -6,7 +6,8 @@
   "pages": {
     "login": "ログイン",
     "signup": "新規登録",
-    "warning": "このページは表示できません!"
+    "warning": "このページは表示できません!",
+    "confirm":"アイテムを本当に削除するのでしょうか?"
   },
   "LoginFields": {
     "username": "ログインID",
