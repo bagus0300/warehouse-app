@@ -108,6 +108,11 @@ class StockInoutsController < ApplicationController
   end
   def export_pdf
     html ='<html>
+          <style>
+            body {
+              font-family: "Noto Sans CJK", Arial, sans-serif;
+            }
+          </style>
           <div style="display: flex;justify-content: center;width: 100%;">
               <div>
                 <div style="border-bottom: 1px solid #000;;">株式会社ADEKA(xxxxxxx)xx</div>
